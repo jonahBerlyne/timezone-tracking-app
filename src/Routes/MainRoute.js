@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
-import AuthNavbar from "./Auth/AuthNavbar";
+import UserNavbar from '../User/UserNavbar';
+import AuthNavbar from '../Auth/AuthNavbar';
 
-export default function AuthRoute ({children}) {
+export default function MainRoute ({children}) {
  const [pending, setPending] = useState(true);
  const [currentUser, setCurrentUser] = useState(null);
  const auth = getAuth();
@@ -26,16 +27,11 @@ export default function AuthRoute ({children}) {
  }, []);
 
  if (pending) return null;
-
- if (!currentUser) {
-   return (
-    <div>
-     <AuthNavbar/>
-     {children}
-     {/* <Footer/> */}
-    </div>
-   );
- } else {
-   return <Navigate to="/"/>;
- }
+ return (
+  <div>
+   {currentUser ? <UserNavbar/> : <AuthNavbar/>}
+   {children}
+   {/* <Footer/> */}
+  </div>
+ );
 }
