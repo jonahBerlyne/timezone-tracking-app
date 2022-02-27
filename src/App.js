@@ -6,7 +6,7 @@ import Privacy from "./Main/Privacy";
 import Terms from "./Main/Terms";
 import Footer from "./Main/Footer";
 import AuthNavbar from "./Auth/AuthNavbar";
-import Register from "./Auth/Register/RegisterForm";
+import RegisterPage from "./Auth/Register/RegisterPage";
 import Login from "./Auth/Login";
 import ResetPassword from "./Auth/ResetPassword";
 import UserNavbar from "./User/UserNavbar";
@@ -26,7 +26,7 @@ export default function App() {
         <Route path="/contact" exact element={<MainRoutes><Contact/></MainRoutes>}></Route>
         <Route path="/privacy" exact element={<MainRoutes><Privacy/></MainRoutes>}></Route>
         <Route path="/terms" exact element={<MainRoutes><Terms/></MainRoutes>}></Route>
-        <Route path="/register" exact element={<AuthRoutes><Register/></AuthRoutes>}></Route>
+        <Route path="/register" exact element={<AuthRoutes><RegisterPage/></AuthRoutes>}></Route>
         <Route path="/login" exact element={<AuthRoutes><Login/></AuthRoutes>}></Route>
         <Route path="/reset_password" exact element={<AuthRoutes><ResetPassword/></AuthRoutes>}></Route>
         <Route path="/profile/:id" exact element={<UserRoutes><ProfilePage/></UserRoutes>}></Route>
