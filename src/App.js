@@ -20,11 +20,11 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" exact element={<Home/>}></Route>
-        <Route path="/about" exact element={<About/>}></Route>
-        <Route path="/contact" exact element={<Contact/>}></Route>
-        <Route path="/privacy" exact element={<Privacy/>}></Route>
-        <Route path="/terms" exact element={<Terms/>}></Route>
+        <Route path="/" exact element={<MainRoutes><Home/></MainRoutes>}></Route>
+        <Route path="/about" exact element={<MainRoutes><About/></MainRoutes>}></Route>
+        <Route path="/contact" exact element={<MainRoutes><Contact/></MainRoutes>}></Route>
+        <Route path="/privacy" exact element={<MainRoutes><Privacy/></MainRoutes>}></Route>
+        <Route path="/terms" exact element={<MainRoutes><Terms/></MainRoutes>}></Route>
         <Route path="/register" exact element={<AuthRoutes><Register/></AuthRoutes>}></Route>
         <Route path="/login" exact element={<AuthRoutes><Login/></AuthRoutes>}></Route>
         <Route path="/reset_password" exact element={<AuthRoutes><ResetPassword/></AuthRoutes>}></Route>
@@ -35,6 +35,17 @@ export default function App() {
         <Route path="/create_team" exact element={<UserRoutes><CreateTeam/></UserRoutes>}></Route>
       </Routes>
     </Router>
+  );
+}
+
+const MainRoutes = ({children}) => {
+  return (
+    <div>
+      {localStorage.getItem("currentUser") && <UserNavbar/>}
+      {!localStorage.getItem("currentUser") && <AuthNavbar/>}
+      {children}
+      <Footer/>
+    </div>
   );
 }
 
