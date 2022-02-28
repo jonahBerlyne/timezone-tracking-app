@@ -1,7 +1,37 @@
+import React, { useState, useEffect } from 'react';
+import { doc, setDoc } from 'firebase/firestore';
+import fireDB from '../../firebaseConfig';
+import uniqid from "uniqid";
+
 export default function CreateTeam() {
+
+ const user = JSON.parse(localStorage.getItem("currentUser"));
+
+ const [teamName, setTeamName] = useState("");
+
+ const handleChange = e => setTeamName(e.target.value);
+
+ const createTeam = async () => {
+  if (teamName === '') return;
+  try {
+   const docRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamName}`);
+   const teamInfo = {
+     id: uniqid(),
+     name: teamName
+   };
+   await setDoc(docRef, teamInfo);
+   alert("Team created");
+   window.location.href = `/team/${teamName}/manage`;
+  } catch (err) {
+   alert(`Team creation error: ${err}`);
+  }
+ }
+
  return (
   <div>
-   CreateTeam
+   <label>Name your team:</label>
+   <input type="text" placeholder="Team name" value={teamName} onChange={handleChange}/>
+   <button onClick={createTeam}>Create team</button>
   </div>
  );
 }
