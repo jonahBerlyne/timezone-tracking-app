@@ -7,6 +7,7 @@ export default function UserNavbar() {
  const user = JSON.parse(localStorage.getItem("currentUser"));
 
  const logout = () => {
+  localStorage.removeItem("teams");
   localStorage.removeItem("currentUser");
   window.location.href = "/";
  }

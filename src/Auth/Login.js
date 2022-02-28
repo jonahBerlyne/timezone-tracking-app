@@ -12,15 +12,22 @@ export default function Login() {
  const login = async () => {
   try {
    const userAuth = await signInWithEmailAndPassword(auth, email, password);
-   const q = query(collection(fireDB, "users"));
-   const querySnapshot = await getDocs(q);
+   const usersCollection = query(collection(fireDB, "users"));
+   const usersSnapshot = await getDocs(usersCollection);
    let usersArr = [];
-   querySnapshot.forEach(doc => {
+   usersSnapshot.forEach(doc => {
     usersArr.push(doc.data());
    });
    const user = usersArr.filter(user => user.id === userAuth.user.uid);
    const userInfo = user[0];
    localStorage.setItem("currentUser", JSON.stringify({...userAuth.user, userInfo}));
+   const teamsCollection = query(collection(fireDB, "users", `${userAuth.user.uid}`, "teams"));
+   const teamsSnapshot = await getDocs(teamsCollection);
+   let teamsArr = [];
+   teamsSnapshot.forEach(doc => {
+    teamsArr.push(doc.data());
+   });
+   localStorage.setItem("teams", JSON.stringify(teamsArr));
    alert("Logged in");
    window.location.href = '/';
   } catch (err) {
