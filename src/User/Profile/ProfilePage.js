@@ -3,6 +3,8 @@ import Profile from "./Profile";
 import EditProfile from "./EditProfile";
 import fireDB from '../../firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
+import { storage } from '../../firebaseConfig';
+import { ref, uploadBytes } from 'firebase/storage';
 
 export default function ProfilePage() {
 
@@ -30,6 +32,23 @@ export default function ProfilePage() {
   });
  }
 
+ const [imgFile, setImgFile] = useState(null);
+
+ const choosePic = e => {
+  const image = e.target.files[0];
+  if (image) setImgFile(image);
+ }
+
+ const handleUpload = async () => {
+  if (imgFile === null) return;
+  try {
+   const uploadTask = ref(storage, `${user.uid}/profilePic`);
+   await uploadBytes(uploadTask, imgFile);
+  } catch (err) {
+   alert(`Upload error: ${err}`);
+  }
+ }
+
  const [refresh, setRefresh] = useState(false);
 
  const saveChanges = async () => {
@@ -41,6 +60,7 @@ export default function ProfilePage() {
     location: values.location
    };
    await setDoc(docRef, userInfo);
+   await handleUpload();
    alert("Changes saved");
    localStorage.setItem("currentUser", JSON.stringify({...user, userInfo}));
    setRefresh(!refresh);
@@ -53,13 +73,13 @@ export default function ProfilePage() {
   <div>
    {showProfile &&
     <div>
-     <Profile username={user.userInfo.name} location={user.userInfo.location}/>
+     <Profile name={user.userInfo.name} location={user.userInfo.location}/>
      <button onClick={goToEditProfile}>Edit your profile or location</button>
     </div> 
    }
    {editProfile &&
     <div>
-     <EditProfile values={values} handleChange={handleChange}/>
+     <EditProfile values={values} handleChange={handleChange} choosePic={choosePic}/>
      <button onClick={goToProfile}>Go back</button>
      <button onClick={saveChanges}>Save</button>
     </div>

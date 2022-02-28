@@ -1,4 +1,4 @@
-export default function Profile({ username, location }) {
+export default function Profile({ name, location }) {
   const formatAMPM = date => {
    let hours = date.getHours();
    let minutes = date.getMinutes();
@@ -12,7 +12,7 @@ export default function Profile({ username, location }) {
 
  return (
   <div>
-   <h2>{username}</h2>
+   <h2>{name}</h2>
    <p><strong>{location}</strong> {formatAMPM(new Date())}</p>
   </div>
  );
