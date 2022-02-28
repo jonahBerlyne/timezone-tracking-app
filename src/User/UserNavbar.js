@@ -15,7 +15,7 @@ export default function UserNavbar() {
     <div className='header'>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
-            <h1 className="navbar-brand">Welcome {user.userInfo.name}!</h1>
+            <h1 className="navbar-brand">Welcome, {user.userInfo.name}!</h1>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span>
                 <FaBars size={25} color="gray"/>
@@ -27,7 +27,7 @@ export default function UserNavbar() {
                   <Link className="nav-link" to="/">Home</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/profile/:id">Profile</Link>
+                  <Link className="nav-link" to={`/profile/${user.uid}`}>Profile</Link>
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/account">Account Settings</Link>
