@@ -1,4 +1,4 @@
-export default function Profile({ name, location }) {
+export default function Profile({ name, location, imgUrl }) {
   const formatAMPM = date => {
    let hours = date.getHours();
    let minutes = date.getMinutes();
@@ -12,6 +12,7 @@ export default function Profile({ name, location }) {
 
  return (
   <div>
+   {imgUrl && <img src={imgUrl} alt={imgUrl} height="100" width="200"/>}
    <h2>{name}</h2>
    <p><strong>{location}</strong> {formatAMPM(new Date())}</p>
   </div>

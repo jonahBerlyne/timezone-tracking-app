@@ -1,8 +1,9 @@
-export default function EditProfile({ values, handleChange, choosePic }) {
+export default function EditProfile({ values, handleChange, choosePic, imgFileErr }) {
  return (
   <div>
    <div>
     <input onChange={choosePic} type="file"/>
+    {imgFileErr && <h6>{imgFileErr}</h6>}
    </div>
    <div>
     <label>Name:</label>
