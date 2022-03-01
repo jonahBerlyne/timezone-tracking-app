@@ -14,9 +14,10 @@ export default function CreateTeam() {
  const createTeam = async () => {
   if (teamName === '') return;
   try {
-   const docRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamName}`);
+   const teamId = uniqid();
+   const docRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamId}`);
    const teamInfo = {
-     id: uniqid(),
+     id: teamId,
      name: teamName
    };
    await setDoc(docRef, teamInfo);
