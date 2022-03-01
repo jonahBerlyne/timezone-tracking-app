@@ -6,8 +6,6 @@ export default function UserNavbar() {
 
  const user = JSON.parse(localStorage.getItem("currentUser"));
 
- const teams = JSON.parse(localStorage.getItem("teams"));
-
  const logout = () => {
   localStorage.removeItem("teams");
   localStorage.removeItem("currentUser");
@@ -35,13 +33,9 @@ export default function UserNavbar() {
                 <li className="nav-item">
                   <Link className="nav-link" to="/account">Account Settings</Link>
                 </li>
-                {teams && teams.map(team => {
-                  return (
-                    <li className="nav-item" key={team.id}>
-                      <Link className="nav-link" to={`/team/${team.name}`}>{team.name}</Link>
-                    </li>
-                  );
-                })}
+                <li className="nav-item">
+                  <Link className="nav-link" to="/teams">Teams</Link>
+                </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/create_team">Add New Team</Link>
                 </li>

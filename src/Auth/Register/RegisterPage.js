@@ -26,6 +26,7 @@ export default function RegisterPage() {
    };
    await setDoc(docRef, userInfo);
    localStorage.setItem("currentUser", JSON.stringify({...userAuth.user, userInfo}));
+   localStorage.setItem("teams", JSON.stringify([]));
    alert("Registered");
    window.location.href = '/';
   } catch (err) {

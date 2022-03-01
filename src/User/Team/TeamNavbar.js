@@ -7,8 +7,8 @@ export default function TeamNavbar() {
  const user = JSON.parse(localStorage.getItem("currentUser"));
 
  const teams = JSON.parse(localStorage.getItem("teams"));
-
- const teamName = useParams();
+ const teamId = useParams();
+ const [teamName] = teams.filter(team => team.id === teamId.id);
 
  const logout = () => {
   localStorage.removeItem("teams");
@@ -20,8 +20,8 @@ export default function TeamNavbar() {
     <div className='header'>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
-            <h1 className="navbar-brand">{teamName.teamname}</h1>
-            <Link to={`/team/${teamName.teamname}/manage`}>
+            <h1 className="navbar-brand">{teamName.name}</h1>
+            <Link to={`/team/${teamId.id}/manage`}>
              <span>
               <FaCog size={25}/>
              </span>
@@ -42,13 +42,9 @@ export default function TeamNavbar() {
                 <li className="nav-item">
                   <Link className="nav-link" to="/account">Account Settings</Link>
                 </li>
-                {teams && teams.map(team => {
-                  return (
-                    <li className="nav-item" key={team.id}>
-                      <Link className="nav-link" to={`/team/${team.name}`}>{team.name}</Link>
-                    </li>
-                  );
-                })}
+                <li className="nav-item">
+                  <Link className="nav-link" to="/teams">Teams</Link>
+                </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/create_team">Add New Team</Link>
                 </li>

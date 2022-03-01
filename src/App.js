@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from "react-router-dom";
 import Home from "./Main/Home";
 import About from "./Main/About";
 import Contact from "./Main/Contact";
@@ -33,8 +33,8 @@ export default function App() {
         <Route path="/profile/:id" exact element={<UserRoutes><ProfilePage/></UserRoutes>}></Route>
         <Route path="/account" exact element={<UserRoutes><AccountSettings/></UserRoutes>}></Route>
         <Route path="/teams" exact element={<UserRoutes><TeamsPage/></UserRoutes>}></Route>
-        <Route path="/team/:teamname" exact element={<TeamRoute><TeamPage/></TeamRoute>}></Route>
-        <Route path="/team/:teamname/manage" exact element={<UserRoutes><ManageTeam/></UserRoutes>}></Route>
+        <Route path="/team/:id" exact element={<TeamRoute><TeamPage/></TeamRoute>}></Route>
+        <Route path="/team/:id/manage" exact element={<TeamRoute><ManageTeam/></TeamRoute>}></Route>
         <Route path="/create_team" exact element={<UserRoutes><CreateTeam/></UserRoutes>}></Route>
       </Routes>
     </Router>
@@ -81,7 +81,10 @@ const UserRoutes = ({children}) => {
 }
 
 const TeamRoute = ({children}) => {
-  if (localStorage.getItem("currentUser")) {
+  const teams = JSON.parse(localStorage.getItem("teams"));
+  const teamId = useParams();
+  const [teamName] = teams.filter(team => team.id === teamId.id);
+  if (localStorage.getItem("currentUser") && teams.length > 0 && teams.includes(teamName)) {
     return (
       <div>
         <TeamNavbar/>
