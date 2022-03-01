@@ -13,6 +13,7 @@ import UserNavbar from "./User/UserNavbar";
 import ProfilePage from "./User/Profile/ProfilePage";
 import AccountSettings from "./User/AccountSettings";
 import TeamNavbar from "./User/Team/TeamNavbar";
+import TeamsPage from "./User/Team/TeamsPage";
 import TeamPage from "./User/Team/TeamPage";
 import ManageTeam from "./User/Team/Manage/ManageTeam";
 import CreateTeam from "./User/Team/CreateTeam";
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/reset_password" exact element={<AuthRoutes><ResetPassword/></AuthRoutes>}></Route>
         <Route path="/profile/:id" exact element={<UserRoutes><ProfilePage/></UserRoutes>}></Route>
         <Route path="/account" exact element={<UserRoutes><AccountSettings/></UserRoutes>}></Route>
+        <Route path="/teams" exact element={<UserRoutes><TeamsPage/></UserRoutes>}></Route>
         <Route path="/team/:teamname" exact element={<TeamRoute><TeamPage/></TeamRoute>}></Route>
         <Route path="/team/:teamname/manage" exact element={<UserRoutes><ManageTeam/></UserRoutes>}></Route>
         <Route path="/create_team" exact element={<UserRoutes><CreateTeam/></UserRoutes>}></Route>
