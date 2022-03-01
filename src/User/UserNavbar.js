@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
 
 export default function UserNavbar() {
 
  const user = JSON.parse(localStorage.getItem("currentUser"));
+
+ const teams = JSON.parse(localStorage.getItem("teams"));
+
+ useEffect(() => {
+   console.log(teams);
+ }, []);
 
  const logout = () => {
   localStorage.removeItem("teams");
@@ -33,9 +39,13 @@ export default function UserNavbar() {
                 <li className="nav-item">
                   <Link className="nav-link" to="/account">Account Settings</Link>
                 </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/team/:teamname">Team</Link>
-                </li>
+                {teams.map(team => {
+                  return (
+                    <li className="nav-item" key={team.id}>
+                      <Link className="nav-link" to={`/team/${team.name}`}>{team.name}</Link>
+                    </li>
+                  );
+                })}
                 <li className="nav-item">
                   <Link className="nav-link" to="/create_team">Add New Team</Link>
                 </li>
