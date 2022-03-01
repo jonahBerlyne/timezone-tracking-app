@@ -8,10 +8,6 @@ export default function UserNavbar() {
 
  const teams = JSON.parse(localStorage.getItem("teams"));
 
- useEffect(() => {
-   console.log(teams);
- }, []);
-
  const logout = () => {
   localStorage.removeItem("teams");
   localStorage.removeItem("currentUser");
@@ -39,7 +35,7 @@ export default function UserNavbar() {
                 <li className="nav-item">
                   <Link className="nav-link" to="/account">Account Settings</Link>
                 </li>
-                {teams.map(team => {
+                {teams && teams.map(team => {
                   return (
                     <li className="nav-item" key={team.id}>
                       <Link className="nav-link" to={`/team/${team.name}`}>{team.name}</Link>

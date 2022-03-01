@@ -21,7 +21,7 @@ export default function CreateTeam() {
    };
    await setDoc(docRef, teamInfo);
    const teams = JSON.parse(localStorage.getItem("teams"));
-   localStorage.setItem("teams", JSON.stringify([...teams, teamInfo]));
+   teams ? localStorage.setItem("teams", JSON.stringify([...teams, teamInfo])) : localStorage.setItem("teams", JSON.stringify([teamInfo]));
    alert("Team created");
    window.location.href = `/team/${teamName}/manage`;
   } catch (err) {
