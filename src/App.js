@@ -96,3 +96,9 @@ const TeamRoute = ({children}) => {
     return <Navigate to="/"/>;
   }
 }
+
+export const logout = () => {
+ localStorage.removeItem("teams");
+ localStorage.removeItem("currentUser");
+ window.location.href = "/";
+}

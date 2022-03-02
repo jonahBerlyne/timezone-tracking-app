@@ -1,16 +1,11 @@
 import React, { useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
+import { logout } from "../App";
 
 export default function UserNavbar() {
 
  const user = JSON.parse(localStorage.getItem("currentUser"));
-
- const logout = () => {
-  localStorage.removeItem("teams");
-  localStorage.removeItem("currentUser");
-  window.location.href = "/";
- }
 
  return (
     <div className='header'>
@@ -40,7 +35,7 @@ export default function UserNavbar() {
                   <Link className="nav-link" to="/create_team">Add New Team</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/" onClick={logout}>Log Out</Link>
+                  <Link className="nav-link" to="/" onClick={() => logout()}>Log Out</Link>
                 </li>
               </ul>
             </div>

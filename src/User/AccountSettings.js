@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import fireDB from "../firebaseConfig";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { EmailAuthProvider, getAuth, reauthenticateWithCredential, updateEmail, updatePassword } from "firebase/auth";
+import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { EmailAuthProvider, getAuth, reauthenticateWithCredential, updateEmail, updatePassword, deleteUser } from "firebase/auth";
+import { logout } from '../App';
 
 export default function AccountSettings() {
 
  const user = JSON.parse(localStorage.getItem("currentUser"));
 
- const auth = getAuth();
-
- const initialValues = { name: user.userInfo.name, email: user.email, password: '' };
-
+ const initialValues = { name: user.userInfo.name, email: user.email, password: '', delete: '', reason: '' };
+ 
  const [values, setValues] = useState(initialValues);
+
+ const auth = getAuth();
 
  const handleChange = e => {
   setValues({
@@ -49,6 +50,40 @@ export default function AccountSettings() {
   }
  }
 
+ const deleteAccount = async () => {
+  if (values.delete !== "DELETE") {
+   alert("Type in DELETE to delete your account");
+   return;
+  }
+  if (values.password === '') {
+   alert("Please enter your password in the password field to delete your account");
+   return;
+  }
+  try {
+   let docRef = doc(fireDB, "users", `${user.uid}`);
+   const currentUser = auth.currentUser;
+   const credential = EmailAuthProvider.credential(
+    auth.currentUser.email,
+    values.password
+   );
+   await reauthenticateWithCredential(currentUser, credential);
+   await deleteUser(currentUser);
+   await deleteDoc(docRef);
+   docRef = doc(fireDB, "deleted", `${user.uid}`);
+   if (values.reason === '') values.reason = "No reason given";
+   const deletedUser = {
+    name: user.userInfo.name,
+    email: user.email,
+    reason: values.reason
+   }
+   await setDoc(docRef, deletedUser);
+   alert("Account deleted");
+   logout();
+  } catch (err) {
+   alert(`Account deletion error: ${err}`);
+  }
+ }
+
  return (
   <div>
    <h1>Account Settings</h1>
@@ -68,18 +103,20 @@ export default function AccountSettings() {
     <input type="radio" name="location"/><label>Show my location to anyone</label>
     <input type="radio" name="location"/><label>Show my location to my team only</label>
     <input type="radio" name="location"/><label>Show my location to only me</label>
-    <label>Please enter your password to save any changes:</label>
-    <input type="password" name="password" value={values.password} onChange={handleChange} required/>
    </div>
    <button onClick={saveChanges}>Save changes</button>
    <div style={{display: "flex", flexDirection: "column"}}>
+    <label>Please enter your password to save any changes or to delete your account:</label>
+    <input type="password" name="password" value={values.password} onChange={handleChange} required/>
+   </div>
+   <div style={{display: "flex", flexDirection: "column"}}>
     <h4>Delete account:</h4>
     <label>Type DELETE to confirm:</label>
-    <input type="text"/>
+    <input type="text" name="delete" value={values.delete} onChange={handleChange}/>
     <label>Why are you deleting your account? (Optional)</label>
-    <textarea rows="10" cols="10"/>
+    <textarea rows="10" cols="10" name="reason" value={values.reason} onChange={handleChange}/>
    </div>
-   <button>Delete my account</button>
+   <button onClick={deleteAccount}>Delete my account</button>
   </div>
  );
 }

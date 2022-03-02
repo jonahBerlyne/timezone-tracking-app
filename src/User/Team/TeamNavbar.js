@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from "react-router-dom";
 import { FaBars, FaCog } from "react-icons/fa";
+import { logout } from '../../App';
 
 export default function TeamNavbar() {
 
@@ -9,12 +10,6 @@ export default function TeamNavbar() {
  const teams = JSON.parse(localStorage.getItem("teams"));
  const teamId = useParams();
  const [teamName] = teams.filter(team => team.id === teamId.id);
-
- const logout = () => {
-  localStorage.removeItem("teams");
-  localStorage.removeItem("currentUser");
-  window.location.href = "/";
- }
 
  return (
     <div className='header'>
@@ -49,7 +44,7 @@ export default function TeamNavbar() {
                   <Link className="nav-link" to="/create_team">Add New Team</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/" onClick={logout}>Log Out</Link>
+                  <Link className="nav-link" to="/" onClick={() => logout()}>Log Out</Link>
                 </li>
               </ul>
             </div>
