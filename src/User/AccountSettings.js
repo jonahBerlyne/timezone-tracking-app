@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import fireDB from "../firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { EmailAuthProvider, getAuth, reauthenticateWithCredential, updateEmail, updatePassword } from "firebase/auth";
 
 export default function AccountSettings() {
 
  const user = JSON.parse(localStorage.getItem("currentUser"));
 
- const initialValues = { name: user.userInfo.name, email: user.email };
+ const auth = getAuth();
+
+ const initialValues = { name: user.userInfo.name, email: user.email, password: '' };
 
  const [values, setValues] = useState(initialValues);
 
@@ -17,11 +20,11 @@ export default function AccountSettings() {
   });
  }
 
- useEffect(() => {
-  // console.log(user.userInfo.name);
- }, []);
-
  const saveChanges = async () => {
+  if (values.password === '') {
+   alert("You have to enter your password in the password field to save your changes");
+   return;
+  }
   try {
    const docRef = doc(fireDB, "users", `${user.uid}`);
    const userDoc = await getDoc(docRef);
@@ -31,6 +34,14 @@ export default function AccountSettings() {
    };
    await setDoc(docRef, userInfo);
    localStorage.setItem("currentUser", JSON.stringify({...user, userInfo}));
+   const currentUser = auth.currentUser;
+   const credential = EmailAuthProvider.credential(
+    auth.currentUser.email,
+    values.password
+   );
+   await reauthenticateWithCredential(currentUser, credential);
+   await updateEmail(currentUser, `${values.email}`);
+   localStorage.setItem("currentUser", JSON.stringify({...JSON.parse(localStorage.getItem("currentUser")), email: `${values.email}`}));
    alert("Changes saved");
    window.location = "/account";
   } catch (err) {
@@ -57,6 +68,8 @@ export default function AccountSettings() {
     <input type="radio" name="location"/><label>Show my location to anyone</label>
     <input type="radio" name="location"/><label>Show my location to my team only</label>
     <input type="radio" name="location"/><label>Show my location to only me</label>
+    <label>Please enter your password to save any changes:</label>
+    <input type="password" name="password" value={values.password} onChange={handleChange} required/>
    </div>
    <button onClick={saveChanges}>Save changes</button>
    <div style={{display: "flex", flexDirection: "column"}}>
