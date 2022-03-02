@@ -44,7 +44,7 @@ export default function ManageTeam() {
 
    {showAddMember && <AddTeamMember displayMembersDiv={displayMembersDiv} teamId={team.id}/>}
 
-   {showEditTeam && <EditTeamInfo displayMembersDiv={displayMembersDiv}/>}
+   {showEditTeam && <EditTeamInfo displayMembersDiv={displayMembersDiv} teamId={team.id}/>}
 
   </div>
  );
