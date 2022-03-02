@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import fireDB from "../firebaseConfig";
+import { Link } from 'react-router-dom';
+import fireDB from "../../firebaseConfig";
 import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
-import { EmailAuthProvider, getAuth, reauthenticateWithCredential, updateEmail, updatePassword, deleteUser } from "firebase/auth";
-import { logout } from '../App';
+import { EmailAuthProvider, getAuth, reauthenticateWithCredential, updateEmail, deleteUser } from "firebase/auth";
+import { logout } from '../../App';
 
 export default function AccountSettings() {
 
@@ -60,7 +61,16 @@ export default function AccountSettings() {
    return;
   }
   try {
-   let docRef = doc(fireDB, "users", `${user.uid}`);
+   const deletedUserRef = doc(fireDB, "deleted", `${user.uid}`);
+   if (values.reason === '') values.reason = "No reason given";
+   const deletedUser = {
+    name: user.userInfo.name,
+    email: user.email,
+    reason: values.reason
+   }
+   await setDoc(deletedUserRef, deletedUser);
+   const userDocRef = doc(fireDB, "users", `${user.uid}`);
+   await deleteDoc(userDocRef);
    const currentUser = auth.currentUser;
    const credential = EmailAuthProvider.credential(
     auth.currentUser.email,
@@ -68,15 +78,6 @@ export default function AccountSettings() {
    );
    await reauthenticateWithCredential(currentUser, credential);
    await deleteUser(currentUser);
-   await deleteDoc(docRef);
-   docRef = doc(fireDB, "deleted", `${user.uid}`);
-   if (values.reason === '') values.reason = "No reason given";
-   const deletedUser = {
-    name: user.userInfo.name,
-    email: user.email,
-    reason: values.reason
-   }
-   await setDoc(docRef, deletedUser);
    alert("Account deleted");
    logout();
   } catch (err) {
@@ -94,7 +95,7 @@ export default function AccountSettings() {
     <label>Email:</label>
     <input type="email" name="email" value={values.email} onChange={handleChange}/>
    </div>
-   <button>Change password</button>
+   <Link to="/account/change_password"><button>Change password</button></Link>
    <div style={{display: "flex", flexDirection: "column"}}>
     <h4>Time format:</h4>
     <input type="radio" name="time"/><label>AM/PM Format</label>
