@@ -47,7 +47,7 @@ const MainRoutes = ({children}) => {
       {localStorage.getItem("currentUser") && <UserNavbar/>}
       {!localStorage.getItem("currentUser") && <AuthNavbar/>}
       {children}
-      <Footer/>
+      {/* <Footer/> */}
     </div>
   );
 }
@@ -58,7 +58,7 @@ const AuthRoutes = ({children}) => {
       <div>
         <AuthNavbar/>
         {children}
-        <Footer/>
+        {/* <Footer/> */}
       </div>
     );
   } else {
@@ -72,7 +72,7 @@ const UserRoutes = ({children}) => {
       <div>
         <UserNavbar/>
         {children}
-        <Footer/>
+        {/* <Footer/> */}
       </div>
     );
   } else {
@@ -89,7 +89,7 @@ const TeamRoute = ({children}) => {
       <div>
         <TeamNavbar/>
         {children}
-        <Footer/>
+        {/* <Footer/> */}
       </div>
     );
   } else {
