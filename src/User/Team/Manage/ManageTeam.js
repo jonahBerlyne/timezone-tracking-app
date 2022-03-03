@@ -40,7 +40,7 @@ export default function ManageTeam() {
     <button><Link to={`/team/${team.id}`} style={{textDecoration: "none", color: "#000"}}>Go back to my team</Link></button>
    </div>
 
-   {showMembers && <TeamMembers/>}
+   {showMembers && <TeamMembers teamId={team.id}/>}
 
    {showAddMember && <AddTeamMember displayMembersDiv={displayMembersDiv} teamId={team.id}/>}
 
