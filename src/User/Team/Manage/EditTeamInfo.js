@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from "react-icons/fa"
 import fireDB from '../../../firebaseConfig';
-import { doc, setDoc, getDocs, query, collection } from "firebase/firestore";
+import { doc, setDoc, getDocs, query, collection, deleteDoc } from "firebase/firestore";
 
 export default function EditTeamInfo({ displayMembersDiv, teamId }) {
 
@@ -42,6 +42,25 @@ export default function EditTeamInfo({ displayMembersDiv, teamId }) {
   }
  }
 
+ const deleteTeam = async () => {
+  try {
+   const membersCollection = query(collection(fireDB, "users", `${user.uid}`, "teams", `${teamId}`, "team_members"));
+   const membersSnapshot = await getDocs(membersCollection);
+   membersSnapshot.forEach(async member => {
+    const memberRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamId}`, "team_members", `${member.data().id}`);
+    await deleteDoc(memberRef);
+   });
+   const docRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamId}`);
+   await deleteDoc(docRef);
+   const newTeams = teams.filter(team => team.id !== teamId);
+   localStorage.setItem("teams", JSON.stringify(newTeams));
+   alert("Team deleted");
+   window.location = `/teams`;
+  } catch (err) {
+   alert(`Team deletion error: ${err}`);
+  }
+ }
+
  return (
   <div style={{display: "flex", flexDirection: "column"}}>
 
@@ -57,7 +76,7 @@ export default function EditTeamInfo({ displayMembersDiv, teamId }) {
    <button onClick={saveNameChange}>Save</button>
 
    <label>Delete your team:</label>
-   <button>Delete {teamName}</button>
+   <button onClick={deleteTeam}>Delete {teamName}</button>
   </div>
  );
 }

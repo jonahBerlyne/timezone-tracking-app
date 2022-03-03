@@ -70,7 +70,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
  const saveChanges = async () => {
   try {
    setSaveClicked(false);
-   const docRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamId}`, "team members", `${values.id}`);
+   const docRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamId}`, "team_members", `${values.id}`);
    const memberInfo = {
     id: values.id,
     name: values.name,
