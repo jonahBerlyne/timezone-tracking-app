@@ -3,12 +3,12 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyApCdUd1vji0gGwdLVZU0pmyLRxHJGZ_Ok",
-  authDomain: "timezone-tracking-app.firebaseapp.com",
-  projectId: "timezone-tracking-app",
-  storageBucket: "timezone-tracking-app.appspot.com",
-  messagingSenderId: "825779299521",
-  appId: "1:825779299521:web:33b1768ee5bf7ba6952040"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
