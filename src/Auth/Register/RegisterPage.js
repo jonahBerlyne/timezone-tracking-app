@@ -11,7 +11,7 @@ export default function RegisterPage() {
  const [registerForm, setRegisterForm] = useState(true);
  const [profileSetUpForm, setProfileSetUpForm] = useState(false);
 
- const initialValues = {email: '', password: '', confirmPassword: '', name: '', location: ''};
+ const initialValues = {email: '', password: '', confirmPassword: '', name: '', country: ''};
  const [values, setValues] = useState(initialValues);
  const auth = getAuth();
 
@@ -57,6 +57,41 @@ export default function RegisterPage() {
 
  const formProps = {values, handleChange};
 
+ const apiKey = process.env.REACT_APP_TIMEZONE_API_KEY;
+
+ useEffect(() => {
+  fetchAPI();
+ }, []);
+
+ const [countries, setCountries] = useState([]);
+ const [zones, setZones] = useState([]);
+
+ const fetchAPI = async () => {
+  try {
+   console.clear();
+   const data = await fetch(`http://api.timezonedb.com/v2.1/list-time-zone?key=${apiKey}&format=json`);
+   const dataJSON = await data.json();
+   // console.log(dataJSON.zones);
+   let countriesArr = [];
+   let zonesArr = [];
+   dataJSON.zones.forEach(zone => {
+    countriesArr.push(zone.countryName);
+    zonesArr.push(zone.zoneName);
+   });
+   // console.log(zonesArr);
+   // console.log(dataJSON.zones.filter(x => x.countryCode === "US"));
+   // Countries with multiple time zones are Russia, USA, Canada, Australia, Mexico, Brazil, Indonesia, Kazakhstan, Mongolia, the Democratic Republic of the Congo, Kiribati, Micronesia, Chile, Spain, Portugal, and Ecuador
+   setCountries([...new Set(countriesArr)].sort());
+  } catch (err) {
+   alert(`Fetching error: ${err}`);
+  }
+ }
+
+ useEffect(() => {
+  console.clear();
+  console.log(values);
+ }, [values]);
+
  return (
   <div>
    {registerForm && 
@@ -67,7 +102,7 @@ export default function RegisterPage() {
    }
    {profileSetUpForm && 
     <div>
-     <ProfileSetUpForm {...formProps}/>
+     <ProfileSetUpForm {...formProps} countries={countries}/>
      <button onClick={goToRegisterInputs}>Go Back</button>
      <button onClick={register}>Register</button>
     </div>
