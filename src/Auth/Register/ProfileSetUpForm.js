@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-export default function ProfileSetUpForm({ values, handleChange, countries, changeCategory }) {
+export default function ProfileSetUpForm({ values, handleChange, countries, zones }) {
 
  return (
   <div>
@@ -14,14 +14,29 @@ export default function ProfileSetUpForm({ values, handleChange, countries, chan
     required
    />
    <h4>Select Your Country:</h4>
-   <select id="selectBox" name="country" onChange={handleChange} required>
-    <option defaultValue="">Choose a country</option>
+   <select name="country" onChange={handleChange} required>
+    <option defaultValue="" key=""></option>
     {countries.map(country => {
      return (
-      <option value={`${country}`}>{country}</option>
+      <option key={countries.indexOf(country)}>{country}</option>
      );
     })}
    </select>
+   <br/>
+   <br/>
+   {values.country !== "" &&
+    <div>
+     <h4>Select Your Timezone:</h4>
+     <select id="timezoneBox" name="timezone" onChange={handleChange} required>
+      <option defaultValue="" key=""></option>
+      {zones.map(zone => {
+       return (
+        <option key={zones.indexOf(zone)}>{zone}</option>
+       );
+      })}
+     </select>
+    </div>
+   }
    <hr/>
   </div>
  );

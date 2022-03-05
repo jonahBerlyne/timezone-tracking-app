@@ -11,7 +11,7 @@ export default function RegisterPage() {
  const [registerForm, setRegisterForm] = useState(true);
  const [profileSetUpForm, setProfileSetUpForm] = useState(false);
 
- const initialValues = {email: '', password: '', confirmPassword: '', name: '', country: ''};
+ const initialValues = { email: '', password: '', confirmPassword: '', name: '', country: '', timezone: '' };
  const [values, setValues] = useState(initialValues);
  const auth = getAuth();
 
@@ -49,10 +49,17 @@ export default function RegisterPage() {
  }
 
  const handleChange = e => {
-  setValues({
-   ...values,
-   [e.target.name]: e.target.value
-  });
+  if (e.target.name === "country") {
+   setValues({
+    ...values,
+    [e.target.name]: e.target.value
+   });
+  } else {
+   setValues({
+    ...values,
+    [e.target.name]: e.target.value
+   });
+  }
  }
 
  const formProps = {values, handleChange};
@@ -65,30 +72,55 @@ export default function RegisterPage() {
 
  const [countries, setCountries] = useState([]);
  const [zones, setZones] = useState([]);
+ const [zonesConst, setZonesConst] = useState([]);
 
  const fetchAPI = async () => {
   try {
-   console.clear();
    const data = await fetch(`http://api.timezonedb.com/v2.1/list-time-zone?key=${apiKey}&format=json`);
    const dataJSON = await data.json();
    // console.log(dataJSON.zones);
    let countriesArr = [];
    let zonesArr = [];
    dataJSON.zones.forEach(zone => {
+    console.log();
     countriesArr.push(zone.countryName);
-    zonesArr.push(zone.zoneName);
+    zonesArr.push(zone);
    });
+   setZonesConst(zonesArr);
    // console.log(zonesArr);
    // console.log(dataJSON.zones.filter(x => x.countryCode === "US"));
    // Countries with multiple time zones are Russia, USA, Canada, Australia, Mexico, Brazil, Indonesia, Kazakhstan, Mongolia, the Democratic Republic of the Congo, Kiribati, Micronesia, Chile, Spain, Portugal, and Ecuador
+   // console.log(countriesArr);
+   // console.log([...new Set(countriesArr)].sort());
    setCountries([...new Set(countriesArr)].sort());
   } catch (err) {
    alert(`Fetching error: ${err}`);
   }
  }
 
+ // useEffect(() => {
+ //  console.log(zones);
+ // }, [zones]);
+
  useEffect(() => {
-  console.clear();
+  if (values.country !== "") {
+   console.clear();
+   const zonesCopy = zonesConst;
+   const timezones = zonesCopy.filter(zone => zone.countryName === values.country);
+   // console.log(typeof timezones);
+   let timezonesArr = [];
+   timezones.forEach(timezone => {
+    timezonesArr.push(timezone.zoneName);
+   });
+   // console.log(timezonesArr);
+   setZones(timezonesArr);
+  }
+  if (values.timezone !== "") {
+   const timezoneBox = document.getElementById("timezoneBox");
+   const selectedValue = timezoneBox.options[timezoneBox.selectedIndex].value;
+   console.log(selectedValue);
+   // fix this later
+  }
   console.log(values);
  }, [values]);
 
@@ -102,7 +134,7 @@ export default function RegisterPage() {
    }
    {profileSetUpForm && 
     <div>
-     <ProfileSetUpForm {...formProps} countries={countries}/>
+     <ProfileSetUpForm {...formProps} countries={countries} zones={zones}/>
      <button onClick={goToRegisterInputs}>Go Back</button>
      <button onClick={register}>Register</button>
     </div>
