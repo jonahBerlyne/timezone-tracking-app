@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ProfileSetUpForm({ values, handleChange, countries, zones }) {
+export default function ProfileSetUpForm({ values, handleChange, countries, zones, showZones }) {
 
  return (
   <div>
@@ -24,7 +24,7 @@ export default function ProfileSetUpForm({ values, handleChange, countries, zone
    </select>
    <br/>
    <br/>
-   {values.country !== "" &&
+   {showZones &&
     <div>
      <h4>Select Your Timezone:</h4>
      <select id="timezoneBox" name="timezone" onChange={handleChange} required>
