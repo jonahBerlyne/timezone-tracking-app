@@ -9,15 +9,59 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
 
  const user = JSON.parse(localStorage.getItem("currentUser"));
 
- const initialValues = { id: uniqid(), email: '', name: '', location: '' };
+ const initialValues = { id: uniqid(), email: '', name: '', country: '', timezone: '' };
 
  const [values, setValues] = useState(initialValues);
 
+ useEffect(() => {
+  fetchAPI();
+ }, []);
+
+ const [countries, setCountries] = useState([]);
+ const [zones, setZones] = useState([]);
+ const [zonesConst, setZonesConst] = useState([]);
+ const [zoneData, setZoneData] = useState([]);
+
+ const fetchAPI = async () => {
+  try {
+   const apiKey = process.env.REACT_APP_TIMEZONE_API_KEY;
+   const data = await fetch(`http://api.timezonedb.com/v2.1/list-time-zone?key=${apiKey}&format=json`);
+   const dataJSON = await data.json();
+   setZoneData(dataJSON.zones);
+   let countriesArr = [];
+   let zonesArr = [];
+   dataJSON.zones.forEach(zone => {
+    countriesArr.push(zone.countryName);
+    zonesArr.push(zone);
+   });
+   setZonesConst(zonesArr);
+   setCountries([...new Set(countriesArr)].sort());
+  } catch (err) {
+   alert(`Fetching error: ${err}`);
+  }
+ }
+
+ const [showZones, setShowZones] = useState(false);
+
  const handleChange = e => {
-  setValues({
-   ...values,
-   [e.target.name]: e.target.value
-  });
+  if (e.target.name === "country") {
+   setValues({
+    ...values,
+    [e.target.name]: e.target.value,
+    timezone: ""
+   });
+   setShowZones(false);
+   if (e.target.value !== "") {
+    setTimeout(() => {
+     setShowZones(true);
+    }, 0.0000000000000000001);
+   }
+  } else {
+   setValues({
+    ...values,
+    [e.target.name]: e.target.value
+   });
+  }
  }
 
  const [emailDiv, setEmailDiv] = useState(true);
@@ -49,32 +93,34 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
  }
 
  const [imgUrl, setImgUrl] = useState("");
- const [saveClicked, setSaveClicked] = useState(false);
+ // const [saveClicked, setSaveClicked] = useState(false);
 
  const handleUpload = async () => {
   try {
-   const uploadTask = ref(storage, `${user.uid}/teams/${teamId}/members/${values.id}`);
+   const uploadTask = ref(storage, `${user.userInfo.name}:${user.uid}/teams/${teamId}/members/${values.id}`);
    await uploadBytes(uploadTask, imgFile);
    const url = await getDownloadURL(uploadTask);
    setImgUrl(url);
-   setSaveClicked(true);
+   // setSaveClicked(true);
   } catch (err) {
    alert(`Upload error: ${err}`);
   }
  }
 
- useEffect(() => {
-  if (saveClicked) saveChanges();
- }, [saveClicked]);
+ // useEffect(() => {
+ //  if (saveClicked) saveChanges();
+ // }, [saveClicked]);
 
  const saveChanges = async () => {
   try {
-   setSaveClicked(false);
+   await handleUpload();
+   // setSaveClicked(false);
    const docRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamId}`, "team_members", `${values.id}`);
+   const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
    const memberInfo = {
     id: values.id,
     name: values.name,
-    location: values.location,
+    timezoneData: userZoneData[0],
     profilePic: imgUrl
    };
    await setDoc(docRef, memberInfo);
@@ -85,6 +131,20 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
    alert(`Change saving error: ${err}`);
   }
  }
+
+ useEffect(() => {
+  if (values.country !== "") {
+   const zonesCopy = zonesConst;
+   const timezones = zonesCopy.filter(zone => zone.countryName === values.country);
+   let timezonesArr = [];
+   timezones.forEach(timezone => {
+    timezonesArr.push(timezone.zoneName);
+   });
+   setZones(timezonesArr);
+  }
+  console.clear();
+  console.log(values);
+ }, [values]);
 
  return (
   <div>
@@ -107,10 +167,34 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
     <div style={{display: "flex", flexDirection: "column"}}>
      <input onChange={choosePic} type="file"/>
      {imgFileErr && <h6>{imgFileErr}</h6>}
-     <input type="text" name="name" value={values.name} onChange={handleChange} placeholder="Name" required/>
-     <input type="text" name="location" value={values.location} onChange={handleChange} placeholder="Location" required/>
+     <h4>Name:</h4>
+     <input type="text" name="name" value={values.name} onChange={handleChange} required/>
+     <h4>Country:</h4>
+     <select name="country" onChange={handleChange} required>
+      <option defaultValue="" key=""></option>
+      {countries.map(country => {
+       return (
+        <option key={countries.indexOf(country)}>{country}</option>
+       );
+      })}
+     </select>
+     {showZones && 
+      <div>
+       <h4>Timezone:</h4>
+       <select name="timezone" onChange={handleChange} required>
+        <option defaultValue="" key=""></option>
+        {zones.map(zone => {
+         return (
+          <option key={zones.indexOf(zone)}>{zone}</option>
+         );
+        })}
+       </select>
+      </div>
+     }
+     <br/>
+     <br/>
      <button onClick={showEmailDiv}>Back</button>
-     <button onClick={handleUpload}>Save</button>
+     <button onClick={saveChanges}>Save</button>
     </div>
    }
 
