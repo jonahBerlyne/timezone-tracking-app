@@ -5,6 +5,7 @@ import fireDB from '../../firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
 import { storage } from '../../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { findUTCOffset } from '../../App';
 
 export default function ProfilePage() {
 
@@ -141,10 +142,11 @@ export default function ProfilePage() {
    await handleUpload();
    const docRef = doc(fireDB, "users", `${user.uid}`);
    const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
+   const utcOffset = findUTCOffset(userZoneData[0].gmtOffset);
    const userInfo = {
     id: user.uid,
     name: values.name !== "" ? values.name : user.userInfo.name,
-    timezoneData: values.country !== "" && values.timezone !== "" ? userZoneData[0] : user.userInfo.timezoneData,
+    timezoneData: values.country !== "" && values.timezone !== "" ? {...userZoneData[0], utcOffset} : user.userInfo.timezoneData,
     profilePic: imgUrl
    };
    await setDoc(docRef, userInfo);

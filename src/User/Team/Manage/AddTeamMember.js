@@ -4,6 +4,7 @@ import uniqid from "uniqid";
 import fireDB, { storage } from '../../../firebaseConfig';
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { findUTCOffset } from '../../../App';
 
 export default function AddTeamMember({ displayMembersDiv, teamId }) {
 
@@ -97,7 +98,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
 
  const handleUpload = async () => {
   try {
-   const uploadTask = ref(storage, `${user.userInfo.name}:${user.uid}/teams/${teamId}/members/${values.id}`);
+   const uploadTask = ref(storage, `${user.uid}/teams/${teamId}/members/${values.id}`);
    await uploadBytes(uploadTask, imgFile);
    const url = await getDownloadURL(uploadTask);
    setImgUrl(url);
@@ -117,10 +118,11 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
    // setSaveClicked(false);
    const docRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamId}`, "team_members", `${values.id}`);
    const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
+   const utcOffset = findUTCOffset(userZoneData[0].gmtOffset);
    const memberInfo = {
     id: values.id,
     name: values.name,
-    timezoneData: userZoneData[0],
+    timezoneData: {...userZoneData[0], utcOffset},
     profilePic: imgUrl
    };
    await setDoc(docRef, memberInfo);
