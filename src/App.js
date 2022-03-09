@@ -105,3 +105,9 @@ export const logout = () => {
  localStorage.removeItem("currentUser");
  window.location.href = "/";
 }
+
+export const findUTCOffset = gmt => {
+  const initDiff = gmt / 3600;
+  const roundedDiff = Math.floor(initDiff);
+  return roundedDiff;
+}

@@ -5,6 +5,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import fireDB from "../../firebaseConfig";
 import ProfileSetUpForm from './ProfileSetUpForm';
 import { doc, setDoc } from 'firebase/firestore';
+import { findUTCOffset } from '../../App';
 
 export default function RegisterPage() {
 
@@ -52,14 +53,16 @@ export default function RegisterPage() {
 
  const register = async () => {
   try {
-   const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
    const userAuth = await createUserWithEmailAndPassword(auth, values.email, values.password);
    const docRef = doc(fireDB, "users", `${userAuth.user.uid}`);
+   const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
+   const utcOffset = findUTCOffset(userZoneData[0].gmtOffset);
    const userInfo = {
     id: userAuth.user.uid,
     name: values.name,
-    timezoneData: userZoneData[0]
+    timezoneData: {...userZoneData[0], utcOffset}
    };
+   console.clear();
    console.log(userInfo);
    await setDoc(docRef, userInfo);
    localStorage.setItem("currentUser", JSON.stringify({...userAuth.user, userInfo}));
