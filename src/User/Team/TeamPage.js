@@ -12,9 +12,20 @@ export default function TeamPage() {
   try {
    const membersCollection = query(collection(fireDB, "users", `${user.uid}`, "teams", `${team.id}`, "team_members"));
    const membersSnapshot = await getDocs(membersCollection);
+   let tempArr = [];
    membersSnapshot.forEach(member => {
-    console.log(member.data());
+    tempArr.push(member.data());
    });
+   let membersArr = [];
+   const arrConst = [...tempArr];
+   console.log(arrConst);
+   for (let i = -12; i <= 14; i++) {
+    tempArr = tempArr.filter(member => member.timezoneData.utcOffset === i);
+    membersArr.push(tempArr);
+    tempArr = arrConst;
+   }
+   membersArr = membersArr.filter(members => members.length > 0);
+   console.log(membersArr);
   } catch (err) {
    alert(`Team members retrieval error: ${err}`);
   }
