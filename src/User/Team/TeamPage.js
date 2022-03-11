@@ -7,6 +7,7 @@ export default function TeamPage() {
 
  const user = JSON.parse(localStorage.getItem("currentUser"));
  const team = useParams();
+ const [timezones, setTimezones] = useState([]);
 
  const getTeamMembers = async () => {
   try {
@@ -18,14 +19,14 @@ export default function TeamPage() {
    });
    let membersArr = [];
    const arrConst = [...tempArr];
-   console.log(arrConst);
    for (let i = -12; i <= 14; i++) {
     tempArr = tempArr.filter(member => member.timezoneData.utcOffset === i);
-    membersArr.push(tempArr);
+    if (tempArr.length > 0) membersArr.push([i, tempArr]);
     tempArr = arrConst;
    }
-   membersArr = membersArr.filter(members => members.length > 0);
+   console.clear();
    console.log(membersArr);
+   setTimezones(membersArr);
   } catch (err) {
    alert(`Team members retrieval error: ${err}`);
   }
@@ -37,7 +38,28 @@ export default function TeamPage() {
 
  return (
   <div>
-   TeamPage
+   <h1 style={{textAlign: "center"}}>Your team:</h1>
+   <br/>
+   <div style={{display: "flex", gap: "5px"}}>
+    {timezones.map(timezone => {
+     return (
+      <div key={timezone[0]}>
+       <h2>{timezone[0]}</h2>
+       <br/>
+       {timezone[1].map(member => {
+        const locationData = member.timezoneData.zoneName;
+        const location = locationData.substring(locationData.indexOf("/") + 1, locationData.length).replace(/_+/g, ' ');
+        return (
+         <div key={member.id}>
+          <h3>{member.name}</h3>
+          <h5>{location}</h5>
+         </div>
+        );
+       })}
+      </div>
+     );
+    })}
+   </div>
   </div>
  );
 }
