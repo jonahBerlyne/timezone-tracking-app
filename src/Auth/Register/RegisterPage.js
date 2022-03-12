@@ -5,7 +5,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import fireDB from "../../firebaseConfig";
 import ProfileSetUpForm from './ProfileSetUpForm';
 import { doc, setDoc } from 'firebase/firestore';
-import { findUTCOffset } from '../../App';
+import { findUTCOffset } from '../../User/Time';
 
 export default function RegisterPage() {
 

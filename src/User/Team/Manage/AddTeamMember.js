@@ -4,7 +4,7 @@ import uniqid from "uniqid";
 import fireDB, { storage } from '../../../firebaseConfig';
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { findUTCOffset } from '../../../App';
+import { findUTCOffset } from '../../Time';
 
 export default function AddTeamMember({ displayMembersDiv, teamId }) {
 

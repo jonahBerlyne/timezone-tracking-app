@@ -5,7 +5,7 @@ import fireDB from '../../firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
 import { storage } from '../../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { findUTCOffset } from '../../App';
+import { findUTCOffset } from '../Time';
 
 export default function ProfilePage() {
 

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import fireDB from "../../firebaseConfig";
-import { doc, getDocs, query, collection } from "firebase/firestore";
+import { getDocs, query, collection } from "firebase/firestore";
 import { useParams } from 'react-router-dom';
+import { formatAMPM } from '../Time';
 
 export default function TeamPage() {
 
@@ -44,14 +45,15 @@ export default function TeamPage() {
     {timezones.map(timezone => {
      return (
       <div key={timezone[0]}>
-       <h2>{timezone[0]}</h2>
+       <h3>UTC {timezone[0]}</h3>
+       <h2>{formatAMPM(timezone[0])}</h2>
        <br/>
        {timezone[1].map(member => {
         const locationData = member.timezoneData.zoneName;
         const location = locationData.substring(locationData.indexOf("/") + 1, locationData.length).replace(/_+/g, ' ');
         return (
          <div key={member.id}>
-          <h3>{member.name}</h3>
+          <h4>{member.name}</h4>
           <h5>{location}</h5>
          </div>
         );
