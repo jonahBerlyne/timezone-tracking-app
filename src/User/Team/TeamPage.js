@@ -45,7 +45,7 @@ export default function TeamPage() {
     {timezones.map(timezone => {
      return (
       <div key={timezone[0]}>
-       <h3>UTC {timezone[0]}</h3>
+       <h3>UTC {timezone[0] > -1 ? `+${timezone[0]}` : timezone[0]}</h3>
        <h2>{formatAMPM(timezone[0])}</h2>
        <br/>
        {timezone[1].map(member => {
