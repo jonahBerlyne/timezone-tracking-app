@@ -30,6 +30,8 @@ export default function ManageTeam() {
   setShowEditTeam(true);
  }
 
+ const goBackToTeamPage = () => window.location = `/team/${team.id}`;
+
  return (
   <div style={{display: "flex", gap: "100px"}}>
 
@@ -37,7 +39,7 @@ export default function ManageTeam() {
     <p>Edit and add members of your team here.</p>
     <button onClick={displayAddMemberDiv}>Add team member</button>
     <button onClick={displayEditTeamDiv}>Edit team info</button>
-    <button><Link to={`/team/${team.id}`} style={{textDecoration: "none", color: "#000"}}>Go back to my team</Link></button>
+    <button style={{textDecoration: "none", color: "#000"}} onClick={goBackToTeamPage}>Go back to my team</button>
    </div>
 
    {showMembers && <TeamMembers teamId={team.id}/>}
