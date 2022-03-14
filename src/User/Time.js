@@ -38,7 +38,39 @@ export const formatAMPM = diff => {
    ampm = "am";
  }
  if (hours === 0) hours = 12;
+ hours = hours < 10 ? `0${hours}` : hours;
  minutes = minutes < 10 ? `0${minutes}` : minutes;
  const strTime = `${hours}:${minutes}${ampm}`;
  return strTime;
+}
+
+export const formatMT = diff => {
+  const date = new Date();
+  const utcHours = date.getUTCHours();
+  const timezoneMinutes = diff % 1;
+  const hoursDiff = diff - timezoneMinutes;
+  const hoursSum = utcHours + hoursDiff;
+  let hours = hoursSum % 24;
+  const utcMinutes = date.getUTCMinutes();
+  const minutesOnClock = timezoneMinutes * 60;
+  const minutesDiff = utcMinutes + minutesOnClock;
+  let minutes = 0;
+  if (utcMinutes !== minutesDiff) {
+   if (minutesDiff >= 60) {
+     minutes = minutesDiff - 60;
+     hours++;
+    } else if (minutesDiff < 0) {
+      minutes = 60 + minutesDiff;
+      hours > 0 ? hours-- : hours = 23;
+    } else {
+      minutes = minutesDiff;
+    }
+  } else {
+    minutes = utcMinutes;
+  }
+  if (hours === 24) hours = 0;
+  hours = hours < 10 ? `0${hours}` : hours;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  const strTime = `${hours}:${minutes}`;
+  return strTime;
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import fireDB from "../../firebaseConfig";
 import { getDocs, query, collection } from "firebase/firestore";
 import { useParams } from 'react-router-dom';
-import { formatAMPM } from '../Time';
+import { formatAMPM, formatMT } from '../Time';
 
 export default function TeamPage() {
 
@@ -48,6 +48,7 @@ export default function TeamPage() {
       <div key={timezone[0]}>
       <h3>UTC {timezone[0] > -1 ? `+${Math.floor(timezone[0])}` : Math.ceil(timezone[0])}:{timezone[0] % 1 !== 0 ? `${Math.abs((timezone[0] % 1)*60)}` : "00"}</h3>
        <h2>{formatAMPM(timezone[0])}</h2>
+       <h2>{formatMT(timezone[0])}</h2>
        <br/>
        {timezone[1].map(member => {
         const locationData = member.timezoneData.zoneName;
