@@ -41,13 +41,13 @@ export default function TeamPage() {
   <div>
    <h1 style={{textAlign: "center"}}>Your team:</h1>
    <br/>
-   <div style={{display: "flex", gap: "5px"}}>
+   <div style={{display: "flex", gap: "5px", flexWrap: "wrap"}}>
     {timezones.map(timezone => {
-     console.log(Math.floor(timezone[0]) < timezone[0] < Math.ceil(timezone[0]));
+     // console.log(Math.floor(timezone[0]) < timezone[0] < Math.ceil(timezone[0]));
      return (
       <div key={timezone[0]}>
       <h3>UTC {timezone[0] > -1 ? `+${Math.floor(timezone[0])}` : Math.ceil(timezone[0])}:{timezone[0] % 1 !== 0 ? `${Math.abs((timezone[0] % 1)*60)}` : "00"}</h3>
-       {/* <h2>{formatAMPM(timezone[0])}</h2> */}
+       <h2>{formatAMPM(timezone[0])}</h2>
        <br/>
        {timezone[1].map(member => {
         const locationData = member.timezoneData.zoneName;
