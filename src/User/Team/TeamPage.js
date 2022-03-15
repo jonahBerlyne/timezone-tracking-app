@@ -33,9 +33,20 @@ export default function TeamPage() {
   }
  }
 
+ const [refresh, setRefresh] = useState(false);
+ const [seconds, setSeconds] = useState(null);
+
  useEffect(() => {
   getTeamMembers();
  }, []);
+
+ // useEffect(() => {
+ //  let date = new Date();
+ //  setInterval(() => {
+ //   setSeconds(date.getUTCSeconds());
+ //  }, 1000);
+ //  console.log(seconds);
+ // });
 
  return (
   <div>
@@ -43,10 +54,10 @@ export default function TeamPage() {
    <br/>
    <div style={{display: "flex", gap: "5px", flexWrap: "wrap"}}>
     {timezones.map(timezone => {
-     // console.log(Math.floor(timezone[0]) < timezone[0] < Math.ceil(timezone[0]));
+     // console.log(Math.floor(timezone[0]), timezone[0], Math.ceil(timezone[0]));
      return (
       <div key={timezone[0]}>
-      <h3>UTC {timezone[0] > -1 ? `+${Math.floor(timezone[0])}` : Math.ceil(timezone[0])}:{timezone[0] % 1 !== 0 ? `${Math.abs((timezone[0] % 1)*60)}` : "00"}</h3>
+      <h3>UTC {Math.ceil(timezone[0]) >= 0 ? "+" : "-"}{(Math.ceil(timezone[0]) <= -10 || Math.floor(timezone[0] >= 10)) ? "" : "0"}{timezone[0] > 0 ? Math.abs(Math.floor(timezone[0])) : Math.abs(Math.ceil(timezone[0]))}:{timezone[0] % 1 !== 0 ? `${Math.abs((timezone[0] % 1)*60)}` : "00"}</h3>
        <h2>{formatAMPM(timezone[0])}</h2>
        <h2>{formatMT(timezone[0])}</h2>
        <br/>

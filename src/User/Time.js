@@ -11,7 +11,8 @@ export const formatAMPM = diff => {
  const utcHours = date.getUTCHours();
  const timezoneMinutes = diff % 1;
  const hoursDiff = diff - timezoneMinutes;
- const hoursSum = utcHours + hoursDiff;
+ let hoursSum = utcHours + hoursDiff;
+ if (hoursSum < 0) hoursSum = 24 + hoursSum;
  let hours = hoursSum % 12;
  const utcMinutes = date.getUTCMinutes();
  const minutesOnClock = timezoneMinutes * 60;
@@ -32,7 +33,7 @@ export const formatAMPM = diff => {
  }
  const hoursCount = hoursSum % 24;
  let ampm = "";
- if ((hoursCount > 12 && hoursCount < 23) || (hoursCount === 0 && minutesDiff < 0) || (hoursCount === 12 && minutesDiff >= 0) || (hoursCount === 23 && minutesDiff < 60)) {
+ if ((hoursCount > 12 && hoursCount < 23) || (hoursCount === 0 && minutesDiff < 0) || (hoursCount === 11 && minutesDiff >= 60) || (hoursCount === 12 && minutesDiff >= 0) || (hoursCount === 23 && minutesDiff < 60)) {
   ampm = "pm";
  } else {
    ampm = "am";
@@ -49,7 +50,8 @@ export const formatMT = diff => {
   const utcHours = date.getUTCHours();
   const timezoneMinutes = diff % 1;
   const hoursDiff = diff - timezoneMinutes;
-  const hoursSum = utcHours + hoursDiff;
+  let hoursSum = utcHours + hoursDiff;
+  if (hoursSum < 0) hoursSum = 24 + hoursSum;
   let hours = hoursSum % 24;
   const utcMinutes = date.getUTCMinutes();
   const minutesOnClock = timezoneMinutes * 60;
