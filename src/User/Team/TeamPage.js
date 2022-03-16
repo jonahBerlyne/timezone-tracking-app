@@ -18,6 +18,7 @@ export default function TeamPage() {
    membersSnapshot.forEach(member => {
     tempArr.push(member.data());
    });
+   console.log(tempArr);
    let membersArr = [];
    const arrConst = [...tempArr];
    for (let i = -12; i <= 14; i+=0.25) {
@@ -25,7 +26,6 @@ export default function TeamPage() {
     if (tempArr.length > 0) membersArr.push([i, tempArr]);
     tempArr = arrConst;
    }
-   console.clear();
    console.log(membersArr);
    setTimezones(membersArr);
   } catch (err) {
@@ -58,8 +58,8 @@ export default function TeamPage() {
      return (
       <div key={timezone[0]}>
       <h3>UTC {Math.ceil(timezone[0]) >= 0 ? "+" : "-"}{(Math.ceil(timezone[0]) <= -10 || Math.floor(timezone[0] >= 10)) ? "" : "0"}{timezone[0] > 0 ? Math.abs(Math.floor(timezone[0])) : Math.abs(Math.ceil(timezone[0]))}:{timezone[0] % 1 !== 0 ? `${Math.abs((timezone[0] % 1)*60)}` : "00"}</h3>
-       <h2>{user.format === "ampm" && formatAMPM(timezone[0])}</h2>
-       <h2>{user.format === "MT" && formatMT(timezone[0])}</h2>
+       <h2>{user.userInfo.format === "ampm" && formatAMPM(timezone[0])}</h2>
+       <h2>{user.userInfo.format === "MT" && formatMT(timezone[0])}</h2>
        <br/>
        {timezone[1].map(member => {
         const locationData = member.timezoneData.zoneName;

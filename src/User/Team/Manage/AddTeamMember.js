@@ -122,8 +122,9 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
    const memberInfo = {
     id: values.id,
     name: values.name,
-    timezoneData: {...userZoneData[0], utcOffset},
-    profilePic: imgUrl
+    timezoneData: userZoneData[0],
+    profilePic: imgUrl,
+    utcOffset: utcOffset
    };
    await setDoc(docRef, memberInfo);
    alert("Changes saved");
