@@ -9,9 +9,15 @@ export default function AccountSettings() {
 
  const user = JSON.parse(localStorage.getItem("currentUser"));
 
- const initialValues = { name: user.userInfo.name, email: user.email, password: '', delete: '', reason: '' };
+ const initialValues = { name: user.userInfo.name, email: user.email, password: '', format: user.userInfo.format, delete: '', reason: '' };
+
  
  const [values, setValues] = useState(initialValues);
+ 
+ useEffect(() => {
+  console.clear();
+  console.log(values);
+ }, [values]);
 
  const auth = getAuth();
 
@@ -32,7 +38,8 @@ export default function AccountSettings() {
    const userDoc = await getDoc(docRef);
    const userInfo = {
     ...userDoc.data(),
-    name: values.name
+    name: values.name,
+    format: values.format
    };
    await setDoc(docRef, userInfo);
    localStorage.setItem("currentUser", JSON.stringify({...user, userInfo}));
@@ -98,8 +105,10 @@ export default function AccountSettings() {
    <Link to="/account/change_password"><button>Change password</button></Link>
    <div style={{display: "flex", flexDirection: "column"}}>
     <h4>Time format:</h4>
-    <input type="radio" name="time"/><label>AM/PM Format</label>
-    <input type="radio" name="time"/><label>24 Hr. Format</label>
+    <div value={values.format} onChange={handleChange}>
+     <input type="radio" name="format" checked={values.format === "ampm"} value="ampm"/><label>AM/PM Format</label>
+     <input type="radio" name="format" checked={values.format === "MT"} value="MT"/><label>24 Hr. Format</label>
+    </div>
     <h4>Location privacy:</h4>
     <input type="radio" name="location"/><label>Show my location to anyone</label>
     <input type="radio" name="location"/><label>Show my location to my team only</label>
