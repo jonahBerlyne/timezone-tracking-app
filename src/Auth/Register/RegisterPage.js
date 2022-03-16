@@ -33,11 +33,6 @@ export default function RegisterPage() {
     zonesArr.push(zone);
    });
    setZonesConst(zonesArr);
-   // console.log(zonesArr);
-   // console.log(dataJSON.zones.filter(x => x.countryCode === "US"));
-   // Countries with multiple time zones are Russia, USA, Canada, Australia, Mexico, Brazil, Indonesia, Kazakhstan, Mongolia, the Democratic Republic of the Congo, Kiribati, Micronesia, Chile, Spain, Portugal, and Ecuador
-   // console.log(countriesArr);
-   // console.log([...new Set(countriesArr)].sort());
    setCountries([...new Set(countriesArr)].sort());
   } catch (err) {
    alert(`Fetching error: ${err}`);
@@ -47,7 +42,7 @@ export default function RegisterPage() {
  const [registerForm, setRegisterForm] = useState(true);
  const [profileSetUpForm, setProfileSetUpForm] = useState(false);
 
- const initialValues = { email: '', password: '', confirmPassword: '', name: '', country: '', timezone: '' };
+ const initialValues = { email: '', password: '', confirmPassword: '', name: '', country: '', timezone: '', format: '' };
  const [values, setValues] = useState(initialValues);
  const auth = getAuth();
 
@@ -58,9 +53,11 @@ export default function RegisterPage() {
    const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
    const utcOffset = findUTCOffset(userZoneData[0].gmtOffset);
    const userInfo = {
+    format: values.format,
     id: userAuth.user.uid,
     name: values.name,
-    timezoneData: {...userZoneData[0], utcOffset}
+    timezoneData: userZoneData[0],
+    utcOffset: utcOffset
    };
    console.clear();
    console.log(userInfo);
@@ -91,7 +88,8 @@ export default function RegisterPage() {
    ...values,
    name: "",
    country: "",
-   timezone: ""
+   timezone: "",
+   format: ""
   });
  }
  const [showZones, setShowZones] = useState(false);
@@ -101,12 +99,15 @@ export default function RegisterPage() {
    setValues({
     ...values,
     [e.target.name]: e.target.value,
-    timezone: ""
+    timezone: "",
+    format: ""
    });
    setShowZones(false);
-   setTimeout(() => {
-    setShowZones(true);
-   }, 0.0000000000000000001);
+   if (e.target.value !== "") {
+    setTimeout(() => {
+     setShowZones(true);
+    }, 0.0000000000000000001);
+   }
   } else {
    setValues({
     ...values,
@@ -132,6 +133,7 @@ export default function RegisterPage() {
    });
    setZones(timezonesArr);
   }
+  console.clear();
   console.log(values);
  }, [values]);
 

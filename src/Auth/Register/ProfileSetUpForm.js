@@ -35,6 +35,11 @@ export default function ProfileSetUpForm({ values, handleChange, countries, zone
        );
       })}
      </select>
+     <h4>Select A Time Format:</h4>
+     <div values={values.format} onChange={handleChange}>
+      <input type="radio" name="format" value="ampm"/>AMPM
+      <input type="radio" name="format" value="MT"/>MT
+     </div>
     </div>
    }
    <hr/>
