@@ -162,7 +162,7 @@ export default function ProfilePage() {
   <div>
    {showProfile &&
     <div>
-     <Profile name={user.userInfo.name} zoneName={profileZone} imgUrl={imgUrl}/>
+     <Profile name={user.userInfo.name} zoneName={profileZone} imgUrl={imgUrl} format={user.userInfo.format} utcOffset={user.userInfo.utcOffset}/>
      <button onClick={goToEditProfile}>Edit your profile or location</button>
     </div> 
    }
