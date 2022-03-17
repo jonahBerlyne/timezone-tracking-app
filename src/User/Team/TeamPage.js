@@ -58,9 +58,9 @@ export default function TeamPage() {
      return (
       <div key={timezone[0]}>
       <h3>UTC {Math.ceil(timezone[0]) >= 0 ? "+" : "-"}{(Math.ceil(timezone[0]) <= -10 || Math.floor(timezone[0] >= 10)) ? "" : "0"}{timezone[0] > 0 ? Math.abs(Math.floor(timezone[0])) : Math.abs(Math.ceil(timezone[0]))}:{timezone[0] % 1 !== 0 ? `${Math.abs((timezone[0] % 1)*60)}` : "00"}</h3>
-       <h2>{user.userInfo.format === "ampm" && formatAMPM(timezone[0])}</h2>
-       <h2>{user.userInfo.format === "MT" && formatMT(timezone[0])}</h2>
-       <br/>
+      {user.userInfo.format === "ampm" && <h2>{formatAMPM(timezone[0])}</h2>}
+      {user.userInfo.format === "MT" && <h2>{formatMT(timezone[0])}</h2>}
+      <br/>
        {timezone[1].map(member => {
         const locationData = member.timezoneData.zoneName;
         const location = locationData.substring(locationData.indexOf("/") + 1, locationData.length).replace(/_+/g, ' ');
