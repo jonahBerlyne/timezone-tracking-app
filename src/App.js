@@ -22,6 +22,7 @@ import AuthRoute from "./Routes/AuthRoute";
 import AppRoute from "./Routes/AppRoute";
 import TeamRoute from "./Routes/TeamRoute";
 import MainRoute from "./Routes/MainRoute";
+import { getAuth, signOut } from "firebase/auth";
 
 export default function App() {
 
@@ -104,8 +105,12 @@ export default function App() {
 //   }
 // }
 
-export const logout = () => {
- localStorage.removeItem("teams");
- localStorage.removeItem("currentUser");
- window.location.href = "/";
+export const logout = async () => {
+  try {
+    const auth = getAuth();
+    await signOut(auth);
+    localStorage.removeItem("teams");
+  } catch (err) {
+    alert(`Sign out error: ${err}`);
+  }
 }
