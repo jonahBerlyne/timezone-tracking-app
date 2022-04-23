@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
-import UserNavbar from '../User/UserNavbar';
 
 export default function AppRoute ({children}) {
  const [pending, setPending] = useState(true);
@@ -29,13 +28,11 @@ export default function AppRoute ({children}) {
 
  if (currentUser) {
   return (
-   <div>
-    <UserNavbar/>
-    {children}
-    {/* <Footer/> */}
-   </div>
+    <div>
+      {children}
+    </div>
   );
  } else {
-   return <Navigate to="/" />;
+   return <Navigate to="/login" />;
  }
 }
