@@ -18,87 +18,91 @@ import TeamsPage from "./User/Team/TeamsPage";
 import TeamPage from "./User/Team/TeamPage";
 import ManageTeam from "./User/Team/Manage/ManageTeam";
 import CreateTeam from "./User/Team/CreateTeam";
+import AuthRoute from "./Routes/AuthRoute";
+import AppRoute from "./Routes/AppRoute";
+import TeamRoute from "./Routes/TeamRoute";
+import MainRoute from "./Routes/MainRoute";
 
 export default function App() {
 
   return (
     <Router>
       <Routes>
-        <Route path="/" exact element={<MainRoutes><Home/></MainRoutes>}></Route>
-        <Route path="/about" exact element={<MainRoutes><About/></MainRoutes>}></Route>
-        <Route path="/contact" exact element={<MainRoutes><Contact/></MainRoutes>}></Route>
-        <Route path="/privacy" exact element={<MainRoutes><Privacy/></MainRoutes>}></Route>
-        <Route path="/terms" exact element={<MainRoutes><Terms/></MainRoutes>}></Route>
-        <Route path="/register" exact element={<AuthRoutes><RegisterPage/></AuthRoutes>}></Route>
-        <Route path="/login" exact element={<AuthRoutes><Login/></AuthRoutes>}></Route>
-        <Route path="/reset_password" exact element={<AuthRoutes><ResetPassword/></AuthRoutes>}></Route>
-        <Route path="/profile/:id" exact element={<UserRoutes><ProfilePage/></UserRoutes>}></Route>
-        <Route path="/account" exact element={<UserRoutes><AccountSettings/></UserRoutes>}></Route>
-        <Route path="/account/change_password" exact element={<UserRoutes><ChangePassword/></UserRoutes>}></Route>
-        <Route path="/teams" exact element={<UserRoutes><TeamsPage/></UserRoutes>}></Route>
+        <Route path="/" exact element={<MainRoute><Home/></MainRoute>}></Route>
+        <Route path="/about" exact element={<MainRoute><About/></MainRoute>}></Route>
+        <Route path="/contact" exact element={<MainRoute><Contact/></MainRoute>}></Route>
+        <Route path="/privacy" exact element={<MainRoute><Privacy/></MainRoute>}></Route>
+        <Route path="/terms" exact element={<MainRoute><Terms/></MainRoute>}></Route>
+        <Route path="/register" exact element={<AuthRoute><RegisterPage/></AuthRoute>}></Route>
+        <Route path="/login" exact element={<AuthRoute><Login/></AuthRoute>}></Route>
+        <Route path="/reset_password" exact element={<AuthRoute><ResetPassword/></AuthRoute>}></Route>
+        <Route path="/profile/:id" exact element={<AppRoute><ProfilePage/></AppRoute>}></Route>
+        <Route path="/account" exact element={<AppRoute><AccountSettings/></AppRoute>}></Route>
+        <Route path="/account/change_password" exact element={<AppRoute><ChangePassword/></AppRoute>}></Route>
+        <Route path="/teams" exact element={<AppRoute><TeamsPage/></AppRoute>}></Route>
         <Route path="/team/:id" exact element={<TeamRoute><TeamPage/></TeamRoute>}></Route>
         <Route path="/team/:id/manage" exact element={<TeamRoute><ManageTeam/></TeamRoute>}></Route>
-        <Route path="/create_team" exact element={<UserRoutes><CreateTeam/></UserRoutes>}></Route>
+        <Route path="/create_team" exact element={<AppRoute><CreateTeam/></AppRoute>}></Route>
       </Routes>
     </Router>
   );
 }
 
-const MainRoutes = ({children}) => {
-  return (
-    <div>
-      {localStorage.getItem("currentUser") && <UserNavbar/>}
-      {!localStorage.getItem("currentUser") && <AuthNavbar/>}
-      {children}
-      {/* <Footer/> */}
-    </div>
-  );
-}
+// const MainRoutes = ({children}) => {
+//   return (
+//     <div>
+//       {localStorage.getItem("currentUser") && <UserNavbar/>}
+//       {!localStorage.getItem("currentUser") && <AuthNavbar/>}
+//       {children}
+//       {/* <Footer/> */}
+//     </div>
+//   );
+// }
 
-const AuthRoutes = ({children}) => {
-  if (!localStorage.getItem("currentUser")) {
-    return (
-      <div>
-        <AuthNavbar/>
-        {children}
-        {/* <Footer/> */}
-      </div>
-    );
-  } else {
-    return <Navigate to="/"/>;
-  }
-}
+// const AuthRoutes = ({children}) => {
+//   if (!localStorage.getItem("currentUser")) {
+//     return (
+//       <div>
+//         <AuthNavbar/>
+//         {children}
+//         {/* <Footer/> */}
+//       </div>
+//     );
+//   } else {
+//     return <Navigate to="/"/>;
+//   }
+// }
 
-const UserRoutes = ({children}) => {
-  if (localStorage.getItem("currentUser")) {
-    return (
-      <div>
-        <UserNavbar/>
-        {children}
-        {/* <Footer/> */}
-      </div>
-    );
-  } else {
-    return <Navigate to="/"/>;
-  }
-}
+// const UserRoutes = ({children}) => {
+//   if (localStorage.getItem("currentUser")) {
+//     return (
+//       <div>
+//         <UserNavbar/>
+//         {children}
+//         {/* <Footer/> */}
+//       </div>
+//     );
+//   } else {
+//     return <Navigate to="/"/>;
+//   }
+// }
 
-const TeamRoute = ({children}) => {
-  const teams = JSON.parse(localStorage.getItem("teams"));
-  const teamId = useParams();
-  const [teamName] = teams.filter(team => team.id === teamId.id);
-  if (localStorage.getItem("currentUser") && teams.length > 0 && teams.includes(teamName)) {
-    return (
-      <div>
-        <TeamNavbar/>
-        {children}
-        {/* <Footer/> */}
-      </div>
-    );
-  } else {
-    return <Navigate to="/"/>;
-  }
-}
+// const TeamRoute = ({children}) => {
+//   const teams = JSON.parse(localStorage.getItem("teams"));
+//   const teamId = useParams();
+//   const [teamName] = teams.filter(team => team.id === teamId.id);
+//   if (localStorage.getItem("currentUser") && teams.length > 0 && teams.includes(teamName)) {
+//     return (
+//       <div>
+//         <TeamNavbar/>
+//         {children}
+//         {/* <Footer/> */}
+//       </div>
+//     );
+//   } else {
+//     return <Navigate to="/"/>;
+//   }
+// }
 
 export const logout = () => {
  localStorage.removeItem("teams");
