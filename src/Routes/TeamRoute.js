@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
+import TeamNavbar from '../User/Team/TeamNavbar';
 
-export default function AppRoute ({children}) {
+export default function TeamRoute ({children}) {
  const [pending, setPending] = useState(true);
  const [currentUser, setCurrentUser] = useState(null);
  const auth = getAuth();
+
+ const teams = JSON.parse(localStorage.getItem("teams"));
+ const teamId = useParams();
+ const [teamName] = teams.filter(team => team.id === teamId.id);
 
  useEffect(() => {
   const unsub = onAuthStateChanged(
@@ -26,13 +31,16 @@ export default function AppRoute ({children}) {
 
  if (pending) return null;
 
- if (currentUser) {
+
+ if (currentUser && teams.length > 0 && teams.includes(teamName)) {
   return (
-    <div>
-      {children}
-    </div>
+   <div>
+    <TeamNavbar/>
+    {children}
+    {/* <Footer/> */}
+   </div>
   );
  } else {
-   return <Navigate to="/" />;
+  return <Navigate to="/"/>;
  }
 }
