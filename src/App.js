@@ -40,10 +40,10 @@ export default function App() {
         <Route path="/profile/:id" exact element={<AppRoute><ProfilePage/></AppRoute>}></Route>
         <Route path="/account" exact element={<AppRoute><AccountSettings/></AppRoute>}></Route>
         <Route path="/account/change_password" exact element={<AppRoute><ChangePassword/></AppRoute>}></Route>
+        <Route path="/create_team" exact element={<AppRoute><CreateTeam/></AppRoute>}></Route>
         <Route path="/teams" exact element={<AppRoute><TeamsPage/></AppRoute>}></Route>
         <Route path="/team/:id" exact element={<TeamRoute><TeamPage/></TeamRoute>}></Route>
         <Route path="/team/:id/manage" exact element={<TeamRoute><ManageTeam/></TeamRoute>}></Route>
-        <Route path="/create_team" exact element={<AppRoute><CreateTeam/></AppRoute>}></Route>
       </Routes>
     </Router>
   );
@@ -110,6 +110,7 @@ export const logout = async () => {
     const auth = getAuth();
     await signOut(auth);
     localStorage.removeItem("teams");
+    localStorage.removeItem("currentUser");
   } catch (err) {
     alert(`Sign out error: ${err}`);
   }
