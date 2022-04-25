@@ -29,21 +29,21 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" exact element={<MainRoute><Home/></MainRoute>}></Route>
-        <Route path="/about" exact element={<MainRoute><About/></MainRoute>}></Route>
-        <Route path="/contact" exact element={<MainRoute><Contact/></MainRoute>}></Route>
-        <Route path="/privacy" exact element={<MainRoute><Privacy/></MainRoute>}></Route>
-        <Route path="/terms" exact element={<MainRoute><Terms/></MainRoute>}></Route>
-        <Route path="/register" exact element={<AuthRoute><RegisterPage/></AuthRoute>}></Route>
-        <Route path="/login" exact element={<AuthRoute><Login/></AuthRoute>}></Route>
-        <Route path="/reset_password" exact element={<AuthRoute><ResetPassword/></AuthRoute>}></Route>
-        <Route path="/profile/:id" exact element={<AppRoute><ProfilePage/></AppRoute>}></Route>
-        <Route path="/account" exact element={<AppRoute><AccountSettings/></AppRoute>}></Route>
-        <Route path="/account/change_password" exact element={<AppRoute><ChangePassword/></AppRoute>}></Route>
-        <Route path="/create_team" exact element={<AppRoute><CreateTeam/></AppRoute>}></Route>
-        <Route path="/teams" exact element={<AppRoute><TeamsPage/></AppRoute>}></Route>
-        <Route path="/team/:id" exact element={<TeamRoute><TeamPage/></TeamRoute>}></Route>
-        <Route path="/team/:id/manage" exact element={<TeamRoute><ManageTeam/></TeamRoute>}></Route>
+        <Route path="/" element={<MainRoute><Home/></MainRoute>}></Route>
+        <Route path="/about" element={<MainRoute><About/></MainRoute>}></Route>
+        <Route path="/contact" element={<MainRoute><Contact/></MainRoute>}></Route>
+        <Route path="/privacy" element={<MainRoute><Privacy/></MainRoute>}></Route>
+        <Route path="/terms" element={<MainRoute><Terms/></MainRoute>}></Route>
+        <Route path="/register" element={<AuthRoute><RegisterPage/></AuthRoute>}></Route>
+        <Route path="/login" element={<AuthRoute><Login/></AuthRoute>}></Route>
+        <Route path="/reset_password" element={<AuthRoute><ResetPassword/></AuthRoute>}></Route>
+        <Route path="/profile/:id" element={<AppRoute><ProfilePage/></AppRoute>}></Route>
+        <Route path="/account" element={<AppRoute><AccountSettings/></AppRoute>}></Route>
+        <Route path="/account/change_password" element={<AppRoute><ChangePassword/></AppRoute>}></Route>
+        <Route path="/create_team" element={<AppRoute><CreateTeam/></AppRoute>}></Route>
+        <Route path="/teams" element={<AppRoute><TeamsPage/></AppRoute>}></Route>
+        <Route path="/team/:id" element={<TeamRoute><TeamPage/></TeamRoute>}></Route>
+        <Route path="/team/:id/manage" element={<TeamRoute><ManageTeam/></TeamRoute>}></Route>
       </Routes>
     </Router>
   );
