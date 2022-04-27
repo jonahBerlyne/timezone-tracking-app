@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
 
-export default function AppRoute ({children}) {
- const [pending, setPending] = useState(true);
- const [currentUser, setCurrentUser] = useState(null);
+export default function AppRoute ({children}: {children: any}) {
+ const [pending, setPending] = useState<boolean>(true);
+ const [currentUser, setCurrentUser] = useState<User | null>(null);
  const auth = getAuth();
 
  useEffect(() => {
