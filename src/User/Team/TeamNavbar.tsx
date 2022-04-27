@@ -5,11 +5,11 @@ import { logout } from '../../App';
 
 export default function TeamNavbar() {
 
- const user = JSON.parse(localStorage.getItem("currentUser"));
+ const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
 
- const teams = JSON.parse(localStorage.getItem("teams"));
+ const teams = JSON.parse(localStorage.getItem("teams") || "{}");
  const teamId = useParams();
- const [teamName] = teams.filter(team => team.id === teamId.id);
+ const [teamName]: any = teams.filter((team: any) => team.id === teamId.id);
 
  return (
     <div className='header'>
