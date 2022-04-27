@@ -5,7 +5,7 @@ import { logout } from "../App";
 
 export default function UserNavbar() {
 
- const user = JSON.parse(localStorage.getItem("currentUser"));
+ const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
 
  return (
     <div className='header'>
