@@ -1,4 +1,4 @@
-export const findUTCOffset = gmt => {
+export const findUTCOffset = (gmt: number): number => {
   // console.clear();
   const diff = gmt / 3600;
   // console.log(Math.floor(diff) < diff < Math.ceil(diff)); // True for float zones, false for int zones
@@ -6,18 +6,18 @@ export const findUTCOffset = gmt => {
   return diff;
 }
 
-export const formatAMPM = diff => {
+export const formatAMPM = (diff: number): string => {
  const date = new Date();
  const utcHours = date.getUTCHours();
  const timezoneMinutes = diff % 1;
  const hoursDiff = diff - timezoneMinutes;
  let hoursSum = utcHours + hoursDiff;
  if (hoursSum < 0) hoursSum = 24 + hoursSum;
- let hours = hoursSum % 12;
+ let hours: string | number = hoursSum % 12;
  const utcMinutes = date.getUTCMinutes();
  const minutesOnClock = timezoneMinutes * 60;
  const minutesDiff = utcMinutes + minutesOnClock;
- let minutes = 0;
+ let minutes: string | number = 0;
  if (utcMinutes !== minutesDiff) {
    if (minutesDiff >= 60) {
      minutes = minutesDiff - 60;
@@ -45,18 +45,18 @@ export const formatAMPM = diff => {
  return strTime;
 }
 
-export const formatMT = diff => {
+export const formatMT = (diff: number): string => {
   const date = new Date();
   const utcHours = date.getUTCHours();
   const timezoneMinutes = diff % 1;
   const hoursDiff = diff - timezoneMinutes;
   let hoursSum = utcHours + hoursDiff;
   if (hoursSum < 0) hoursSum = 24 + hoursSum;
-  let hours = hoursSum % 24;
+  let hours: string | number = hoursSum % 24;
   const utcMinutes = date.getUTCMinutes();
   const minutesOnClock = timezoneMinutes * 60;
   const minutesDiff = utcMinutes + minutesOnClock;
-  let minutes = 0;
+  let minutes: string | number = 0;
   if (utcMinutes !== minutesDiff) {
    if (minutesDiff >= 60) {
      minutes = minutesDiff - 60;
