@@ -5,11 +5,11 @@ import { collection, query, getDocs} from "firebase/firestore";
 import fireDB from "../firebaseConfig";
 
 export default function Login() {
- const [email, setEmail] = useState('');
- const [password, setPassword] = useState('');
+ const [email, setEmail] = useState<string>('');
+ const [password, setPassword] = useState<string>('');
  const auth = getAuth();
 
- const login = async () => {
+ const login = async (): Promise<any> => {
   try {
    const userAuth = await signInWithEmailAndPassword(auth, email, password);
    const usersCollection = query(collection(fireDB, "users"));
