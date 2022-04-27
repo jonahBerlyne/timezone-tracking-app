@@ -1,4 +1,16 @@
-export default function EditProfile({ values, handleChange, choosePic, imgFileErr, countries, zones, showZones }) {
+interface EditProfileInterface {
+ values: {
+  name: string;
+ };
+ handleChange: (e: any) => void;
+ choosePic: (e: any) => void;
+ imgFileErr: string | null;
+ countries: any[];
+ zones: any[];
+ showZones: boolean;
+};
+
+export default function EditProfile({ values, handleChange, choosePic, imgFileErr, countries, zones, showZones }: EditProfileInterface) {
 
  return (
   <div>
