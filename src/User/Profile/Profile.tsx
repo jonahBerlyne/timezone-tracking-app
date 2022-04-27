@@ -1,6 +1,14 @@
 import { formatAMPM, formatMT } from "../Time";
 
-export default function Profile({ name, zoneName, imgUrl, format, utcOffset }) {
+interface ProfileInterface {
+ name: string;
+ zoneName: string;
+ imgUrl: string;
+ format: string;
+ utcOffset: number;
+};
+
+export default function Profile({ name, zoneName, imgUrl, format, utcOffset }: ProfileInterface) {
 
  return (
   <div>
