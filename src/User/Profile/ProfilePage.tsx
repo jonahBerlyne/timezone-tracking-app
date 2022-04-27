@@ -7,26 +7,34 @@ import { storage } from '../../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { findUTCOffset } from '../Time';
 
+interface Values {
+ name: string;
+ country: string;
+ timezone: string;
+};
+
 export default function ProfilePage() {
 
- const user = JSON.parse(localStorage.getItem("currentUser"));
+ const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
 
- const [showProfile, setShowProfile] = useState(true);
- const [editProfile, setEditProfile] = useState(false);
+ const [showProfile, setShowProfile] = useState<boolean>(true);
+ const [editProfile, setEditProfile] = useState<boolean>(false);
 
- const goToEditProfile = () => {
+ const goToEditProfile = (): void => {
   setShowProfile(false);
   setEditProfile(true);
  }
 
- const goToProfile = () => {
+ const goToProfile = (): void => {
   setEditProfile(false);
   setShowProfile(true);
  }
 
- const [values, setValues] = useState({name: "", country: "", timezone: ""});
+ const initialValues = { name: "", country: "", timezone: "" };
 
- const [profileZone, setProfileZone] = useState("");
+ const [values, setValues] = useState<Values>(initialValues);
+
+ const [profileZone, setProfileZone] = useState<string>("");
 
  useEffect(() => {
   let zoneStr = user.userInfo.timezoneData.zoneName;
@@ -35,20 +43,20 @@ export default function ProfilePage() {
   fetchAPI();
  }, []);
 
- const [countries, setCountries] = useState([]);
- const [zones, setZones] = useState([]);
- const [zonesConst, setZonesConst] = useState([]);
- const [zoneData, setZoneData] = useState([]);
+ const [countries, setCountries] = useState<any[]>([]);
+ const [zones, setZones] = useState<any[]>([]);
+ const [zonesConst, setZonesConst] = useState<any[]>([]);
+ const [zoneData, setZoneData] = useState<any[]>([]);
 
- const fetchAPI = async () => {
+ const fetchAPI = async (): Promise<any> => {
   try {
    const apiKey = process.env.REACT_APP_TIMEZONE_API_KEY;
    const data = await fetch(`http://api.timezonedb.com/v2.1/list-time-zone?key=${apiKey}&format=json`);
    const dataJSON = await data.json();
    setZoneData(dataJSON.zones);
-   let countriesArr = [];
-   let zonesArr = [];
-   dataJSON.zones.forEach(zone => {
+   let countriesArr: any[] = [];
+   let zonesArr: any[] = [];
+   dataJSON.zones.forEach((zone: any) => {
     countriesArr.push(zone.countryName);
     zonesArr.push(zone);
    });
@@ -61,7 +69,7 @@ export default function ProfilePage() {
 
  const [showZones, setShowZones] = useState(false);
 
- const handleChange = e => {
+ const handleChange = (e: any): void => {
   if (e.target.name === "country") {
    setValues({
     ...values,
@@ -86,19 +94,19 @@ export default function ProfilePage() {
   if (values.country !== "") {
    const zonesCopy = zonesConst;
    const timezones = zonesCopy.filter(zone => zone.countryName === values.country);
-   let timezonesArr = [];
-   timezones.forEach(timezone => {
+   let timezonesArr: any[] = [];
+   timezones.forEach((timezone: any) => {
     timezonesArr.push(timezone.zoneName);
    });
    setZones(timezonesArr);
   }
  }, [values]);
 
- const [imgFile, setImgFile] = useState(null);
- const [imgFileErr, setImgFileErr] = useState(null);
- const types = ['image/png', 'image/jpeg'];
+ const [imgFile, setImgFile] = useState<any>(null);
+ const [imgFileErr, setImgFileErr] = useState<string | null>(null);
+ const types: string[] = ['image/png', 'image/jpeg'];
 
- const choosePic = e => {
+ const choosePic = (e: any): void => {
   const image = e.target.files[0];
   if (image && types.includes(image.type)) {
    setImgFile(image);
@@ -109,13 +117,13 @@ export default function ProfilePage() {
   }
  }
 
- const [imgUrl, setImgUrl] = useState(null);
+ const [imgUrl, setImgUrl] = useState<any>(null);
 
  useEffect(() => {
   if (user.userInfo.profilePic) setImgUrl(user.userInfo.profilePic);
  }, []);
 
- const handleUpload = async () => {
+ const handleUpload = async (): Promise<any> => {
   if (imgFile === null) return;
   try {
    const uploadTask = ref(storage, `${user.uid}/profilePic`);
@@ -152,7 +160,7 @@ export default function ProfilePage() {
    await setDoc(docRef, userInfo);
    alert("Changes saved");
    localStorage.setItem("currentUser", JSON.stringify({...user, userInfo}));
-   window.location = `/profile/${user.uid}`;
+   window.location.href = `/profile/${user.uid}`;
   } catch (err) {
    alert(`Change saving error: ${err}`);
   }
