@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
 import TeamNavbar from '../User/Team/TeamNavbar';
 
-export default function TeamRoute ({children}) {
- const [pending, setPending] = useState(true);
- const [currentUser, setCurrentUser] = useState(null);
+export default function TeamRoute ({children}: {children: any}) {
+ const [pending, setPending] = useState<boolean>(true);
+ const [currentUser, setCurrentUser] = useState<User | null>(null);
  const auth = getAuth();
 
- const teams = JSON.parse(localStorage.getItem("teams"));
+ const teams = JSON.parse(localStorage.getItem("teams") || "{}");
  const teamId = useParams();
- const [teamName] = teams.filter(team => team.id === teamId.id);
+ const [teamName] = teams.filter((team: any) => team.id === teamId.id);
 
  useEffect(() => {
   const unsub = onAuthStateChanged(
