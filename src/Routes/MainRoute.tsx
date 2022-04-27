@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
 import UserNavbar from '../User/UserNavbar';
 import AuthNavbar from '../Auth/AuthNavbar';
 
-export default function MainRoute ({children}) {
- const [pending, setPending] = useState(true);
- const [currentUser, setCurrentUser] = useState(null);
+export default function MainRoute ({children}: {children: any}) {
+ const [pending, setPending] = useState<boolean>(true);
+ const [currentUser, setCurrentUser] = useState<User | null>(null);
  const auth = getAuth();
 
  useEffect(() => {
@@ -35,5 +35,3 @@ export default function MainRoute ({children}) {
   </div>
  );
 }
-
-/// Committed on April 23, 2022, not December 31, 2020
