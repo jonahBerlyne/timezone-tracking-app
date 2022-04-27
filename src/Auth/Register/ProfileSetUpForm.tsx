@@ -55,16 +55,16 @@ export default function ProfileSetUpForm({ values, handleChange, countries, zone
        value="ampm" 
        onChange={onRadioChange} 
        checked={isRadioSelected("ampm")}
-      />AMPM
-
+      />
+      <label>AM/PM Format</label>
       <input 
        type="radio" 
        name="format" 
        value="MT" 
        onChange={onRadioChange} 
        checked={isRadioSelected("MT")}
-      />MT
-
+      />
+      <label>24 Hr. Format</label>
      </div>
     </div>
    }
