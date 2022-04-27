@@ -105,7 +105,7 @@ export default function App() {
 //   }
 // }
 
-export const logout = async () => {
+export const logout = async (): Promise<any> => {
   try {
     const auth = getAuth();
     await signOut(auth);
