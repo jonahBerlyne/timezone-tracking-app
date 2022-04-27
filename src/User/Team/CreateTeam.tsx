@@ -5,13 +5,13 @@ import uniqid from "uniqid";
 
 export default function CreateTeam() {
 
- const user = JSON.parse(localStorage.getItem("currentUser"));
+ const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
 
- const [teamName, setTeamName] = useState("");
+ const [teamName, setTeamName] = useState<string>("");
 
- const handleChange = e => setTeamName(e.target.value);
+ const handleChange = (e: any): void => setTeamName(e.target.value);
 
- const createTeam = async () => {
+ const createTeam = async (): Promise<any> => {
   if (teamName === '') return;
   try {
    const teamId = uniqid();
@@ -21,7 +21,7 @@ export default function CreateTeam() {
      name: teamName
    };
    await setDoc(docRef, teamInfo);
-   const teams = JSON.parse(localStorage.getItem("teams"));
+   const teams = JSON.parse(localStorage.getItem("teams") || "{}");
    localStorage.setItem("teams", JSON.stringify([...teams, teamInfo]));
    alert("Team created");
    window.location.href = `/team/${teamInfo.id}/manage`;
