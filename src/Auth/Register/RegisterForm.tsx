@@ -1,6 +1,15 @@
 import React from 'react';
 
-export default function RegisterForm({ values, handleChange }) {
+interface Register {
+ values: {
+  email: string;
+  password: string;
+  confirmPassword: string;
+ };
+ handleChange: (e: any) => void;
+}
+
+export default function RegisterForm({ values, handleChange }: Register) {
  return (
   <div>
    <h2>Register:</h2>

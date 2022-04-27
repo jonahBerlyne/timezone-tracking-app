@@ -14,7 +14,7 @@ export default function Login() {
    const userAuth = await signInWithEmailAndPassword(auth, email, password);
    const usersCollection = query(collection(fireDB, "users"));
    const usersSnapshot = await getDocs(usersCollection);
-   let usersArr = [];
+   let usersArr: any[] = [];
    usersSnapshot.forEach(doc => {
     usersArr.push(doc.data());
    });
@@ -23,7 +23,7 @@ export default function Login() {
    localStorage.setItem("currentUser", JSON.stringify({...userAuth.user, userInfo}));
    const teamsCollection = query(collection(fireDB, "users", `${userAuth.user.uid}`, "teams"));
    const teamsSnapshot = await getDocs(teamsCollection);
-   let teamsArr = [];
+   let teamsArr: any[] = [];
    teamsSnapshot.forEach(doc => {
     teamsArr.push(doc.data());
    });
