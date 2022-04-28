@@ -8,29 +8,29 @@ export default function ManageTeam() {
 
  const team = useParams();
 
- const [showMembers, setShowMembers] = useState(true);
- const [showAddMember, setShowAddMember] = useState(false);
- const [showEditTeam, setShowEditTeam] = useState(false);
+ const [showMembers, setShowMembers] = useState<boolean>(true);
+ const [showAddMember, setShowAddMember] = useState<boolean>(false);
+ const [showEditTeam, setShowEditTeam] = useState<boolean>(false);
 
- const displayMembersDiv = () => {
+ const displayMembersDiv = (): void => {
   setShowAddMember(false);
   setShowEditTeam(false);
   setShowMembers(true);
  }
 
- const displayAddMemberDiv = () => {
+ const displayAddMemberDiv = (): void => {
   setShowMembers(false);
   setShowEditTeam(false);
   setShowAddMember(true);
  }
 
- const displayEditTeamDiv = () => {
+ const displayEditTeamDiv = (): void => {
   setShowMembers(false);
   setShowAddMember(false);
   setShowEditTeam(true);
  }
 
- const goBackToTeamPage = () => window.location = `/team/${team.id}`;
+ const goBackToTeamPage = () => window.location.href = `/team/${team.id}`;
 
  return (
   <div style={{display: "flex", gap: "100px"}}>

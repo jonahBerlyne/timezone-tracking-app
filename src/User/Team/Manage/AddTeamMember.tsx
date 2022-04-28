@@ -8,7 +8,7 @@ import { findUTCOffset } from '../../Time';
 
 interface AddTeamMemberInterface {
  displayMembersDiv: () => void;
- teamId: string;
+ teamId: string | undefined;
 };
 
 interface Values {
