@@ -6,20 +6,20 @@ import { formatAMPM, formatMT } from '../Time';
 
 export default function TeamPage() {
 
- const user = JSON.parse(localStorage.getItem("currentUser"));
+ const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
  const team = useParams();
- const [timezones, setTimezones] = useState([]);
+ const [timezones, setTimezones] = useState<any[]>([]);
 
- const getTeamMembers = async () => {
+ const getTeamMembers = async (): Promise<any> => {
   try {
    const membersCollection = query(collection(fireDB, "users", `${user.uid}`, "teams", `${team.id}`, "team_members"));
    const membersSnapshot = await getDocs(membersCollection);
-   let tempArr = [];
+   let tempArr: any[] = [];
    membersSnapshot.forEach(member => {
     tempArr.push(member.data());
    });
    console.log(tempArr);
-   let membersArr = [];
+   let membersArr: any[] = [];
    const arrConst = [...tempArr];
    for (let i = -12; i <= 14; i+=0.25) {
     tempArr = tempArr.filter(member => member.utcOffset === i);
@@ -32,9 +32,6 @@ export default function TeamPage() {
    alert(`Team members retrieval error: ${err}`);
   }
  }
-
- const [refresh, setRefresh] = useState(false);
- const [seconds, setSeconds] = useState(null);
 
  useEffect(() => {
   getTeamMembers();
@@ -53,15 +50,27 @@ export default function TeamPage() {
    <h1 style={{textAlign: "center"}}>Your team:</h1>
    <br/>
    <div style={{display: "flex", gap: "5px", flexWrap: "wrap"}}>
-    {timezones.map(timezone => {
+    {timezones.map((timezone: any) => {
      // console.log(Math.floor(timezone[0]), timezone[0], Math.ceil(timezone[0]));
      return (
       <div key={timezone[0]}>
-      <h3>UTC {Math.ceil(timezone[0]) >= 0 ? "+" : "-"}{(Math.ceil(timezone[0]) <= -10 || Math.floor(timezone[0] >= 10)) ? "" : "0"}{timezone[0] > 0 ? Math.abs(Math.floor(timezone[0])) : Math.abs(Math.ceil(timezone[0]))}:{timezone[0] % 1 !== 0 ? `${Math.abs((timezone[0] % 1)*60)}` : "00"}</h3>
+      <h3>
+       UTC 
+
+       {Math.ceil(timezone[0]) >= 0 ? "+" : "-"}
+
+       {(Math.ceil(timezone[0]) <= -10 || Math.floor(timezone[0]) >= 10) ? "" : "0"}
+
+       {timezone[0] > 0 ? Math.abs(Math.floor(timezone[0])) : Math.abs(Math.ceil(timezone[0]))}
+
+       :
+       
+       {timezone[0] % 1 !== 0 ? `${Math.abs((timezone[0] % 1)*60)}` : "00"}
+      </h3>
       {user.userInfo.format === "ampm" && <h2>{formatAMPM(timezone[0])}</h2>}
       {user.userInfo.format === "MT" && <h2>{formatMT(timezone[0])}</h2>}
       <br/>
-       {timezone[1].map(member => {
+       {timezone[1].map((member: any) => {
         const locationData = member.timezoneData.zoneName;
         const location = locationData.substring(locationData.indexOf("/") + 1, locationData.length).replace(/_+/g, ' ');
         return (
