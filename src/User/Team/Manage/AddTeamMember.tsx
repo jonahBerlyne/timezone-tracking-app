@@ -6,32 +6,45 @@ import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { findUTCOffset } from '../../Time';
 
-export default function AddTeamMember({ displayMembersDiv, teamId }) {
+interface AddTeamMemberInterface {
+ displayMembersDiv: () => void;
+ teamId: string;
+};
 
- const user = JSON.parse(localStorage.getItem("currentUser"));
+interface Values {
+ id: string | undefined;
+ email: string;
+ name: string;
+ country: string;
+ timezone: string;
+};
+
+export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemberInterface) {
+
+ const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
 
  const initialValues = { id: uniqid(), email: '', name: '', country: '', timezone: '' };
 
- const [values, setValues] = useState(initialValues);
+ const [values, setValues] = useState<Values>(initialValues);
 
  useEffect(() => {
   fetchAPI();
  }, []);
 
- const [countries, setCountries] = useState([]);
- const [zones, setZones] = useState([]);
- const [zonesConst, setZonesConst] = useState([]);
- const [zoneData, setZoneData] = useState([]);
+ const [countries, setCountries] = useState<any[]>([]);
+ const [zones, setZones] = useState<any[]>([]);
+ const [zonesConst, setZonesConst] = useState<any[]>([]);
+ const [zoneData, setZoneData] = useState<any[]>([]);
 
- const fetchAPI = async () => {
+ const fetchAPI = async (): Promise<any> => {
   try {
    const apiKey = process.env.REACT_APP_TIMEZONE_API_KEY;
    const data = await fetch(`http://api.timezonedb.com/v2.1/list-time-zone?key=${apiKey}&format=json`);
    const dataJSON = await data.json();
    setZoneData(dataJSON.zones);
-   let countriesArr = [];
-   let zonesArr = [];
-   dataJSON.zones.forEach(zone => {
+   let countriesArr: any[] = [];
+   let zonesArr: any[] = [];
+   dataJSON.zones.forEach((zone: any) => {
     countriesArr.push(zone.countryName);
     zonesArr.push(zone);
    });
@@ -42,9 +55,9 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
   }
  }
 
- const [showZones, setShowZones] = useState(false);
+ const [showZones, setShowZones] = useState<boolean>(false);
 
- const handleChange = e => {
+ const handleChange = (e: any): void => {
   if (e.target.name === "country") {
    setValues({
     ...values,
@@ -65,24 +78,24 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
   }
  }
 
- const [emailDiv, setEmailDiv] = useState(true);
- const [profileDiv, setProfileDiv] = useState(false);
+ const [emailDiv, setEmailDiv] = useState<boolean>(true);
+ const [profileDiv, setProfileDiv] = useState<boolean>(false);
 
- const showProfileDiv = () => {
+ const showProfileDiv = (): void => {
   setEmailDiv(false);
   setProfileDiv(true);
  }
 
- const showEmailDiv = () => {
+ const showEmailDiv = (): void => {
   setProfileDiv(false);
   setEmailDiv(true);
  }
 
- const [imgFile, setImgFile] = useState("../../default_pic.png");
- const [imgFileErr, setImgFileErr] = useState(null);
- const types = ['image/png', 'image/jpeg'];
+ const [imgFile, setImgFile] = useState<any>("../../default_pic.png");
+ const [imgFileErr, setImgFileErr] = useState<string | null>(null);
+ const types: string[] = ['image/png', 'image/jpeg'];
 
- const choosePic = e => {
+ const choosePic = (e: any): void => {
   const image = e.target.files[0];
   if (image && types.includes(image.type)) {
    setImgFile(image);
@@ -93,10 +106,10 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
   }
  }
 
- const [imgUrl, setImgUrl] = useState("");
+ const [imgUrl, setImgUrl] = useState<string>("");
  // const [saveClicked, setSaveClicked] = useState(false);
 
- const handleUpload = async () => {
+ const handleUpload = async (): Promise<any> => {
   try {
    const uploadTask = ref(storage, `${user.uid}/teams/${teamId}/members/${values.id}`);
    await uploadBytes(uploadTask, imgFile);
@@ -112,7 +125,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
  //  if (saveClicked) saveChanges();
  // }, [saveClicked]);
 
- const saveChanges = async () => {
+ const saveChanges = async (): Promise<any> => {
   try {
    await handleUpload();
    // setSaveClicked(false);
@@ -124,7 +137,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
     name: values.name,
     timezoneData: userZoneData[0],
     profilePic: imgUrl,
-    utcOffset: utcOffset
+    utcOffset
    };
    await setDoc(docRef, memberInfo);
    alert("Changes saved");
@@ -139,7 +152,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }) {
   if (values.country !== "") {
    const zonesCopy = zonesConst;
    const timezones = zonesCopy.filter(zone => zone.countryName === values.country);
-   let timezonesArr = [];
+   let timezonesArr: any[] = [];
    timezones.forEach(timezone => {
     timezonesArr.push(timezone.zoneName);
    });
