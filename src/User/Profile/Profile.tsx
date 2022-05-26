@@ -1,9 +1,9 @@
 import { formatAMPM, formatMT } from "../Time";
 
 interface ProfileInterface {
- name: string;
+ name: string | null | undefined;
  zoneName: string;
- imgUrl: string;
+ imgUrl: string | null | undefined;
  format: string;
  utcOffset: number;
 };

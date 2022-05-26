@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import RegisterForm from './RegisterForm';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import fireDB from "../../firebaseConfig";
 import ProfileSetUpForm from './ProfileSetUpForm';
 import { doc, setDoc } from 'firebase/firestore';
@@ -58,18 +58,20 @@ export default function RegisterPage() {
  const register = async (): Promise<any> => {
   if (format === "") return;
   try {
-   const userAuth = await createUserWithEmailAndPassword(auth, values.email, values.password);
-   const docRef = doc(fireDB, "users", `${userAuth.user.uid}`);
+   const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+   const docRef = doc(fireDB, "users", `${userCredential.user.uid}`);
    const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
    const utcOffset = findUTCOffset(userZoneData[0].gmtOffset);
    const userInfo = {
     format,
-    id: userAuth.user.uid,
-    name: values.name,
-    timezoneData: userZoneData[0],
+    id: userCredential.user.uid,
+    timezoneData: {...userZoneData[0], utcOffset},
     utcOffset: utcOffset
    };
    await setDoc(docRef, userInfo);
+   await updateProfile(userCredential.user, {
+    displayName: values.name
+   });
    alert("Registered");
   } catch (err) {
    alert(`Registration error: ${err}`);

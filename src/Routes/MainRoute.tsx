@@ -29,7 +29,7 @@ export default function MainRoute ({children}: {children: any}) {
  if (pending) return null;
  return (
   <div>
-   {currentUser ? <UserNavbar/> : <AuthNavbar/>}
+   {currentUser ? <UserNavbar /> : <AuthNavbar/>}
    {children}
    {/* <Footer/> */}
   </div>

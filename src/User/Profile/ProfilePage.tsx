@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Profile from "./Profile";
 import EditProfile from "./EditProfile";
-import fireDB from '../../firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
+import fireDB, { auth } from '../../firebaseConfig';
+import { collection, doc, onSnapshot, query, setDoc } from 'firebase/firestore';
 import { storage } from '../../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { findUTCOffset } from '../Time';
+import { useAppSelector } from '../../Redux/hooks';
+import { selectUser } from '../../Redux/userSlice';
+import { useNavigate } from 'react-router-dom';
+import { reload, updateProfile } from 'firebase/auth';
 
 interface Values {
  name: string;
@@ -15,7 +19,17 @@ interface Values {
 
 export default function ProfilePage() {
 
- const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
+ const user = useAppSelector(selectUser);
+ const [userInfo, setUserInfo] = useState<any>(null);
+
+ useEffect(() => {
+  const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`);
+  const unsub = onSnapshot(docRef, doc => {
+   console.log(doc.data());
+   setUserInfo(doc.data());
+  });
+  return unsub;
+ }, []);
 
  const [showProfile, setShowProfile] = useState<boolean>(true);
  const [editProfile, setEditProfile] = useState<boolean>(false);
@@ -37,11 +51,13 @@ export default function ProfilePage() {
  const [profileZone, setProfileZone] = useState<string>("");
 
  useEffect(() => {
-  let zoneStr = user.userInfo.timezoneData.zoneName;
-  zoneStr = zoneStr.substring(zoneStr.indexOf("/") + 1, zoneStr.length).replace(/_+/g, ' ');
-  setProfileZone(zoneStr);
-  fetchAPI();
- }, []);
+  if (userInfo) {
+   let zoneStr = userInfo?.timezoneData.zoneName;
+   zoneStr = zoneStr.substring(zoneStr.indexOf("/") + 1, zoneStr.length).replace(/_+/g, ' ');
+   setProfileZone(zoneStr);
+   fetchAPI();
+  }
+ }, [userInfo]);
 
  const [countries, setCountries] = useState<any[]>([]);
  const [zones, setZones] = useState<any[]>([]);
@@ -117,19 +133,17 @@ export default function ProfilePage() {
   }
  }
 
- const [imgUrl, setImgUrl] = useState<any>(null);
-
- useEffect(() => {
-  if (user.userInfo.profilePic) setImgUrl(user.userInfo.profilePic);
- }, []);
-
  const handleUpload = async (): Promise<any> => {
   if (imgFile === null) return;
   try {
-   const uploadTask = ref(storage, `${user.uid}/profilePic`);
+   const uploadTask = ref(storage, `${auth.currentUser?.uid}/profilePic`);
    await uploadBytes(uploadTask, imgFile);
    const url = await getDownloadURL(uploadTask);
-   setImgUrl(url);
+   if (auth.currentUser) {
+    await updateProfile(auth.currentUser, {
+     photoURL: url
+    });
+   }
   } catch (err) {
    alert(`Upload error: ${err}`);
   }
@@ -137,9 +151,11 @@ export default function ProfilePage() {
 
  const [refresh, setRefresh] = useState(false);
 
+ const navigate = useNavigate();
+
  const saveChanges = async () => {
-  if (imgUrl === null && values.name === "" && values.country === "") {
-   alert(`You haven't made any changes, ${user.userInfo.name}.`);
+  if (!auth.currentUser?.photoURL && values.name === "" && values.country === "") {
+   alert(`You haven't made any changes, ${userInfo?.name}.`);
    return;
   }
   if (showZones && values.timezone === "") {
@@ -148,19 +164,25 @@ export default function ProfilePage() {
   }
   try {
    await handleUpload();
-   const docRef = doc(fireDB, "users", `${user.uid}`);
+   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`);
    const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
-   const utcOffset = findUTCOffset(userZoneData[0].gmtOffset);
-   const userInfo = {
-    id: user.uid,
-    name: values.name !== "" ? values.name : user.userInfo.name,
-    timezoneData: values.country !== "" && values.timezone !== "" ? {...userZoneData[0], utcOffset} : user.userInfo.timezoneData,
-    profilePic: imgUrl
-   };
-   await setDoc(docRef, userInfo);
+   if (userZoneData.length > 0) {
+    const utcOffset = findUTCOffset(userZoneData[0].gmtOffset);
+    console.log(utcOffset);
+    const userDoc = {
+     ...userInfo,
+     timezoneData: values.country !== "" && values.timezone !== "" ? {...userZoneData[0], utcOffset} : userInfo?.timezoneData
+    };
+    await setDoc(docRef, userDoc);
+   }
+   if (values.name !== "" && auth.currentUser) {
+    await updateProfile(auth.currentUser, {
+     displayName: values.name
+    });
+   }
    alert("Changes saved");
-   localStorage.setItem("currentUser", JSON.stringify({...user, userInfo}));
-   window.location.href = `/profile/${user.uid}`;
+   if (values.name !== "" && auth.currentUser) reload(auth.currentUser);
+   window.location.reload();
   } catch (err) {
    alert(`Change saving error: ${err}`);
   }
@@ -170,7 +192,7 @@ export default function ProfilePage() {
   <div>
    {showProfile &&
     <div>
-     <Profile name={user.userInfo.name} zoneName={profileZone} imgUrl={imgUrl} format={user.userInfo.format} utcOffset={user.userInfo.utcOffset}/>
+     <Profile name={auth.currentUser?.displayName} zoneName={profileZone} imgUrl={auth.currentUser?.photoURL} format={userInfo?.format} utcOffset={userInfo?.timezoneData.utcOffset} />
      <button onClick={goToEditProfile}>Edit your profile or location</button>
     </div> 
    }

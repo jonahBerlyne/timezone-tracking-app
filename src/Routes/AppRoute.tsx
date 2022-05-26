@@ -6,7 +6,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { useAppSelector, useAppDispatch } from '../Redux/hooks';
 import { login, selectUser } from '../Redux/userSlice';
 import { store } from '../Redux/Store';
-import "../Styles/App.css";
 import UserNavbar from '../User/UserNavbar';
 
 export default function AppRoute ({children}: {children: any}) {
@@ -61,14 +60,12 @@ export default function AppRoute ({children}: {children: any}) {
   if (currentUser) {
     return (
       <div>
-        {user?.name &&
           <div className='app-container'> 
             <div className="app-body">
               <UserNavbar />
               {children}
             </div>
           </div>
-        }
       </div>
     );
   } else {

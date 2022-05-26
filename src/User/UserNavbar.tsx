@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
 import { logout } from "../App";
 import { auth } from '../firebaseConfig';
 import { useAppSelector } from '../Redux/hooks';
 import { selectUser } from '../Redux/userSlice';
+import { store } from '../Redux/Store';
+import { reload } from 'firebase/auth';
 
 export default function UserNavbar() {
-
- const user = useAppSelector(selectUser);
 
  return (
     <div className='header'>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
-            {user?.name && <h1 className="navbar-brand">Welcome, {user.name}!</h1>}
+            <h1 className="navbar-brand">Welcome, {auth.currentUser?.displayName}!</h1>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span>
                 <FaBars size={25} color="gray"/>
