@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import fireDB from '../../../firebaseConfig';
+import fireDB, { auth } from '../../../firebaseConfig';
 import { getDocs, query, collection, doc, deleteDoc } from 'firebase/firestore';
 import { FaTimes } from "react-icons/fa";
 
 export default function TeamMembers({ teamId }: { teamId: string | undefined }) {
-
- const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
 
  const [refresh, setRefresh] = useState<boolean>(false);
 
@@ -17,7 +15,7 @@ export default function TeamMembers({ teamId }: { teamId: string | undefined }) 
 
  const renderMembers = async (): Promise<any> => {
   try {
-   const membersCollection = query(collection(fireDB, "users", `${user.uid}`, "teams", `${teamId}`, "team_members"));
+   const membersCollection = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`, "team_members"));
    const membersSnapshot = await getDocs(membersCollection);
    let membersArr: any[] = [];
    membersSnapshot.forEach(member => {
@@ -31,7 +29,7 @@ export default function TeamMembers({ teamId }: { teamId: string | undefined }) 
 
  const deleteMember = async (memberId: any): Promise<any> => {
   try {
-   const docRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamId}`, "team_members", `${memberId}`);
+   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`, "team_members", `${memberId}`);
    await deleteDoc(docRef);
    setRefresh(!refresh);
   } catch (err) {

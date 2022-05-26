@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from "react-icons/fa";
 import uniqid from "uniqid";
-import fireDB, { storage } from '../../../firebaseConfig';
+import fireDB, { auth, storage } from '../../../firebaseConfig';
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { findUTCOffset } from '../../Time';
@@ -20,8 +20,6 @@ interface Values {
 };
 
 export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemberInterface) {
-
- const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
 
  const initialValues = { id: uniqid(), email: '', name: '', country: '', timezone: '' };
 
@@ -111,7 +109,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
 
  const handleUpload = async (): Promise<any> => {
   try {
-   const uploadTask = ref(storage, `${user.uid}/teams/${teamId}/members/${values.id}`);
+   const uploadTask = ref(storage, `${auth.currentUser?.uid}/teams/${teamId}/members/${values.id}`);
    await uploadBytes(uploadTask, imgFile);
    const url = await getDownloadURL(uploadTask);
    setImgUrl(url);
@@ -129,7 +127,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
   try {
    await handleUpload();
    // setSaveClicked(false);
-   const docRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamId}`, "team_members", `${values.id}`);
+   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`, "team_members", `${values.id}`);
    const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
    const utcOffset = findUTCOffset(userZoneData[0].gmtOffset);
    const memberInfo = {

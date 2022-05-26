@@ -1,35 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { collection, query, getDocs} from "firebase/firestore";
-import fireDB from "../firebaseConfig";
+import { Link, useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebaseConfig";
 
 export default function Login() {
  const [email, setEmail] = useState<string>('');
  const [password, setPassword] = useState<string>('');
- const auth = getAuth();
+
+ const navigate = useNavigate();
 
  const login = async (): Promise<any> => {
   try {
-   const userAuth = await signInWithEmailAndPassword(auth, email, password);
-   const usersCollection = query(collection(fireDB, "users"));
-   const usersSnapshot = await getDocs(usersCollection);
-   let usersArr: any[] = [];
-   usersSnapshot.forEach(doc => {
-    usersArr.push(doc.data());
-   });
-   const user = usersArr.filter(user => user.id === userAuth.user.uid);
-   const userInfo = user[0];
-   localStorage.setItem("currentUser", JSON.stringify({...userAuth.user, userInfo}));
-   const teamsCollection = query(collection(fireDB, "users", `${userAuth.user.uid}`, "teams"));
-   const teamsSnapshot = await getDocs(teamsCollection);
-   let teamsArr: any[] = [];
-   teamsSnapshot.forEach(doc => {
-    teamsArr.push(doc.data());
-   });
-   localStorage.setItem("teams", JSON.stringify(teamsArr));
+   await signInWithEmailAndPassword(auth, email, password);
    alert("Logged in");
-   window.location.href = '/';
+   navigate('/');
   } catch (err) {
    alert(`Error: ${err}`);
   }

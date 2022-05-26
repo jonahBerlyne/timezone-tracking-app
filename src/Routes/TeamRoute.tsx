@@ -31,13 +31,11 @@ export default function TeamRoute ({children}: {children: any}) {
 
  if (pending) return null;
 
-
  if (currentUser && teams.length > 0 && teams.includes(teamName)) {
   return (
    <div>
-    <TeamNavbar/>
+    <TeamNavbar />
     {children}
-    {/* <Footer/> */}
    </div>
   );
  } else {

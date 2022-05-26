@@ -37,7 +37,6 @@ export default function RegisterPage() {
    let countriesArr: any[] = [];
    let zonesArr: any[] = [];
    dataJSON.zones.forEach((zone: any) => {
-    console.log();
     countriesArr.push(zone.countryName);
     zonesArr.push(zone);
    });
@@ -70,11 +69,7 @@ export default function RegisterPage() {
     timezoneData: userZoneData[0],
     utcOffset: utcOffset
    };
-   console.clear();
-   console.log(userInfo);
    await setDoc(docRef, userInfo);
-   localStorage.setItem("currentUser", JSON.stringify({...userAuth.user, userInfo}));
-   localStorage.setItem("teams", JSON.stringify([]));
    alert("Registered");
   } catch (err) {
    alert(`Registration error: ${err}`);

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from "react-icons/fa"
-import fireDB from '../../../firebaseConfig';
-import { doc, setDoc, getDocs, query, collection, deleteDoc } from "firebase/firestore";
+import fireDB, { auth } from '../../../firebaseConfig';
+import { doc, setDoc, getDocs, query, collection, deleteDoc, onSnapshot } from "firebase/firestore";
+import { useNavigate } from 'react-router-dom';
 
 interface EditTeamInfoInterface {
  displayMembersDiv: () => void;
@@ -10,38 +11,37 @@ interface EditTeamInfoInterface {
 
 export default function EditTeamInfo({ displayMembersDiv, teamId }: EditTeamInfoInterface) {
 
- const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
-
- const teams = JSON.parse(localStorage.getItem("teams") || "{}");
  const [teamNameInput, setTeamNameInput] = useState<string>("");
  const [teamName, setTeamName] = useState<string>("");
  
- const team: any = teams.filter((team: any) => team.id === teamId);
- 
  useEffect(() => {
-  setTeamNameInput(team[0].name);
-  setTeamName(team[0].name);
+  const q = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams"));
+  const unsub = onSnapshot(q, snapshot => {
+   snapshot.docs.forEach(doc => {
+    if (doc.data()?.id === teamId) {
+     setTeamNameInput(doc.data()?.name);
+     setTeamName(doc.data()?.name);
+     return;
+    }
+   });
+  });
+  return unsub;
  }, []);
+
+ const navigate = useNavigate();
 
  const handleChange = (e: any): void => setTeamNameInput(e.target.value);
 
  const saveNameChange = async (): Promise<any> => {
   try {
-   const docRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamId}`);
+   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`);
    const teamInfo = {
     id: teamId,
     name: teamNameInput
    };
    await setDoc(docRef, teamInfo);
-   const teamsCollection = query(collection(fireDB, "users", `${user.uid}`, "teams"));
-   const teamsSnapshot = await getDocs(teamsCollection);
-   let teamsArr: any[] = [];
-   teamsSnapshot.forEach(team => {
-    teamsArr.push(team.data());
-   });
-   localStorage.setItem("teams", JSON.stringify(teamsArr));
    alert("Team name saved");
-   window.location.href = `/team/${teamId}/manage`;
+   navigate(`/team/${teamId}/manage`);
   } catch (err) {
    alert(`Name change error: ${err}`);
   }
@@ -49,18 +49,16 @@ export default function EditTeamInfo({ displayMembersDiv, teamId }: EditTeamInfo
 
  const deleteTeam = async (): Promise<any> => {
   try {
-   const membersCollection = query(collection(fireDB, "users", `${user.uid}`, "teams", `${teamId}`, "team_members"));
+   const membersCollection = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`, "team_members"));
    const membersSnapshot = await getDocs(membersCollection);
    membersSnapshot.forEach(async member => {
-    const memberRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamId}`, "team_members", `${member.data().id}`);
+    const memberRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`, "team_members", `${member.data().id}`);
     await deleteDoc(memberRef);
    });
-   const docRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamId}`);
+   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`);
    await deleteDoc(docRef);
-   const newTeams: any = teams.filter((team: any) => team.id !== teamId);
-   localStorage.setItem("teams", JSON.stringify(newTeams));
    alert("Team deleted");
-   window.location.href = `/teams`;
+   navigate(`/teams`);
   } catch (err) {
    alert(`Team deletion error: ${err}`);
   }

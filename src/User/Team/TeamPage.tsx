@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import fireDB from "../../firebaseConfig";
+import fireDB, { auth } from "../../firebaseConfig";
 import { getDocs, query, collection } from "firebase/firestore";
 import { useParams } from 'react-router-dom';
 import { formatAMPM, formatMT } from '../Time';
+import { useAppSelector } from '../../Redux/hooks';
+import { selectUser } from '../../Redux/userSlice';
 
 export default function TeamPage() {
 
- const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
+ const user = useAppSelector(selectUser);
  const team = useParams();
  const [timezones, setTimezones] = useState<any[]>([]);
 
  const getTeamMembers = async (): Promise<any> => {
   try {
-   const membersCollection = query(collection(fireDB, "users", `${user.uid}`, "teams", `${team.id}`, "team_members"));
+   const membersCollection = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${team.id}`, "team_members"));
    const membersSnapshot = await getDocs(membersCollection);
    let tempArr: any[] = [];
    membersSnapshot.forEach(member => {
@@ -37,14 +39,6 @@ export default function TeamPage() {
   getTeamMembers();
  }, []);
 
- // useEffect(() => {
- //  let date = new Date();
- //  setInterval(() => {
- //   setSeconds(date.getUTCSeconds());
- //  }, 1000);
- //  console.log(seconds);
- // });
-
  return (
   <div>
    <h1 style={{textAlign: "center"}}>Your team:</h1>
@@ -67,8 +61,8 @@ export default function TeamPage() {
        
        {timezone[0] % 1 !== 0 ? `${Math.abs((timezone[0] % 1)*60)}` : "00"}
       </h3>
-      {user.userInfo.format === "ampm" && <h2>{formatAMPM(timezone[0])}</h2>}
-      {user.userInfo.format === "MT" && <h2>{formatMT(timezone[0])}</h2>}
+      {user?.format === "ampm" && <h2>{formatAMPM(timezone[0])}</h2>}
+      {user?.format === "MT" && <h2>{formatMT(timezone[0])}</h2>}
       <br/>
        {timezone[1].map((member: any) => {
         const locationData = member.timezoneData.zoneName;

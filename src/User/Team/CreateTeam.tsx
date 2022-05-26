@@ -1,30 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { doc, setDoc } from 'firebase/firestore';
-import fireDB from '../../firebaseConfig';
+import fireDB, { auth } from '../../firebaseConfig';
 import uniqid from "uniqid";
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateTeam() {
-
- const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
 
  const [teamName, setTeamName] = useState<string>("");
 
  const handleChange = (e: any): void => setTeamName(e.target.value);
 
+ const navigate = useNavigate();
+
  const createTeam = async (): Promise<any> => {
   if (teamName === '') return;
   try {
    const teamId = uniqid();
-   const docRef = doc(fireDB, "users", `${user.uid}`, "teams", `${teamId}`);
+   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`);
    const teamInfo = {
      id: teamId,
      name: teamName
    };
    await setDoc(docRef, teamInfo);
-   const teams = JSON.parse(localStorage.getItem("teams") || "{}");
-   localStorage.setItem("teams", JSON.stringify([...teams, teamInfo]));
    alert("Team created");
-   window.location.href = `/team/${teamInfo.id}/manage`;
+   navigate(`/team/${teamInfo.id}/manage`);
   } catch (err) {
    alert(`Team creation error: ${err}`);
   }

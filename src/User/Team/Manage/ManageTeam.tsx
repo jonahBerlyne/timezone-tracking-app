@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import TeamMembers from './TeamMembers';
 import AddTeamMember from './AddTeamMember';
 import EditTeamInfo from './EditTeamInfo';
@@ -30,7 +30,7 @@ export default function ManageTeam() {
   setShowEditTeam(true);
  }
 
- const goBackToTeamPage = () => window.location.href = `/team/${team.id}`;
+ const navigate = useNavigate();
 
  return (
   <div style={{display: "flex", gap: "100px"}}>
@@ -39,7 +39,7 @@ export default function ManageTeam() {
     <p>Edit and add members of your team here.</p>
     <button onClick={displayAddMemberDiv}>Add team member</button>
     <button onClick={displayEditTeamDiv}>Edit team info</button>
-    <button style={{textDecoration: "none", color: "#000"}} onClick={goBackToTeamPage}>Go back to my team</button>
+    <button style={{textDecoration: "none", color: "#000"}} onClick={() => navigate(`/team/${team.id}`)}>Go back to my team</button>
    </div>
 
    {showMembers && <TeamMembers teamId={team.id}/>}
