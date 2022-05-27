@@ -11,7 +11,6 @@ import Login from "./Auth/Login";
 import ResetPassword from "./Auth/ResetPassword";
 import UserNavbar from "./User/UserNavbar";
 import ProfilePage from "./User/Profile/ProfilePage";
-import AccountSettings from "./User/Account/AccountSettings";
 import ChangePassword from "./User/Account/ChangePassword";
 import TeamNavbar from "./User/Team/TeamNavbar";
 import TeamsPage from "./User/Team/TeamsPage";
@@ -38,8 +37,7 @@ export default function App() {
         <Route path="/login" element={<AuthRoute><Login/></AuthRoute>}></Route>
         <Route path="/reset_password" element={<AuthRoute><ResetPassword/></AuthRoute>}></Route>
         <Route path="/profile/:id" element={<AppRoute><ProfilePage/></AppRoute>}></Route>
-        <Route path="/account" element={<AppRoute><AccountSettings/></AppRoute>}></Route>
-        <Route path="/account/change_password" element={<AppRoute><ChangePassword/></AppRoute>}></Route>
+        <Route path="/change_password" element={<AppRoute><ChangePassword/></AppRoute>}></Route>
         <Route path="/create_team" element={<AppRoute><CreateTeam/></AppRoute>}></Route>
         <Route path="/teams" element={<AppRoute><TeamsPage/></AppRoute>}></Route>
         <Route path="/team/:id" element={<TeamRoute><TeamPage/></TeamRoute>}></Route>
