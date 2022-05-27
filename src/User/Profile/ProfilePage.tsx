@@ -240,8 +240,6 @@ export default function ProfilePage() {
     );
     await reauthenticateWithCredential(currentUser, credential);
     await deleteUser(currentUser);
-   } else {
-    return;
    }
    alert("Account deleted");
    dispatch(logout());

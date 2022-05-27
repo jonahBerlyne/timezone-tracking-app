@@ -1,11 +1,12 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import RegisterForm from './RegisterForm';
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import fireDB from "../../firebaseConfig";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import fireDB, { auth } from "../../firebaseConfig";
 import ProfileSetUpForm from './ProfileSetUpForm';
 import { doc, setDoc } from 'firebase/firestore';
 import { findUTCOffset } from '../../User/Time';
+import "../../Styles/Auth.css";
 
 interface Values {
  email: string;
@@ -53,7 +54,6 @@ export default function RegisterPage() {
  const initialValues = { email: '', password: '', confirmPassword: '', name: '', country: '', timezone: '' };
  const [values, setValues] = useState<Values>(initialValues);
  const [format, setFormat] = useState<string>("");
- const auth = getAuth();
 
  const register = async (): Promise<any> => {
   if (format === "") return;
@@ -70,7 +70,8 @@ export default function RegisterPage() {
    };
    await setDoc(docRef, userInfo);
    await updateProfile(userCredential.user, {
-    displayName: values.name
+    displayName: values.name,
+    photoURL: "/default_pic.png"
    });
    alert("Registered");
   } catch (err) {
@@ -131,11 +132,6 @@ export default function RegisterPage() {
 
  const formProps = {values, handleChange, onRadioChange, isRadioSelected};
 
- // useEffect(() => {
- //  console.log(zones);
- // }, [zones]);
-
-
  useEffect(() => {
   if (values.country !== "") {
    const zonesCopy = zonesConst;
@@ -153,19 +149,44 @@ export default function RegisterPage() {
  return (
   <div>
    {registerForm && 
-    <div>
+    <div className='auth'>
      <RegisterForm {...formProps}/>
-     <button onClick={goToProfileInputs}>Get Started</button>
+     <button 
+      className="btn btn-primary get-started-btn" 
+      onClick={goToProfileInputs}
+      disabled={
+       values.email === '' ||
+       values.password === '' ||
+       values.confirmPassword === ''
+      }
+     >Get Started
+     </button>
+     <p className='login-link-element'>Already have an account? <Link to="/login" className='auth-link'>Log in here!</Link></p>
     </div>
    }
    {profileSetUpForm && 
-    <div>
-     <ProfileSetUpForm {...formProps} countries={countries} zones={zones} showZones={showZones}/>
-     <button onClick={goToRegisterInputs}>Go Back</button>
-     <button onClick={register}>Register</button>
+    <div className='auth get-started-container'>
+     <ProfileSetUpForm {...formProps} countries={countries} zones={zones} showZones={showZones} />
+     <div className="profile-set-up-btns">
+      <button 
+       className="btn btn-primary go-back-btn" 
+       onClick={goToRegisterInputs}
+      >Go Back
+      </button>
+      <button 
+       className="btn btn-primary register-btn" 
+       onClick={register}
+       disabled={
+        values.name === '' ||
+        values.country === '' ||
+        values.timezone === '' ||
+        format === ''
+       }
+      >Register
+      </button>
+     </div>
     </div>
    }
-   <Link to="/login">Click Here to Login</Link>
   </div>
  );
 }

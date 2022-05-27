@@ -89,7 +89,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
   setEmailDiv(true);
  }
 
- const [imgFile, setImgFile] = useState<any>("../../default_pic.png");
+ const [imgFile, setImgFile] = useState<any>(null);
  const [imgFileErr, setImgFileErr] = useState<string | null>(null);
  const types: string[] = ['image/png', 'image/jpeg'];
 
@@ -99,7 +99,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
    setImgFile(image);
    setImgFileErr(null);
   } else {
-   setImgFile("../../default_pic.png");
+   setImgFile(null);
    setImgFileErr("Please choose an image file (png or jpeg)");
   }
  }
@@ -108,6 +108,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
  // const [saveClicked, setSaveClicked] = useState(false);
 
  const handleUpload = async (): Promise<any> => {
+  if (imgFile === null) setImgUrl("/default_pic.png");
   try {
    const uploadTask = ref(storage, `${auth.currentUser?.uid}/teams/${teamId}/members/${values.id}`);
    await uploadBytes(uploadTask, imgFile);
@@ -119,23 +120,20 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
   }
  }
 
- // useEffect(() => {
- //  if (saveClicked) saveChanges();
- // }, [saveClicked]);
+ useEffect(() => {
+  if (imgUrl !== "") saveChanges();
+ }, [imgUrl]);
 
  const saveChanges = async (): Promise<any> => {
   try {
-   await handleUpload();
-   // setSaveClicked(false);
    const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`, "team_members", `${values.id}`);
    const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
    const utcOffset = findUTCOffset(userZoneData[0].gmtOffset);
    const memberInfo = {
     id: values.id,
     name: values.name,
-    timezoneData: userZoneData[0],
-    profilePic: imgUrl,
-    utcOffset
+    timezoneData: {...userZoneData[0], utcOffset},
+    profilePic: imgUrl
    };
    await setDoc(docRef, memberInfo);
    alert("Changes saved");
@@ -156,8 +154,6 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
    });
    setZones(timezonesArr);
   }
-  console.clear();
-  console.log(values);
  }, [values]);
 
  return (
@@ -208,7 +204,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
      <br/>
      <br/>
      <button onClick={showEmailDiv}>Back</button>
-     <button onClick={saveChanges}>Save</button>
+     <button onClick={handleUpload}>Save</button>
     </div>
    }
 

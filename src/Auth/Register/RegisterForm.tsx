@@ -1,4 +1,5 @@
 import React from 'react';
+import "../../Styles/Auth.css";
 
 interface Register {
  values: {
@@ -12,32 +13,35 @@ interface Register {
 export default function RegisterForm({ values, handleChange }: Register) {
  return (
   <div>
-   <h2>Register:</h2>
-   <input 
-    type="email"
-    name="email" 
-    className='form-control' placeholder='Email' 
-    value={values.email} 
-    onChange={handleChange}
-    required
-   />
-   <input 
-    type="password"
-    name="password" 
-    className='form-control' placeholder='Password' 
-    value={values.password} 
-    onChange={handleChange}
-    required
-   />
-   <input 
-    type="password"
-    name="confirmPassword" 
-    className='form-control' placeholder='Confirm Password' 
-    value={values.confirmPassword} 
-    onChange={handleChange}
-    required
-   />
-   <hr/>
+   <h2 className='auth-header'>Register:</h2>
+   <div className="auth-inputs">
+    <input
+     name="email"
+     type="email" 
+     className='form-control auth-input' 
+     placeholder='Email' 
+     value={values.email} 
+     onChange={handleChange}
+     required
+    />
+    <input
+     name="password" 
+     type="password" 
+     className='form-control auth-input' placeholder='Password' 
+     value={values.password} 
+     onChange={handleChange}
+     required
+    />
+    <input 
+     name="confirmPassword" 
+     type="password" 
+     className='form-control auth-input' 
+     placeholder='Confirm Password' 
+     value={values.confirmPassword} 
+     onChange={handleChange}
+     required
+    />
+   </div>
   </div>
  );
 }

@@ -6,7 +6,7 @@ import EditTeamInfo from './EditTeamInfo';
 
 export default function ManageTeam() {
 
- const team = useParams();
+ const teamParam = useParams();
 
  const [showMembers, setShowMembers] = useState<boolean>(true);
  const [showAddMember, setShowAddMember] = useState<boolean>(false);
@@ -39,14 +39,14 @@ export default function ManageTeam() {
     <p>Edit and add members of your team here.</p>
     <button onClick={displayAddMemberDiv}>Add team member</button>
     <button onClick={displayEditTeamDiv}>Edit team info</button>
-    <button style={{textDecoration: "none", color: "#000"}} onClick={() => navigate(`/team/${team.id}`)}>Go back to my team</button>
+    <button style={{textDecoration: "none", color: "#000"}} onClick={() => navigate(`/team/${teamParam.id}`)}>Go back to my team</button>
    </div>
 
-   {showMembers && <TeamMembers teamId={team.id}/>}
+   {showMembers && <TeamMembers teamId={teamParam.id}/>}
 
-   {showAddMember && <AddTeamMember displayMembersDiv={displayMembersDiv} teamId={team.id}/>}
+   {showAddMember && <AddTeamMember displayMembersDiv={displayMembersDiv} teamId={teamParam.id}/>}
 
-   {showEditTeam && <EditTeamInfo displayMembersDiv={displayMembersDiv} teamId={team.id}/>}
+   {showEditTeam && <EditTeamInfo displayMembersDiv={displayMembersDiv} teamId={teamParam.id}/>}
 
   </div>
  );

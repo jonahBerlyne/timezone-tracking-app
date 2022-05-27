@@ -8,9 +8,9 @@ import { collection, getDocs, query } from 'firebase/firestore';
 export default function TeamRoute ({children}: {children: any}) {
  const [pending, setPending] = useState<boolean>(true);
  const [currentUser, setCurrentUser] = useState<User | null>(null);
-
+ 
  const [teams, setTeams] = useState<any[]>([]);
- const teamId = useParams();
+ const teamParam = useParams();
  const [team, setTeam] = useState<any>([]);
 
  const getTeamInfo = async (user: any): Promise<any> => {
@@ -21,11 +21,7 @@ export default function TeamRoute ({children}: {children: any}) {
    querySnapshot.forEach(doc => {
     teamsArr.push(doc.data());
    });
-   if (teamsArr.length === 0) {
-    return;
-   } else {
-    setTeams(teamsArr);
-   }
+   if (teamsArr.length > 0) setTeams(teamsArr);
   } catch (err) {
    alert(`Team retrieval error: ${err}`);
   }
@@ -54,18 +50,25 @@ export default function TeamRoute ({children}: {children: any}) {
 
  useEffect(() => {
   if (teams.length > 0) {
-   const _team = teams.filter(t => t.id === teamId);
-   if (_team) setTeam(_team);
+   const _team = teams.filter(t => t.id === teamParam.id);
+   if (_team) setTeam(_team[0]);
+  }
+  return () => {
+   setTeam([]);
   }
  }, [teams]);
 
  if (pending) return null;
 
- if (currentUser && teams.length > 0 && teams.includes(team)) {
+ if (currentUser) {
   return (
    <div>
-    <TeamNavbar />
-    {children}
+    {teams.length > 0 && teams.includes(team) &&
+      <div>
+       <TeamNavbar />
+       {children}
+      </div>
+    }
    </div>
   );
  } else {

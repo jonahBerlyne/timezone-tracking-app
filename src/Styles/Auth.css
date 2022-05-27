@@ -1,0 +1,103 @@
+.auth {
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ margin-top: 150px;
+ font-family: 'Roboto', sans-serif;
+ overflow: hidden;
+}
+
+.auth-header {
+ font-size: 40px;
+ font-weight: 900;
+ text-align: center;
+}
+
+.auth-inputs {
+ margin-top: 30px;
+ margin-bottom: -10px;
+ background-color: rgb(255, 254, 255);
+}
+
+.auth-input {
+ width: 350px;
+ margin-bottom: 15px;
+ background-color: rgb(255, 254, 255);
+ border-radius: 15px;
+}
+
+input:focus {
+ -webkit-box-shadow: none !important;
+ -moz-box-shadow: none !important;
+ box-shadow: none !important;
+}
+
+.login-btn,
+.get-started-btn {
+ border-radius: 20px;
+ width: 350px;
+ padding: 8px;
+}
+
+.get-started-btn {
+ margin-top: 15px;
+}
+
+.register-link-element,
+.login-link-element {
+ font-size: 18px;
+}
+
+.login-link-element {
+ margin-top: 15px;
+}
+
+.auth-link {
+ text-decoration: none;
+}
+
+.auth-link:hover {
+ text-decoration: underline;
+}
+
+.get-started-container {
+ margin-top: 50px;
+}
+
+.profile-set-up-btns {
+ display: flex;
+ gap: 30px;
+ margin-top: 10px;
+}
+
+.auth-subheader {
+ text-align: center;
+ font-size: 18px;
+ margin-top: 30px;
+ margin-bottom: 30px;
+}
+
+.auth-time-container {
+ margin-top: -60px;
+}
+
+.auth-time-radio-btns {
+ margin-top: -10px;
+ margin-bottom: 20px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ gap: 5px;
+}
+
+.auth-time-radio-btn-label {
+ padding-right: 5px;
+}
+
+.go-back-btn,
+.register-btn {
+ border-radius: 20px;
+ width: 100px;
+ padding: 8px;
+}

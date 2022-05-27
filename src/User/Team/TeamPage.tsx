@@ -9,8 +9,9 @@ import { selectUser } from '../../Redux/userSlice';
 export default function TeamPage() {
 
  const user = useAppSelector(selectUser);
- const team = useParams();
+ const team = useParams()
  const [timezones, setTimezones] = useState<any[]>([]);
+ const [noMembers, setNoMembers] = useState<boolean>(false);
 
  const getTeamMembers = async (): Promise<any> => {
   try {
@@ -20,15 +21,17 @@ export default function TeamPage() {
    membersSnapshot.forEach(member => {
     tempArr.push(member.data());
    });
-   console.log(tempArr);
+   if (tempArr.length === 0) {
+    setNoMembers(true);
+    return;
+   }
    let membersArr: any[] = [];
    const arrConst = [...tempArr];
    for (let i = -12; i <= 14; i+=0.25) {
-    tempArr = tempArr.filter(member => member.utcOffset === i);
+    tempArr = tempArr.filter(member => member.timezoneData.utcOffset === i);
     if (tempArr.length > 0) membersArr.push([i, tempArr]);
     tempArr = arrConst;
    }
-   console.log(membersArr);
    setTimezones(membersArr);
   } catch (err) {
    alert(`Team members retrieval error: ${err}`);
@@ -41,10 +44,11 @@ export default function TeamPage() {
 
  return (
   <div>
-   <h1 style={{textAlign: "center"}}>Your team:</h1>
+   {noMembers && <h1 style={{textAlign: "center"}}>You haven't added any members to your team, yet.</h1>}
+   {timezones.length > 0 && <h1 style={{textAlign: "center"}}>Your team:</h1>}
    <br/>
    <div style={{display: "flex", gap: "5px", flexWrap: "wrap"}}>
-    {timezones.map((timezone: any) => {
+    {timezones.length > 0 && timezones.map((timezone: any) => {
      // console.log(Math.floor(timezone[0]), timezone[0], Math.ceil(timezone[0]));
      return (
       <div key={timezone[0]}>
@@ -69,6 +73,7 @@ export default function TeamPage() {
         const location = locationData.substring(locationData.indexOf("/") + 1, locationData.length).replace(/_+/g, ' ');
         return (
          <div key={member.id}>
+          <img src={member.profilePic} alt={member.name} height="100px" width="100px" />
           <h4>{member.name}</h4>
           <h5>{location}</h5>
          </div>

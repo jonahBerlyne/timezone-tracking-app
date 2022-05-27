@@ -5,6 +5,7 @@ import fireDB, { auth } from '../../firebaseConfig';
 
 export default function TeamsPage() {
 
+ const [noTeams, setNoTeams] = useState<boolean>(false);
  const [teams, setTeams] = useState<any[]>([]);
 
  useEffect(() => {
@@ -17,14 +18,14 @@ export default function TeamsPage() {
     };
     teamsArr.push(teamDoc);
    });
-   setTeams(teamsArr);
+   teamsArr.length > 0 ? setTeams(teamsArr) : setNoTeams(true);
   });
   return unsub;
  }, []);
  
  return (
   <div>
-   {teams.length === 0 && <h1>You haven't added any teams, yet.</h1>}
+   {noTeams && <h1>You haven't added any teams, yet.</h1>}
    {teams.length > 0 && <h1>Here are your teams:</h1>}
    {teams.length > 0 && teams.map((team: any) => {
     return (

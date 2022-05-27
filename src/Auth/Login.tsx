@@ -1,42 +1,46 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { auth } from '../firebaseConfig';
+import "../Styles/Auth.css";
 
 export default function Login() {
  const [email, setEmail] = useState<string>('');
  const [password, setPassword] = useState<string>('');
 
- const navigate = useNavigate();
-
- const login = async (): Promise<any> => {
+ const signIn = async (): Promise<any> => {
   try {
    await signInWithEmailAndPassword(auth, email, password);
-   alert("Logged in");
-   navigate('/');
   } catch (err) {
-   alert(`Error: ${err}`);
+   alert(`Login error: ${err}`);
   }
  }
 
  return (
-  <div>
-   <h2>Login:</h2>
-   <input 
-    type="email" 
-    className='form-control' placeholder='Email' 
-    value={email} 
-    onChange={(e) => {setEmail(e.target.value)}}
-   />
-   <input 
-    type="password" 
-    className='form-control' placeholder='Password' 
-    value={password} 
-    onChange={(e) => {setPassword(e.target.value)}}
-   />
-   <button className='my-3' onClick={login}>Login</button>
-   <hr/>
-   <Link to="/register">Click Here to Register</Link>
+  <div className='auth'>
+   <h2 className='auth-header'>Log in</h2>
+   <div className="auth-inputs">
+    <input 
+     type="email" 
+     className='form-control auth-input' placeholder='Email' 
+     value={email} 
+     onChange={(e) => {setEmail(e.target.value)}}
+    />
+    <input 
+     type="password" 
+     className='form-control auth-input' placeholder='Password' 
+     value={password} 
+     onChange={(e) => {setPassword(e.target.value)}}
+    />
+   </div>
+   <button 
+    className='my-3 btn btn-primary login-btn' onClick={signIn}
+    disabled={
+     email === "" ||
+     password === ""
+    }>Log in
+   </button>
+   <p className='register-link-element'>Don't have an account? <Link to="/register" className='auth-link'>Sign up now!</Link></p>
   </div>
  );
 }
