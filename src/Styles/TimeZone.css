@@ -1,0 +1,51 @@
+.team-zone-container {
+ display: flex;
+ flex-direction: column;
+}
+
+.time-container {
+ display: flex;
+ flex-direction: column;
+}
+
+.time-element {
+ font-size: 15px;
+}
+
+.offset-element {
+ font-size: 10px;
+}
+
+.members-container {
+ display: flex;
+ flex-direction: column;
+}
+
+.member-container {
+ display: flex;
+ flex-direction: column;
+}
+
+.member-avatar {
+ border-radius: 50px;
+ height: 100px;
+ width: 100px;
+}
+
+/* .member-info {
+ display: none;
+} */
+
+.member-avatar:hover
+.member-info {
+ display: flex;
+ flex-direction: column;
+}
+
+.member-info > h4 {
+ font-size: 10px;
+}
+
+.member-info > h5 {
+ font-size: 8px;
+}

@@ -56,7 +56,6 @@ export default function RegisterPage() {
  const [format, setFormat] = useState<string>("");
 
  const register = async (): Promise<any> => {
-  if (format === "") return;
   try {
    const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
    const docRef = doc(fireDB, "users", `${userCredential.user.uid}`);
@@ -65,13 +64,12 @@ export default function RegisterPage() {
    const userInfo = {
     format,
     id: userCredential.user.uid,
-    timezoneData: {...userZoneData[0], utcOffset},
-    utcOffset: utcOffset
+    timezoneData: {...userZoneData[0], utcOffset}
    };
    await setDoc(docRef, userInfo);
    await updateProfile(userCredential.user, {
     displayName: values.name,
-    photoURL: "/default_pic.png"
+    photoURL: "/Images/default_pic.png"
    });
    alert("Registered");
   } catch (err) {
@@ -124,13 +122,11 @@ export default function RegisterPage() {
   }
  }
 
- const onRadioChange = (e: ChangeEvent<HTMLInputElement>): void => {
-  setFormat(e.target.value);
- }
+ const onRadioChange = (e: ChangeEvent<HTMLInputElement>): void => setFormat(e.target.value);
 
  const isRadioSelected = (value: string): boolean => format === value;
 
- const formProps = {values, handleChange, onRadioChange, isRadioSelected};
+ const formProps = { values, handleChange, onRadioChange, isRadioSelected };
 
  useEffect(() => {
   if (values.country !== "") {
@@ -142,7 +138,6 @@ export default function RegisterPage() {
    });
    setZones(timezonesArr);
   }
-  console.clear();
   console.log(values);
  }, [values]);
 

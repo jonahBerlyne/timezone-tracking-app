@@ -105,16 +105,17 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
  }
 
  const [imgUrl, setImgUrl] = useState<string>("");
- // const [saveClicked, setSaveClicked] = useState(false);
 
  const handleUpload = async (): Promise<any> => {
-  if (imgFile === null) setImgUrl("/default_pic.png");
+  if (imgFile === null) {
+   setImgUrl("/Images/default_pic.png");
+   return;
+  }
   try {
    const uploadTask = ref(storage, `${auth.currentUser?.uid}/teams/${teamId}/members/${values.id}`);
    await uploadBytes(uploadTask, imgFile);
    const url = await getDownloadURL(uploadTask);
    setImgUrl(url);
-   // setSaveClicked(true);
   } catch (err) {
    alert(`Upload error: ${err}`);
   }

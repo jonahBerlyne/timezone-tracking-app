@@ -226,7 +226,7 @@ export default function ProfilePage() {
     reason: values.reason
    }
    await setDoc(deletedUserRef, deletedUser);
-   if (auth.currentUser?.photoURL) {
+   if (auth.currentUser?.photoURL !== "/Images/default_pic.png") {
     const deletedPicRef = ref(storage, `${auth.currentUser?.uid}/profilePic`);
     await deleteObject(deletedPicRef);
    }
