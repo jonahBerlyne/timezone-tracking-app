@@ -77,7 +77,7 @@ export default function Home() {
   <div className="home-page-container">
 
    <div className="home-page-top">
-    <h3>Keep track where and <em>when</em> your team is.</h3>
+    <h3>Keep track of where and <em>when</em> your team is.</h3>
     <div className="dummy-team-container">
      <TimeZone offset={dummyDataOne.offset} members={dummyDataOne.members} />
      <TimeZone offset={dummyDataTwo.offset} members={dummyDataTwo.members} />

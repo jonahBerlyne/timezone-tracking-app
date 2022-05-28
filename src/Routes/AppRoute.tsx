@@ -7,6 +7,7 @@ import { useAppSelector, useAppDispatch } from '../Redux/hooks';
 import { login, selectUser } from '../Redux/userSlice';
 import { store } from '../Redux/Store';
 import UserNavbar from '../User/UserNavbar';
+import "../Styles/App.css";
 
 export default function AppRoute ({children}: {children: any}) {
   const [pending, setPending] = useState<boolean>(true);
@@ -62,10 +63,12 @@ export default function AppRoute ({children}: {children: any}) {
   if (currentUser) {
     return (
       <div className='app-container'> 
+      {user && 
         <div className="app-body">
           <UserNavbar />
           {children}
         </div>
+      }
       </div>
     );
   } else {

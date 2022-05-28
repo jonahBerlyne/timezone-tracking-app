@@ -1,36 +1,79 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { getAuth } from 'firebase/auth';
+import fireDB, { auth } from "../firebaseConfig";
 import UserNavbar from '../User/UserNavbar';
 import AuthNavbar from '../Auth/AuthNavbar';
+import { useAppDispatch, useAppSelector } from '../Redux/hooks';
+import { login, selectUser } from '../Redux/userSlice';
+import { doc, getDoc } from 'firebase/firestore';
+import { store } from '../Redux/Store';
 
 export default function MainRoute ({children}: {children: any}) {
  const [pending, setPending] = useState<boolean>(true);
  const [currentUser, setCurrentUser] = useState<User | null>(null);
- const auth = getAuth();
+ 
+ const user = useAppSelector(selectUser);
+ const dispatch = useAppDispatch();
 
- useEffect(() => {
-  const unsub = onAuthStateChanged(
-   auth,
-   user => {
-    user ? setCurrentUser(user) : setCurrentUser(null);
-    setPending(false);
-   },
-   err => {
-    alert(`Error: ${err}`);
-    setPending(false);
-   }
-  );
+  const getUserInfo = async (user: User): Promise<any> => {
+    let storeLength = 0;
+    console.log(storeLength);
+    try {
+      while (storeLength < 2) {
+        const docRef = doc(fireDB, "users", `${user.uid}`);
+        const docSnapshot = await getDoc(docRef);
+        console.log(docSnapshot.data());
+        dispatch(
+          login({
+            ...docSnapshot.data(),
+            id: docSnapshot.id
+          })
+        );
+        storeLength = Object.keys(store.getState().user.user).length;
+      }
+    } catch (err) {
+      alert(`User info retrieval error: ${err}`);
+    }
+  }
 
-  return unsub;
- }, []);
+  useEffect(() => {
+    const unsub = onAuthStateChanged(
+      auth,
+      _user => {
+        if (_user) {
+          getUserInfo(_user);
+          setCurrentUser(_user);
+        } else {
+          setCurrentUser(null);
+        }
+        setPending(false);
+      },
+      err => {
+        alert(`Error: ${err}`);
+        setPending(false);
+      }
+    );
+
+    return unsub;
+  }, []);
 
  if (pending) return null;
+
  return (
   <div>
-   {currentUser ? <UserNavbar /> : <AuthNavbar/>}
-   {children}
+   {currentUser && user &&
+    <> 
+     <UserNavbar />
+     {children}
+    </>
+   }
+   {!currentUser && 
+    <> 
+     <AuthNavbar />
+     {children}
+    </>
+   }
    {/* <Footer/> */}
   </div>
  );
