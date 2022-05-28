@@ -2,14 +2,15 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import Profile from "./Profile";
 import EditProfile from "./EditProfile";
 import fireDB, { auth } from '../../firebaseConfig';
-import { collection, deleteDoc, doc, onSnapshot, query, setDoc } from 'firebase/firestore';
+import { deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { storage } from '../../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { findUTCOffset } from '../Time';
 import { useAppDispatch, useAppSelector } from '../../Redux/hooks';
 import { logout, selectUser } from '../../Redux/userSlice';
-import { useNavigate } from 'react-router-dom';
-import { deleteUser, EmailAuthCredential, EmailAuthProvider, reauthenticateWithCredential, reload, updateEmail, updateProfile, User } from 'firebase/auth';
+import { deleteUser, EmailAuthCredential, EmailAuthProvider, reauthenticateWithCredential, updateEmail, updateProfile, User } from 'firebase/auth';
+import "../../Styles/Profile.css";
+import { Avatar } from '@mui/material';
 
 interface Values {
  name: any;
@@ -38,7 +39,7 @@ export default function ProfilePage() {
   setShowProfile(true);
   setValues(initialValues);
   setShowZones(false);
-  setImgFile(null);
+  setImgPreview(auth.currentUser?.photoURL);
   setFormat(user?.format);
  }
 
@@ -124,6 +125,7 @@ export default function ProfilePage() {
  const [imgFile, setImgFile] = useState<any>(null);
  const [imgFileErr, setImgFileErr] = useState<string | null>(null);
  const types: string[] = ['image/png', 'image/jpeg'];
+ const [imgPreview, setImgPreview] = useState<any>(auth.currentUser?.photoURL);
 
  const choosePic = (e: any): void => {
   const image = e.target.files[0];
@@ -136,6 +138,13 @@ export default function ProfilePage() {
   }
  }
 
+  useEffect(() => {
+   if (imgFile) setImgPreview(URL.createObjectURL(imgFile));
+   return () => {
+     setImgPreview(auth.currentUser?.photoURL);
+   }
+  }, [imgFile]);
+
  const handleUpload = async (): Promise<any> => {
   if (imgFile === null) return;
   try {
@@ -146,6 +155,7 @@ export default function ProfilePage() {
     await updateProfile(auth.currentUser, {
      photoURL: url
     });
+    // setImgUrl(url);
    }
   } catch (err) {
    alert(`Upload error: ${err}`);
@@ -248,22 +258,24 @@ export default function ProfilePage() {
   }
  }
 
- const editProps = { values, handleChange, choosePic, imgFileErr, countries, zones, showZones, isRadioSelected, onRadioChange };
+ const editProps = { values, handleChange, choosePic, imgPreview, imgFileErr, countries, zones, showZones, isRadioSelected, onRadioChange };
 
  return (
-  <div>
+  <div className='profile-page-container'>
    {showProfile &&
-    <div>
-     <Profile name={auth.currentUser?.displayName} zoneName={profileZone} imgUrl={auth.currentUser?.photoURL} format={userInfo?.format} utcOffset={userInfo?.timezoneData.utcOffset} />
-     <button onClick={goToEditProfile}>Edit your profile or location</button>
+    <div className='profile-container'>
+     <Profile name={auth.currentUser?.displayName} imgUrl={auth.currentUser?.photoURL} zoneName={profileZone} format={userInfo?.format} utcOffset={userInfo?.timezoneData.utcOffset} />
+     <button className='btn btn-primary edit-profile-btn' onClick={goToEditProfile}>Edit your profile</button>
     </div> 
    }
    {editProfile &&
-    <div>
+    <div className='edit-profile-container'>
      <EditProfile {...editProps} />
-     <button onClick={goToProfile}>Go back</button>
-     <button onClick={saveChanges}>Save</button>
-     <button onClick={deleteAccount}>Delete my account</button>
+     <div className="edit-profile-btns">
+      <button className="btn btn-primary profile-btn" onClick={goToProfile}>Go back</button>
+      <button className="btn btn-success save-changes-btn" onClick={saveChanges}>Save</button>
+      <button className="btn btn-danger delete-acct-btn" onClick={deleteAccount}>Delete my account</button>
+     </div>
     </div>
    }
   </div>

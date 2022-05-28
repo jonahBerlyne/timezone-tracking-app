@@ -1,0 +1,184 @@
+.profile-page-container {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ margin-top: 50px;
+ font-family: "Lato", sans-serif;
+}
+
+
+.profile-container {
+ margin-top: 20px;
+}
+
+.profile {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+}
+
+.profile > .MuiAvatar-root,
+.edit-profile-pic-container > .MuiAvatar-root {
+ height: 100px;
+ width: 100px;
+}
+
+.profile-info-container {
+ display: flex;
+ gap: 8px;
+}
+
+.profile-info-container > .MuiSvgIcon-root {
+ color: #0303d2;
+}
+
+.profile-info {
+ display: flex;
+ align-items: center;
+ gap: 5px;
+}
+
+.profile-time {
+ opacity: 0.7;
+ font-size: 12px;
+ margin-top: 3px;
+}
+
+.edit-profile-btn {
+ font-weight: bold;
+}
+
+.edit-profile-container {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+}
+
+.edit-profile {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+}
+
+.edit-profile-pic-container {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+}
+
+.edit-profile-pic-container > input {
+ margin-top: 10px;
+ margin-left: 10px;
+ width: 110px;
+ color: #00000000;
+}
+
+.edit-profile-pic-container > p {
+ color: red;
+ margin-top: 10px;
+ margin-bottom: -10px;
+}
+
+.edit-profile-name-container,
+.edit-profile-email-container,
+.edit-profile-time-container,
+.edit-profile-country-container {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ margin-top: 20px;
+}
+
+.edit-profile-name-container > p,
+.edit-profile-email-container > p,
+.edit-profile-time-container > p,
+.edit-profile-pic-container > p {
+ font-size: 12px;
+ opacity: 0.7;
+}
+
+.edit-profile-name-container > input,
+.edit-profile-email-container > input {
+ margin-top: -10px;
+ border: 1px solid lightgray;
+ border-radius: 15px;
+ padding: 3px 0px 3px 10px;
+ width: 200px;
+}
+
+.edit-profile-radio-btns-container {
+ display: flex;
+ gap: 10px;
+}
+
+.edit-profile-radio-btn {
+ display: flex;
+ align-items: center;
+ gap: 5px;
+}
+
+.edit-profile-country-container > p {
+ margin-bottom: 25px;
+}
+
+.edit-profile-country-container > select,
+.edit-profile-timezone-container > select {
+ margin-top: -10px;
+ border: 1px solid lightgray;
+ border-radius: 15px;
+ padding: 3px 0px 3px 10px;
+ width: 420px;
+}
+
+.edit-profile-timezone-container {
+ margin-top: 10px;
+}
+
+.edit-profile-timezone-container > p {
+ text-align: center;
+}
+
+.edit-profile-delete-acct-container {
+ display: flex;
+ flex-direction: column;
+}
+
+.edit-profile-delete-acct-container > h4,
+.edit-profile-delete-acct-container > label,
+.edit-profile-password-container > label {
+ text-align: center;
+ margin-bottom: 20px;
+}
+
+.edit-profile-delete-acct-container > input,
+.edit-profile-password-container > input {
+ margin-bottom: 20px;
+ border: 1px solid lightgray;
+ border-radius: 15px;
+ padding: 3px 0px 3px 10px;
+ width: 400px;
+}
+
+.edit-profile-delete-acct-container > textarea {
+ border: 1px solid lightgray;
+}
+
+.edit-profile-password-container {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ margin-top: 40px;
+}
+
+.edit-profile-btns {
+ display: flex;
+ gap: 30px;
+ margin-top: 20px;
+ margin-bottom: 40px;
+}
+
+.edit-profile-btns > button {
+ padding-left: 20px;
+ padding-right: 20px;
+ font-weight: bold;
+}

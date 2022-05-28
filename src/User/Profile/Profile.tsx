@@ -1,20 +1,29 @@
 import { formatAMPM, formatMT } from "../Time";
+import "../../Styles/Profile.css";
+import { LocationOn } from "@mui/icons-material";
+import { Avatar } from "@mui/material";
 
 interface ProfileInterface {
  name: string | null | undefined;
+ imgUrl: any;
  zoneName: string;
- imgUrl: string | null | undefined;
  format: string;
  utcOffset: number;
 };
 
-export default function Profile({ name, zoneName, imgUrl, format, utcOffset }: ProfileInterface) {
+export default function Profile({ name, imgUrl, zoneName, format, utcOffset }: ProfileInterface) {
 
  return (
-  <div>
-   {imgUrl && <img src={imgUrl} alt={imgUrl} height="100" width="200"/>}
-   <h2>{name}</h2>
-   <p><strong>{zoneName}</strong> {format === "ampm" && formatAMPM(utcOffset)} {format === "MT" && formatMT(utcOffset)}</p>
+  <div className="profile">
+    {imgUrl && <Avatar src={imgUrl} alt={`${name} profile pic`} />}
+    <h2>{name}</h2>
+    <div className="profile-info-container">
+     <LocationOn />
+     <div className="profile-info">
+      <p className="profile-location">{zoneName}</p> 
+      <p className="profile-time">{format === "ampm" && formatAMPM(utcOffset)} {format === "MT" && formatMT(utcOffset)}</p>
+     </div>
+    </div>
   </div>
  );
 }

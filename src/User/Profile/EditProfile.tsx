@@ -1,9 +1,12 @@
 import React, { ChangeEvent } from "react";
+import "../../Styles/Profile.css";
+import { Avatar } from "@mui/material";
 
 interface EditProfileInterface {
  values: any;
  handleChange: (e: any) => void;
  choosePic: (e: any) => void;
+ imgPreview: any;
  imgFileErr: string | null;
  countries: any[];
  zones: any[];
@@ -12,47 +15,50 @@ interface EditProfileInterface {
  onRadioChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function EditProfile({ values, handleChange, choosePic, imgFileErr, countries, zones, showZones, isRadioSelected, onRadioChange }: EditProfileInterface) {
+export default function EditProfile({ values, handleChange, choosePic, imgPreview, imgFileErr, countries, zones, showZones, isRadioSelected, onRadioChange }: EditProfileInterface) {
 
  return (
-  <div>
-   <div>
-    <h4>Upload a new profile pic:</h4>
-    <input onChange={choosePic} type="file"/>
-    {imgFileErr && <h6>{imgFileErr}</h6>}
+  <div className="edit-profile">
+   <div className="edit-profile-pic-container">
+    <Avatar src={imgPreview} alt={imgPreview} />
+    <input name="img_upload" onChange={choosePic} type="file" />
+    {imgFileErr && <p className="edit-profile-pic-err">{imgFileErr}</p>}
    </div>
-   <div>
-    <h4>Type a new name:</h4>
+   <div className="edit-profile-name-container">
+    <p>Name</p>
     <input type="text" name="name" value={values.name} onChange={handleChange} placeholder={values.name}/>
    </div>
-   <div style={{display: "flex", flexDirection: "column"}}>
-    <h4>Time format:</h4>
-    <div>
-     <input 
-      type="radio" 
-      name="format" 
-      value="ampm"
-      checked={isRadioSelected("ampm")} 
-      onChange={onRadioChange}
-     />
-     <label>AM/PM Format</label>
-     <input 
-      type="radio" 
-      name="format" 
-      value="MT"
-      checked={isRadioSelected("MT")} 
-      onChange={onRadioChange}
-     />
-     <label>24 Hr. Format</label>
-    </div>
-   </div>
-   <div style={{display: "flex", flexDirection: "column"}}>
-    <h3>Change your account and privacy information:</h3>
-    <label>Email:</label>
+   <div className="edit-profile-email-container">
+    <p>Email</p>
     <input type="email" name="email" value={values.email} onChange={handleChange} />
    </div>
-   <div>
-    <h4>Select a new country:</h4>
+   <div className="edit-profile-time-container">
+    <p>Time format</p>
+    <div className="edit-profile-radio-btns-container">
+     <div className="edit-profile-radio-btn">
+      <input 
+       type="radio" 
+       name="format" 
+       value="ampm"
+       checked={isRadioSelected("ampm")} 
+       onChange={onRadioChange}
+      />
+      <label>AM/PM Format</label>
+     </div>
+     <div className="edit-profile-radio-btn">
+      <input 
+       type="radio" 
+       name="format" 
+       value="MT"
+       checked={isRadioSelected("MT")} 
+       onChange={onRadioChange}
+      />
+      <label>24 Hr. Format</label>
+     </div>
+    </div>
+   </div>
+   <div className="edit-profile-country-container">
+    <p>Select a new country</p>
     <select id="countryBox" name="country" onChange={handleChange}>
      <option defaultValue="" key=""></option>
      {countries.map(country => {
@@ -61,10 +67,9 @@ export default function EditProfile({ values, handleChange, choosePic, imgFileEr
       );
      })}
     </select>
-    <br/>
     {showZones &&
-     <div>
-      <h4>Select a new timezone:</h4>
+     <div className="edit-profile-timezone-container">
+      <p>Select a new timezone</p>
       <select id="timezoneBox" name="timezone" onChange={handleChange} required>
        <option defaultValue="" key=""></option>
        {zones.map(zone => {
@@ -77,15 +82,15 @@ export default function EditProfile({ values, handleChange, choosePic, imgFileEr
     }
     <br/>
    </div>
-   <div style={{display: "flex", flexDirection: "column"}}>
-    <h4>Delete account:</h4>
-    <label>Type DELETE to confirm:</label>
+   <div className="edit-profile-delete-acct-container">
+    <h4>Delete account</h4>
+    <label>Type DELETE to confirm</label>
     <input type="text" name="delete" value={values.delete} onChange={handleChange}/>
     <label>Why are you deleting your account? (Optional)</label>
-    <textarea rows={10} cols={10} name="reason" value={values.reason} onChange={handleChange}/>
+    <textarea rows={3} cols={10} name="reason" value={values.reason} onChange={handleChange}/>
    </div>
-   <div style={{display: "flex", flexDirection: "column"}}>
-    <label>Please enter your password to save any changes or to delete your account:</label>
+   <div className="edit-profile-password-container">
+    <label>Please enter your password to save any changes or to delete your account</label>
     <input type="password" name="password" value={values.password} onChange={handleChange} required />
    </div>
   </div>
