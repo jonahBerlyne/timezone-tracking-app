@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
+import { WatchLater } from "@mui/icons-material";
 
 export default function AuthNavbar() {
 
@@ -7,6 +8,7 @@ export default function AuthNavbar() {
     <div className='header'>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
+            <WatchLater color="primary" />
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span>
                 <FaBars size={25} color="gray"/>

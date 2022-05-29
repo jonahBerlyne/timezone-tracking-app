@@ -1,0 +1,57 @@
+.teams-page-container {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ font-family: "Lato", sans-serif;
+}
+
+.no-teams {
+ margin-top: 250px;
+}
+
+.teams-container {
+ display: flex;
+ flex-direction: column;
+ align-items: flex-start;
+}
+
+.teams-header {
+ margin-top: 10px;
+ margin-bottom: 20px;
+}
+
+.team-link-element {
+ font-size: 20px;
+}
+
+.team-link {
+ text-decoration: none;
+}
+
+.team-link:hover {
+ text-decoration: underline;
+}
+
+.create-team-container {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ margin-top: 250px;
+}
+
+.create-team-container > h4 {
+ margin-bottom: 10px;
+}
+
+.create-team-container > input {
+ margin-bottom: 25px;
+ border: 1px solid lightgray;
+ border-radius: 15px;
+ padding: 5px 0px 5px 10px;
+ width: 220px;
+}
+
+.create-team-container > button {
+ border-radius: 20px;
+ font-weight: bold;
+}

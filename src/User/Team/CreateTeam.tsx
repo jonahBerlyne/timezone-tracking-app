@@ -3,6 +3,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import fireDB, { auth } from '../../firebaseConfig';
 import uniqid from "uniqid";
 import { useNavigate } from 'react-router-dom';
+import "../../Styles/Teams.css";
 
 export default function CreateTeam() {
 
@@ -30,10 +31,10 @@ export default function CreateTeam() {
  }
 
  return (
-  <div>
-   <label>Name your team:</label>
-   <input type="text" placeholder="Team name" value={teamName} onChange={handleChange}/>
-   <button onClick={createTeam}>Create team</button>
+  <div className='create-team-container'>
+   <h4>Add a team!</h4>
+   <input type="text" placeholder="Team name" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
+   <button className='btn btn-primary' onClick={createTeam}>Create team</button>
   </div>
  );
 }

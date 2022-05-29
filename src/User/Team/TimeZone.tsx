@@ -18,6 +18,7 @@ export default function TeamZone({ offset, members }: Team) {
     <div className='team-zone-container' key={offset}>
 
      <div className="time-container">
+      {!user && <p className='time-element'>{formatAMPM(offset)}</p>}
       {user?.format === "ampm" && <p className='time-element'>{formatAMPM(offset)}</p>}
       {user?.format === "MT" && <p className='time-element'>{formatMT(offset)}</p>}
       <p className="offset-element">
