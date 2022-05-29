@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import TeamMembers from './TeamMembers';
 import AddTeamMember from './AddTeamMember';
 import EditTeamInfo from './EditTeamInfo';
+import "../../../Styles/Manage.css";
 
 export default function ManageTeam() {
 
@@ -33,13 +34,19 @@ export default function ManageTeam() {
  const navigate = useNavigate();
 
  return (
-  <div style={{display: "flex", gap: "100px"}}>
+  <div className='manage-page-container'>
 
-   <div style={{display: "flex", flexDirection: "column"}}>
-    <p>Edit and add members of your team here.</p>
-    <button onClick={displayAddMemberDiv}>Add team member</button>
-    <button onClick={displayEditTeamDiv}>Edit team info</button>
-    <button style={{textDecoration: "none", color: "#000"}} onClick={() => navigate(`/team/${teamParam.id}`)}>Go back to my team</button>
+   <div className='manage-sidebar-container'>
+    <h1 className='manage-team-header'>Getting started with</h1>
+    <div className="manage-team-text-container">
+     <p>Here you can manage your team.</p>
+     <p>When you're done, you can click the button below or the X at the top right. To get back here you can always click the "Manage Team" button at the left on your team dashboard.</p>
+    </div>
+    <div className="manage-team-btns-container">
+     <button className='btn btn-primary go-to-add-member-btn' onClick={displayAddMemberDiv}>Add team member</button>
+     <button className='btn btn-secondary go-to-edit-team-btn' onClick={displayEditTeamDiv}>Edit team info</button>
+     <button className='btn btn-secondary go-to-team-page-btn' onClick={() => navigate(`/team/${teamParam.id}`)}>Show me my team!</button>
+    </div>
    </div>
 
    {showMembers && <TeamMembers teamId={teamParam.id}/>}

@@ -3,6 +3,7 @@ import { FaArrowLeft } from "react-icons/fa"
 import fireDB, { auth } from '../../../firebaseConfig';
 import { doc, setDoc, getDocs, query, collection, deleteDoc, onSnapshot } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
+import "../../../Styles/Manage.css";
 
 interface EditTeamInfoInterface {
  displayMembersDiv: () => void;

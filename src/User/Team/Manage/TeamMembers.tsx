@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import fireDB, { auth } from '../../../firebaseConfig';
 import { getDocs, query, collection, doc, deleteDoc } from 'firebase/firestore';
 import { FaTimes } from "react-icons/fa";
+import "../../../Styles/Manage.css";
 
 export default function TeamMembers({ teamId }: { teamId: string | undefined }) {
 

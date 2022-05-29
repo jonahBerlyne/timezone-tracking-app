@@ -1,0 +1,14 @@
+.manage-page-container {
+ display: flex;
+ gap: 100px;
+}
+
+.manage-sidebar-container {
+ display: flex;
+ flex-direction: column;
+}
+
+.go-to-team-page-btn {
+ text-decoration: none;
+ color: #000;
+}

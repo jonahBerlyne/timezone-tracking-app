@@ -5,6 +5,7 @@ import fireDB, { auth, storage } from '../../../firebaseConfig';
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { findUTCOffset } from '../../Time';
+import "../../../Styles/Manage.css";
 
 interface AddTeamMemberInterface {
  displayMembersDiv: () => void;
