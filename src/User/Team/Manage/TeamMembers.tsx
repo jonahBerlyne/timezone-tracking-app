@@ -1,38 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import fireDB, { auth } from '../../../firebaseConfig';
-import { getDocs, query, collection, doc, deleteDoc } from 'firebase/firestore';
+import fireDB, { auth, storage } from '../../../firebaseConfig';
+import { getDocs, query, collection, doc, deleteDoc, onSnapshot, getDoc } from 'firebase/firestore';
 import { FaTimes } from "react-icons/fa";
 import "../../../Styles/Manage.css";
+import { deleteObject, ref } from 'firebase/storage';
 
 export default function TeamMembers({ teamId }: { teamId: string | undefined }) {
 
- const [refresh, setRefresh] = useState<boolean>(false);
-
- useEffect(() => {
-  renderMembers();
- }, [refresh]);
-
  const [members, setMembers] = useState<any[]>([]);
 
- const renderMembers = async (): Promise<any> => {
-  try {
-   const membersCollection = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`, "team_members"));
-   const membersSnapshot = await getDocs(membersCollection);
+ useEffect(() => {
+  const q = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`, "team_members"));
+  const unsub = onSnapshot(q, snapshot => {
    let membersArr: any[] = [];
-   membersSnapshot.forEach(member => {
+   snapshot.docs.forEach(member => {
     membersArr.push(member.data());
    });
    setMembers(membersArr);
-  } catch (err) {
-   alert(`Render error: ${err}`);
-  }
- }
+  });
+  return unsub;
+ }, []);
+
 
  const deleteMember = async (memberId: any): Promise<any> => {
   try {
    const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`, "team_members", `${memberId}`);
+   const memberDoc = await getDoc(docRef);
+   if (memberDoc.data()?.profilePic !== "/Images/default_pic.png") {
+    const deletedPicRef = ref(storage, `${auth.currentUser?.uid}/teams/${teamId}/members/${memberId}`);
+    await deleteObject(deletedPicRef);
+   }
    await deleteDoc(docRef);
-   setRefresh(!refresh);
   } catch (err) {
    alert(`Deletion error: ${err}`);
   }

@@ -16,6 +16,8 @@ import TeamNavbar from "./User/Team/TeamNavbar";
 import TeamsPage from "./User/Team/TeamsPage";
 import TeamPage from "./User/Team/TeamPage";
 import ManageTeam from "./User/Team/Manage/ManageTeam";
+import AddTeamMember from "./User/Team/Manage/AddTeamMember";
+import EditTeamInfo from "./User/Team/Manage/EditTeamInfo";
 import CreateTeam from "./User/Team/CreateTeam";
 import AuthRoute from "./Routes/AuthRoute";
 import AppRoute from "./Routes/AppRoute";
@@ -42,6 +44,8 @@ export default function App() {
         <Route path="/teams" element={<AppRoute><TeamsPage/></AppRoute>}></Route>
         <Route path="/team/:id" element={<TeamRoute><TeamPage/></TeamRoute>}></Route>
         <Route path="/team/:id/manage" element={<TeamRoute><ManageTeam/></TeamRoute>}></Route>
+        <Route path="/team/:id/manage/add" element={<TeamRoute><AddTeamMember /></TeamRoute>}></Route>
+        <Route path="/team/:id/manage/edit" element={<TeamRoute><EditTeamInfo /></TeamRoute>}></Route>
       </Routes>
     </Router>
   );

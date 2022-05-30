@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FaArrowLeft } from "react-icons/fa";
 import uniqid from "uniqid";
 import fireDB, { auth, storage } from '../../../firebaseConfig';
 import { doc, setDoc } from "firebase/firestore";
@@ -8,11 +7,7 @@ import { findUTCOffset } from '../../Time';
 import "../../../Styles/Manage.css";
 import { IconButton, Avatar } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-
-interface AddTeamMemberInterface {
- displayMembersDiv: () => void;
- teamId: string | undefined;
-};
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface Values {
  id: string | undefined;
@@ -22,7 +17,9 @@ interface Values {
  timezone: string;
 };
 
-export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemberInterface) {
+export default function AddTeamMember() {
+
+ const teamParam = useParams();
 
  const initialValues = { id: uniqid(), email: '', name: '', country: '', timezone: '' };
 
@@ -108,7 +105,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
    return;
   }
   try {
-   const uploadTask = ref(storage, `${auth.currentUser?.uid}/teams/${teamId}/members/${values.id}`);
+   const uploadTask = ref(storage, `${auth.currentUser?.uid}/teams/${teamParam.id}/members/${values.id}`);
    await uploadBytes(uploadTask, imgFile);
    const url = await getDownloadURL(uploadTask);
    setImgUrl(url);
@@ -121,9 +118,11 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
   if (imgUrl !== "") saveChanges();
  }, [imgUrl]);
 
+ const navigate = useNavigate();
+
  const saveChanges = async (): Promise<any> => {
   try {
-   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`, "team_members", `${values.id}`);
+   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamParam.id}`, "team_members", `${values.id}`);
    const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
    const utcOffset = findUTCOffset(userZoneData[0].gmtOffset);
    const memberInfo = {
@@ -135,7 +134,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
    await setDoc(docRef, memberInfo);
    alert("Changes saved");
    setValues(initialValues);
-   displayMembersDiv();
+   navigate(`/team/${teamParam.id}/manage`);
   } catch (err) {
    alert(`Change saving error: ${err}`);
   }
@@ -156,7 +155,7 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
  return (
   <div className='add-member-container'>
 
-   <IconButton onClick={displayMembersDiv}>
+   <IconButton onClick={() => navigate(`/team/${teamParam.id}/manage`)}>
     <ArrowBack />
    </IconButton>
     

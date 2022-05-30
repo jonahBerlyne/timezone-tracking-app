@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from "react-icons/fa"
 import fireDB, { auth } from '../../../firebaseConfig';
 import { doc, setDoc, getDocs, query, collection, deleteDoc, onSnapshot } from "firebase/firestore";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import "../../../Styles/Manage.css";
+import { IconButton } from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
 
-interface EditTeamInfoInterface {
- displayMembersDiv: () => void;
- teamId: string | undefined;
-};
+export default function EditTeamInfo() {
 
-export default function EditTeamInfo({ displayMembersDiv, teamId }: EditTeamInfoInterface) {
+ const teamParam = useParams();
 
  const [teamNameInput, setTeamNameInput] = useState<string>("");
  const [teamName, setTeamName] = useState<string>("");
@@ -19,7 +18,7 @@ export default function EditTeamInfo({ displayMembersDiv, teamId }: EditTeamInfo
   const q = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams"));
   const unsub = onSnapshot(q, snapshot => {
    snapshot.docs.forEach(doc => {
-    if (doc.data()?.id === teamId) {
+    if (doc.data()?.id === teamParam.id) {
      setTeamNameInput(doc.data()?.name);
      setTeamName(doc.data()?.name);
      return;
@@ -35,14 +34,13 @@ export default function EditTeamInfo({ displayMembersDiv, teamId }: EditTeamInfo
 
  const saveNameChange = async (): Promise<any> => {
   try {
-   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`);
+   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamParam.id}`);
    const teamInfo = {
-    id: teamId,
+    id: teamParam.id,
     name: teamNameInput
    };
    await setDoc(docRef, teamInfo);
    alert("Team name saved");
-   navigate(`/team/${teamId}/manage`);
   } catch (err) {
    alert(`Name change error: ${err}`);
   }
@@ -50,13 +48,13 @@ export default function EditTeamInfo({ displayMembersDiv, teamId }: EditTeamInfo
 
  const deleteTeam = async (): Promise<any> => {
   try {
-   const membersCollection = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`, "team_members"));
+   const membersCollection = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamParam.id}`, "team_members"));
    const membersSnapshot = await getDocs(membersCollection);
    membersSnapshot.forEach(async member => {
-    const memberRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`, "team_members", `${member.data().id}`);
+    const memberRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamParam.id}`, "team_members", `${member.data().id}`);
     await deleteDoc(memberRef);
    });
-   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`);
+   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamParam.id}`);
    await deleteDoc(docRef);
    alert("Team deleted");
    navigate(`/teams`);
@@ -66,21 +64,27 @@ export default function EditTeamInfo({ displayMembersDiv, teamId }: EditTeamInfo
  }
 
  return (
-  <div style={{display: "flex", flexDirection: "column"}}>
+  <div className='edit-team-info-container'>
 
-   <button onClick={displayMembersDiv}>
-    <span>
-     <FaArrowLeft size={25}/>
-    </span>
-   </button>
+   {teamName !== '' &&
+    <>    
+     <IconButton onClick={() => navigate(`/team/${teamParam.id}/manage`)}>
+      <ArrowBack />
+     </IconButton>
 
-   <label>Change team name:</label>
-   <input value={teamNameInput} onChange={handleChange}/>
+     <div className="edit-team-name-container">
+      <p>Change team name</p>
+      <input value={teamNameInput} onChange={handleChange} />
+      <button className="btn change-team-name-btn" onClick={saveNameChange}>Save</button>
+     </div>
 
-   <button onClick={saveNameChange}>Save</button>
+     <div className="delete-team-container">
+      <p>Delete your team, this cannot be undone</p>
+      <button className='btn btn-danger delete-team-btn' onClick={deleteTeam}>Delete {teamName}</button>
+     </div>
+    </> 
+   }
 
-   <label>Delete your team:</label>
-   <button onClick={deleteTeam}>Delete {teamName}</button>
   </div>
  );
 }

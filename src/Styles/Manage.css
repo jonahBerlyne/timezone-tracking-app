@@ -1,19 +1,31 @@
 .manage-page-container {
  display: flex;
  justify-content: center;
- gap: 100px;
  font-family: "Lato", sans-serif;
+ position: absolute;
 }
 
-.manage-sidebar-container {
+.manage-team-container {
  display: flex;
  flex-direction: column;
+ margin-top: 20px;
  margin-left: 50px;
- margin-top: 50px;
 }
 
 .manage-team-text-container {
- margin: 50px 650px 20px 0px;
+ margin: 30px 850px 20px 0px;
+}
+
+.manage-team-text-container > h1 {
+ margin-bottom: 40px;
+}
+
+.manage-team-text-container > p {
+ line-height: 35px;
+}
+
+.manage-team-info-container {
+ display: flex;
 }
 
 .manage-team-btns-container {
@@ -25,6 +37,7 @@
 .manage-team-btns-container > button {
  width: 170px;
  border-radius: 20px;
+ font-weight: bold;
 }
 
 .manage-team-btns-container > button:focus {
@@ -36,22 +49,30 @@
  background-color: whitesmoke;
 }
 
+.go-to-edit-team-btn:hover,
+.go-to-team-page-btn:hover {
+ background-color: rgb(240, 240, 240);
+}
+
 .member-profile > .MuiAvatar-root,
 .add-member-profile-pic-container > .MuiAvatar-root {
  height: 100px;
  width: 100px;
 }
 
-.add-member-container {
+.add-member-container,
+.edit-team-info-container {
  display: flex;
  flex-direction: column;
  align-items: center;
  margin-top: 10px;
+ font-family: "Lato", sans-serif;
 }
 
-.add-member-container > .MuiIconButton-root {
+.add-member-container > .MuiIconButton-root,
+.edit-team-info-container > .MuiIconButton-root {
  position: absolute;
- left: 0;
+ left: 3px;
  top: 70px;
 }
 
@@ -76,7 +97,9 @@
 
 .add-member-name-container,
 .add-member-email-container,
-.add-member-country-container {
+.add-member-country-container,
+.edit-team-name-container,
+.delete-team-container {
  display: flex;
  flex-direction: column;
  align-items: center;
@@ -86,13 +109,16 @@
 .add-member-name-container > p,
 .add-member-email-container > p,
 .add-member-country-container > p,
-.add-member-timezone-container > p {
+.add-member-timezone-container > p,
+.edit-team-name-container > p,
+.delete-team-container > p {
  font-size: 12px;
  opacity: 0.7;
 }
 
 .add-member-name-container > input,
-.add-member-email-container > input {
+.add-member-email-container > input,
+.edit-team-name-container > input {
  margin-top: -10px;
  border: 1px solid lightgray;
  border-radius: 15px;
@@ -129,5 +155,36 @@
  margin-top: 20px;
  padding-left: 20px;
  padding-right: 20px;
+ font-weight: bold;
+}
+
+.edit-team-name-container {
+ margin-top: 10px;
+ margin-bottom: 40px;
+}
+
+.change-team-name-btn {
+ width: 130px;
+ border-radius: 20px;
+ background-color: whitesmoke;
+ margin-top: 20px;
+ font-weight: bold;
+}
+
+.change-team-name-btn:focus {
+ box-shadow: none !important;
+}
+
+.change-team-name-btn:hover {
+ background-color: rgb(240, 240, 240);
+}
+
+.delete-team-container {
+ border: 1px solid red;
+ margin: 0px 100px 0px 100px;
+ padding: 15px 30px 15px 30px;
+}
+
+.delete-team-btn {
  font-weight: bold;
 }
