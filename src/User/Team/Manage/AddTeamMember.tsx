@@ -6,6 +6,8 @@ import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { findUTCOffset } from '../../Time';
 import "../../../Styles/Manage.css";
+import { IconButton, Avatar } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
 
 interface AddTeamMemberInterface {
  displayMembersDiv: () => void;
@@ -77,22 +79,10 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
   }
  }
 
- const [emailDiv, setEmailDiv] = useState<boolean>(true);
- const [profileDiv, setProfileDiv] = useState<boolean>(false);
-
- const showProfileDiv = (): void => {
-  setEmailDiv(false);
-  setProfileDiv(true);
- }
-
- const showEmailDiv = (): void => {
-  setProfileDiv(false);
-  setEmailDiv(true);
- }
-
  const [imgFile, setImgFile] = useState<any>(null);
  const [imgFileErr, setImgFileErr] = useState<string | null>(null);
  const types: string[] = ['image/png', 'image/jpeg'];
+ const [imgPreview, setImgPreview] = useState<string>("/Images/default_pic.png");
 
  const choosePic = (e: any): void => {
   const image = e.target.files[0];
@@ -101,9 +91,14 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
    setImgFileErr(null);
   } else {
    setImgFile(null);
+   setImgPreview("/Images/default_pic.png");
    setImgFileErr("Please choose an image file (png or jpeg)");
   }
  }
+
+ useEffect(() => {
+  if (imgFile) setImgPreview(URL.createObjectURL(imgFile));
+ }, [imgFile]);
 
  const [imgUrl, setImgUrl] = useState<string>("");
 
@@ -159,58 +154,52 @@ export default function AddTeamMember({ displayMembersDiv, teamId }: AddTeamMemb
  }, [values]);
 
  return (
-  <div>
+  <div className='add-member-container'>
 
-   <button onClick={displayMembersDiv}>
-    <span>
-     <FaArrowLeft size={25}/>
-    </span>
-   </button>
-
-   {emailDiv && 
-    <div style={{display: "flex", flexDirection: "column"}}>
-     <p>Enter your teammate's email address:</p>
-     <input type="email" name="email" value={values.email} onChange={handleChange} placeholder="E-mail" required/>
-     <button onClick={showProfileDiv}>Next</button>
-    </div>
-   }
-
-   {profileDiv &&
-    <div style={{display: "flex", flexDirection: "column"}}>
-     <input onChange={choosePic} type="file"/>
-     {imgFileErr && <h6>{imgFileErr}</h6>}
-     <h4>Name:</h4>
-     <input type="text" name="name" value={values.name} onChange={handleChange} required/>
-     <h4>Country:</h4>
+   <IconButton onClick={displayMembersDiv}>
+    <ArrowBack />
+   </IconButton>
+    
+   <div className="add-member-profile-pic-container">
+    <Avatar src={imgPreview} alt={`${values.email} profile pic`} />
+    <input onChange={choosePic} type="file"/>
+    {imgFileErr && <p>{imgFileErr}</p>}
+   </div>
+   <div className="add-member-name-container">
+    <p>Name</p>
+    <input type="text" name="name" value={values.name} onChange={handleChange} placeholder='Name' required />
+   </div>
+   <div className='add-member-email-container'>
+     <p>Email address</p>
+     <input type="email" name="email" value={values.email} onChange={handleChange} placeholder="E-mail" required />
+   </div>
+   <div className="add-member-time-container">
+    <div className="add-member-country-container">
+     <p>Country</p>
      <select name="country" onChange={handleChange} required>
       <option defaultValue="" key=""></option>
       {countries.map(country => {
        return (
         <option key={countries.indexOf(country)}>{country}</option>
-       );
-      })}
-     </select>
-     {showZones && 
-      <div>
-       <h4>Timezone:</h4>
-       <select name="timezone" onChange={handleChange} required>
-        <option defaultValue="" key=""></option>
-        {zones.map(zone => {
-         return (
-          <option key={zones.indexOf(zone)}>{zone}</option>
          );
         })}
-       </select>
-      </div>
-     }
-     <br/>
-     <br/>
-     <button onClick={showEmailDiv}>Back</button>
-     <button onClick={handleUpload}>Save</button>
+     </select>
     </div>
-   }
-
-
+    {showZones && 
+     <div className="add-member-timezone-container">
+      <p>Timezone</p>
+      <select name="timezone" onChange={handleChange} required>
+       <option defaultValue="" key=""></option>
+       {zones.map(zone => {
+        return (
+         <option key={zones.indexOf(zone)}>{zone}</option>
+        );
+       })}
+      </select>
+     </div>
+    }
+   </div>
+   <button className='btn btn-primary save-member-btn' onClick={handleUpload}>Save</button>
   </div>
  );
 }

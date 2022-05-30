@@ -1,14 +1,133 @@
 .manage-page-container {
  display: flex;
+ justify-content: center;
  gap: 100px;
+ font-family: "Lato", sans-serif;
 }
 
 .manage-sidebar-container {
  display: flex;
  flex-direction: column;
+ margin-left: 50px;
+ margin-top: 50px;
 }
 
+.manage-team-text-container {
+ margin: 50px 650px 20px 0px;
+}
+
+.manage-team-btns-container {
+ display: flex;
+ flex-direction: column;
+ gap: 20px;
+}
+
+.manage-team-btns-container > button {
+ width: 170px;
+ border-radius: 20px;
+}
+
+.manage-team-btns-container > button:focus {
+ box-shadow: none !important;
+}
+
+.go-to-edit-team-btn,
 .go-to-team-page-btn {
- text-decoration: none;
- color: #000;
+ background-color: whitesmoke;
+}
+
+.member-profile > .MuiAvatar-root,
+.add-member-profile-pic-container > .MuiAvatar-root {
+ height: 100px;
+ width: 100px;
+}
+
+.add-member-container {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ margin-top: 10px;
+}
+
+.add-member-container > .MuiIconButton-root {
+ position: absolute;
+ left: 0;
+ top: 70px;
+}
+
+.add-member-profile-pic-container {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+}
+
+.add-member-profile-pic-container > input {
+ margin-top: 10px;
+ margin-left: 10px;
+ width: 110px;
+ color: #00000000;
+}
+
+.add-member-profile-pic-container > p {
+ color: red;
+ margin-top: 10px;
+ margin-bottom: -10px;
+}
+
+.add-member-name-container,
+.add-member-email-container,
+.add-member-country-container {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ margin-top: 15px;
+}
+
+.add-member-name-container > p,
+.add-member-email-container > p,
+.add-member-country-container > p,
+.add-member-timezone-container > p {
+ font-size: 12px;
+ opacity: 0.7;
+}
+
+.add-member-name-container > input,
+.add-member-email-container > input {
+ margin-top: -10px;
+ border: 1px solid lightgray;
+ border-radius: 15px;
+ padding: 3px 0px 3px 10px;
+ width: 200px;
+}
+
+.add-member-time-container {
+ margin-top: 40px;
+}
+
+.add-member-country-container > p {
+ margin-bottom: 25px;
+}
+
+.add-member-country-container > select,
+.add-member-timezone-container > select {
+ margin-top: -10px;
+ border: 1px solid lightgray;
+ border-radius: 15px;
+ padding: 3px 0px 3px 10px;
+ width: 420px;
+}
+
+.add-member-timezone-container {
+ margin-top: 10px;
+}
+
+.add-member-timezone-container > p {
+ text-align: center;
+}
+
+.save-member-btn {
+ margin-top: 20px;
+ padding-left: 20px;
+ padding-right: 20px;
+ font-weight: bold;
 }
