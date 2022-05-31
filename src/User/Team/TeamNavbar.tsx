@@ -1,13 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
-import { logout } from '../../App';
 import fireDB, { auth } from '../../firebaseConfig';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { IconButton } from "@mui/material";
 import { Settings } from "@mui/icons-material";
+import { useAppDispatch } from '../../Redux/hooks';
+import { logout } from '../../Redux/userSlice';
+import { signOut } from 'firebase/auth';
 
 export default function TeamNavbar() {
+
+ const dispatch = useAppDispatch();
+
+ const logOut = async (): Promise<any> => {
+   try {
+     dispatch(logout());
+     await signOut(auth);
+   } catch (err) {
+     alert(`Sign out error: ${err}`);
+   }
+ }
 
  const teamParam = useParams();
  const [teamName, setTeamName] = useState<string>("");
@@ -55,7 +68,7 @@ export default function TeamNavbar() {
                   <Link className="nav-link" to="/create_team">Add New Team</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/" onClick={() => logout()}>Log Out</Link>
+                  <Link className="nav-link" to="/" onClick={() => logOut()}>Log Out</Link>
                 </li>
               </ul>
             </div>

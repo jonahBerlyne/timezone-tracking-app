@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
-import { logout } from "../App";
 import { auth } from '../firebaseConfig';
 import { WatchLater } from "@mui/icons-material";
+import { useAppDispatch } from '../Redux/hooks';
+import { logout } from '../Redux/userSlice';
+import { signOut } from 'firebase/auth';
 
 export default function UserNavbar() { 
+
+ const dispatch = useAppDispatch();
+
+ const logOut = async (): Promise<any> => {
+   try {
+     dispatch(logout());
+     await signOut(auth);
+   } catch (err) {
+     alert(`Sign out error: ${err}`);
+   }
+ }
 
  return (
     <div className='header' style={{ fontFamily: "Lato, sans-serif" }}>
@@ -32,7 +45,7 @@ export default function UserNavbar() {
                   <Link className="nav-link" to="/create_team">Add New Team</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/" onClick={() => logout()}>Log Out</Link>
+                  <Link className="nav-link" to="/" onClick={() => logOut()}>Log Out</Link>
                 </li>
               </ul>
             </div>
