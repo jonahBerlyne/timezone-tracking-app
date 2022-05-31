@@ -155,7 +155,6 @@ export default function ProfilePage() {
     await updateProfile(auth.currentUser, {
      photoURL: url
     });
-    // setImgUrl(url);
    }
   } catch (err) {
    alert(`Upload error: ${err}`);
@@ -167,11 +166,11 @@ export default function ProfilePage() {
  const onRadioChange = (e: ChangeEvent<HTMLInputElement>): void => setFormat(e.target.value);
 
  const saveChanges = async (): Promise<any> => {
-  if (values.password === '') {
+  if (values.password !== user?.password) {
    alert("You have to enter your password in the password field to save your changes");
    return;
   }
-  if (!auth.currentUser?.photoURL && values.name === "" && values.country === "") {
+  if (!imgFile && (values.name === auth.currentUser?.displayName || values.name === '') && (values.email === auth.currentUser?.email || values.email === '') && values.country === "" && format === user?.format) {
    alert(`You haven't made any changes, ${auth.currentUser?.displayName}.`);
    return;
   }

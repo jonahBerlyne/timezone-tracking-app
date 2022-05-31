@@ -5,12 +5,10 @@ import { logout } from "../App";
 import { auth } from '../firebaseConfig';
 import { WatchLater } from "@mui/icons-material";
 
-export default function UserNavbar() {
-
- console.log(auth.currentUser?.photoURL); 
+export default function UserNavbar() { 
 
  return (
-    <div className='header'>
+    <div className='header' style={{ fontFamily: "Lato, sans-serif" }}>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
             <WatchLater color="primary" />
@@ -19,7 +17,7 @@ export default function UserNavbar() {
                 <FaBars size={25} color="gray"/>
               </span>
             </button>
-            <div className="collapse navbar-collapse" id="navbarNav">
+            <div className="collapse navbar-collapse" style={{ textAlign: "center", marginRight: "25px" }} id="navbarNav">
               <ul className="navbar-nav ms-auto">
                 <li className="nav-item">
                   <Link className="nav-link" to="/">Home</Link>

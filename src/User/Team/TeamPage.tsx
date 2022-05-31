@@ -47,10 +47,11 @@ export default function TeamPage() {
   <div className='team-page-container'>
    {noMembers && <h1 className='no-members'>You haven't added any members to your team, yet.</h1>}
    <div className='team-members-container'>
-    {timezones.length > 0 && timezones.map((timezone: any) => {
-     console.log(timezone);
+    {timezones.length > 0 && timezones.map((timezone, index) => {
      return (
-      <TimeZone offset={timezone[0]} members={timezone[1]} />
+      <div key={index}>
+       <TimeZone offset={timezone[0]} members={timezone[1]} />
+      </div>
      );
     })}
    </div>

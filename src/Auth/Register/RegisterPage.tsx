@@ -64,6 +64,7 @@ export default function RegisterPage() {
    const userInfo = {
     format,
     id: userCredential.user.uid,
+    password: values.password,
     timezoneData: {...userZoneData[0], utcOffset}
    };
    await setDoc(docRef, userInfo);
