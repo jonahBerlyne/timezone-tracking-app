@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import fireDB, { auth } from "../../firebaseConfig";
 import { getDocs, query, collection } from "firebase/firestore";
 import { useParams } from 'react-router-dom';
-import { formatAMPM, formatMT } from '../Time';
 import { useAppSelector } from '../../Redux/hooks';
 import { selectUser } from '../../Redux/userSlice';
 import TimeZone from "./TimeZone";
+import "../../Styles/Team.css";
 
 export default function TeamPage() {
 
  const user = useAppSelector(selectUser);
- const team = useParams()
+ const team = useParams();
  const [timezones, setTimezones] = useState<any[]>([]);
  const [noMembers, setNoMembers] = useState<boolean>(false);
 
@@ -44,11 +44,9 @@ export default function TeamPage() {
  }, []);
 
  return (
-  <div>
-   {noMembers && <h1 style={{textAlign: "center"}}>You haven't added any members to your team, yet.</h1>}
-   {timezones.length > 0 && <h1 style={{textAlign: "center"}}>Your team:</h1>}
-   <br/>
-   <div style={{display: "flex", gap: "5px", flexWrap: "wrap"}}>
+  <div className='team-page-container'>
+   {noMembers && <h1 className='no-members'>You haven't added any members to your team, yet.</h1>}
+   <div className='team-members-container'>
     {timezones.length > 0 && timezones.map((timezone: any) => {
      console.log(timezone);
      return (

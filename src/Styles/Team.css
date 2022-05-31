@@ -1,0 +1,15 @@
+.team-page-container {
+ font-family: "Lato", sans-serif;
+}
+
+.no-members {
+ text-align: center;
+}
+
+.team-members-container {
+ display: flex;
+ justify-content: center;
+ flex-wrap: wrap;
+ gap: 30px;
+ margin-top: 20px;
+}
