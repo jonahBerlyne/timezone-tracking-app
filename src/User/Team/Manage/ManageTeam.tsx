@@ -33,6 +33,7 @@ export default function ManageTeam() {
     <div className='manage-team-container'>
 
      <div className="manage-team-info-container">
+
       <div className="manage-team-text-container">
        <h1 className='manage-team-header'>Getting started with {teamName}</h1>
        <p>Here you can manage your team.</p>
@@ -42,6 +43,7 @@ export default function ManageTeam() {
       <div className="manage-team-members-container">
        <TeamMembers teamId={teamParam.id}/>
       </div>
+      
      </div>
 
 

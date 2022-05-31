@@ -2,18 +2,11 @@
  display: flex;
  justify-content: center;
  font-family: "Lato", sans-serif;
- position: absolute;
 }
 
 .manage-team-container {
  display: flex;
  flex-direction: column;
- margin-top: 20px;
- margin-left: 50px;
-}
-
-.manage-team-text-container {
- margin: 30px 850px 20px 0px;
 }
 
 .manage-team-text-container > h1 {
@@ -54,7 +47,90 @@
  background-color: rgb(240, 240, 240);
 }
 
-.member-profile > .MuiAvatar-root,
+.member-rows-container {
+ display: flex;
+ flex-direction: column;
+}
+
+.member-rows-container > h1 {
+ text-align: center;
+ margin-bottom: 20px;
+}
+
+.member-row {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ width: 550px;
+ margin-bottom: 20px;
+}
+
+.member-row-info {
+ display: flex;
+ gap: 15px;
+}
+
+.member-row-info-text {
+ display: flex;
+ margin-top: 8px;
+ gap: 10px;
+}
+
+.member-row-info-location {
+ opacity: 0.7;
+}
+
+@media screen and (max-width: 1016px) {
+
+ .manage-page-container {
+  align-items: center;
+  margin-top: 20px;
+ }
+ 
+ .manage-team-info-container {
+  flex-direction: column;
+  margin-bottom: 30px;
+ }
+ 
+ .manage-team-text-container {
+  margin-bottom: 50px;
+  text-align: center;
+ }
+
+ .member-row {
+  width: 100%;
+ }
+
+ .manage-team-btns-container {
+  align-items: center;
+  margin-bottom: 20px;
+ }
+
+}
+
+@media screen and (min-width: 1017px) {
+
+ .manage-page-container {
+  position: absolute;
+ }
+
+ .manage-team-container {
+  margin-top: 20px;
+  margin-left: 50px;
+ }
+
+ .manage-team-text-container {
+  margin: 30px 850px 20px 0px;
+ }
+
+ .member-rows-container {
+  position: absolute;
+  right: 10px;
+  top: 50px;
+ }
+
+}
+
 .add-member-profile-pic-container > .MuiAvatar-root {
  height: 100px;
  width: 100px;

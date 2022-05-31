@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import fireDB, { auth, storage } from '../../../firebaseConfig';
-import { getDocs, query, collection, doc, deleteDoc, onSnapshot, getDoc } from 'firebase/firestore';
+import { query, collection, doc, deleteDoc, onSnapshot, getDoc } from 'firebase/firestore';
 import { FaTimes } from "react-icons/fa";
 import "../../../Styles/Manage.css";
 import { deleteObject, ref } from 'firebase/storage';
+import { IconButton, Avatar } from "@mui/material";
+import { Clear } from "@mui/icons-material";
 
 export default function TeamMembers({ teamId }: { teamId: string | undefined }) {
 
@@ -37,20 +39,23 @@ export default function TeamMembers({ teamId }: { teamId: string | undefined }) 
  }
 
  return (
-  <div style={{display: "flex", flexDirection: "column"}}>
+  <div className='member-rows-container'>
+   <h1>Members:</h1>
    {members.map(member => {
+    let zoneStr = member.timezoneData.zoneName;
+    zoneStr = zoneStr.substring(zoneStr.indexOf("/") + 1, zoneStr.length).replace(/_+/g, ' ');
     return (
-     <div key={member.id} style={{display: "flex"}}>
-      <img src={member.profilePic} alt={member.name} height="50px" width="100px"/>
-      <p>{member.name} {member.location}</p>
-      <button onClick={() => deleteMember(member.id)}>
-       <span>
-        <FaTimes size={15}/>
-       </span>
-      </button>
-      <br/>
-      <br/>
-      <br/>
+     <div key={member.id} className="member-row">
+      <div className="member-row-info">
+       <Avatar src={member.profilePic} alt={member.name} />
+       <div className="member-row-info-text">
+        <p>{member.name}</p>
+        <p className='member-row-info-location'>{zoneStr}</p>
+       </div>
+      </div>
+      <IconButton onClick={() => deleteMember(member.id)}>
+       <Clear />
+      </IconButton>
      </div>
     );
    })}
