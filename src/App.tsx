@@ -1,18 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Main/Home";
-import About from "./Main/About";
-import Contact from "./Main/Contact";
-import Privacy from "./Main/Privacy";
-import Terms from "./Main/Terms";
-import Footer from "./Main/Footer";
-import AuthNavbar from "./Auth/AuthNavbar";
 import RegisterPage from "./Auth/Register/RegisterPage";
 import Login from "./Auth/Login";
 import ResetPassword from "./Auth/ResetPassword";
-import UserNavbar from "./User/UserNavbar";
 import ProfilePage from "./User/Profile/ProfilePage";
 import ChangePassword from "./User/Account/ChangePassword";
-import TeamNavbar from "./User/Team/TeamNavbar";
 import TeamsPage from "./User/Team/TeamsPage";
 import TeamPage from "./User/Team/TeamPage";
 import ManageTeam from "./User/Team/Manage/ManageTeam";
@@ -31,10 +23,6 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<MainRoute><Home/></MainRoute>}></Route>
-        <Route path="/about" element={<MainRoute><About/></MainRoute>}></Route>
-        <Route path="/contact" element={<MainRoute><Contact/></MainRoute>}></Route>
-        <Route path="/privacy" element={<MainRoute><Privacy/></MainRoute>}></Route>
-        <Route path="/terms" element={<MainRoute><Terms/></MainRoute>}></Route>
         <Route path="/register" element={<AuthRoute><RegisterPage/></AuthRoute>}></Route>
         <Route path="/login" element={<AuthRoute><Login/></AuthRoute>}></Route>
         <Route path="/reset_password" element={<AuthRoute><ResetPassword/></AuthRoute>}></Route>

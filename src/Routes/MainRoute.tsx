@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import fireDB, { auth } from "../firebaseConfig";
 import UserNavbar from '../User/UserNavbar';
@@ -8,8 +7,10 @@ import { useAppDispatch, useAppSelector } from '../Redux/hooks';
 import { login, selectUser } from '../Redux/userSlice';
 import { doc, getDoc } from 'firebase/firestore';
 import { store } from '../Redux/Store';
+import Footer from '../Main/Footer';
+import "../Styles/App.css";
 
-export default function MainRoute ({children}: {children: any}) {
+export default function MainRoute ({ children }: {children: any}) {
  const [pending, setPending] = useState<boolean>(true);
  const [currentUser, setCurrentUser] = useState<User | null>(null);
  
@@ -61,20 +62,21 @@ export default function MainRoute ({children}: {children: any}) {
  if (pending) return null;
 
  return (
-  <div>
+  <div className='app-container'>
    {currentUser && user &&
-    <> 
+    <div className="app-body"> 
      <UserNavbar />
      {children}
-    </>
+     <Footer />
+    </div>
    }
    {!currentUser && 
-    <> 
+    <div className="app-body"> 
      <AuthNavbar />
      {children}
-    </>
+     <Footer />
+    </div>
    }
-   {/* <Footer/> */}
   </div>
  );
 }

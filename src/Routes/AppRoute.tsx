@@ -8,8 +8,9 @@ import { login, selectUser } from '../Redux/userSlice';
 import { store } from '../Redux/Store';
 import UserNavbar from '../User/UserNavbar';
 import "../Styles/App.css";
+import Footer from '../Main/Footer';
 
-export default function AppRoute ({children}: {children: any}) {
+export default function AppRoute ({ children }: {children: any}) {
   const [pending, setPending] = useState<boolean>(true);
   const [currentUser, setCurrentUser] = useState<any>(null);
 
@@ -67,6 +68,7 @@ export default function AppRoute ({children}: {children: any}) {
         <div className="app-body">
           <UserNavbar />
           {children}
+          <Footer />
         </div>
       }
       </div>

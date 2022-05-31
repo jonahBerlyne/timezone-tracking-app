@@ -37,7 +37,7 @@ export default function ManageTeam() {
       <div className="manage-team-text-container">
        <h1 className='manage-team-header'>Getting started with {teamName}</h1>
        <p>Here you can manage your team.</p>
-       <p>When you're done, you can click the button below or the X at the top right. To get back here you can always click the "Manage Team" button at the left on your team dashboard.</p>
+       <p>You can add new team members, delete team members, and change your team name (and if you want to, you can delete your team entirely). To get back here, you can always click the "Manage Team" gear icon at the left on your team dashboard.</p>
       </div>
 
       <div className="manage-team-members-container">

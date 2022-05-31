@@ -1,7 +1,6 @@
 .team-zone-container {
  display: flex;
  flex-direction: column;
- font-family: "Lato", sans-serif;
 }
 
 .time-container {

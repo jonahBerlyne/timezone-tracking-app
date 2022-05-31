@@ -4,8 +4,10 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import fireDB, { auth } from '../firebaseConfig';
 import TeamNavbar from '../User/Team/TeamNavbar';
 import { collection, getDocs, query } from 'firebase/firestore';
+import Footer from '../Main/Footer';
+import "../Styles/App.css";
 
-export default function TeamRoute ({children}: {children: any}) {
+export default function TeamRoute ({ children }: {children: any}) {
  const [pending, setPending] = useState<boolean>(true);
  const [currentUser, setCurrentUser] = useState<User | null>(null);
  
@@ -62,11 +64,12 @@ export default function TeamRoute ({children}: {children: any}) {
 
  if (currentUser) {
   return (
-   <div>
+   <div className='app-container'>
     {teams.length > 0 && teams.includes(team) &&
-      <div>
+      <div className="app-body">
        <TeamNavbar />
        {children}
+       <Footer />
       </div>
     }
    </div>
