@@ -6,9 +6,9 @@ import { doc, getDoc } from "firebase/firestore";
 import { useAppSelector, useAppDispatch } from '../Redux/hooks';
 import { login, selectUser } from '../Redux/userSlice';
 import { store } from '../Redux/Store';
-import UserNavbar from '../User/UserNavbar';
+import UserNavbar from '../Components/Navbars/UserNavbar';
 import "../Styles/App.css";
-import Footer from '../Main/Footer';
+import Footer from '../Components/Footer';
 
 export default function AppRoute ({ children }: {children: any}) {
   const [pending, setPending] = useState<boolean>(true);

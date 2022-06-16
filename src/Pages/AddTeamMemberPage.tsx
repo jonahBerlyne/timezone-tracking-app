@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import uniqid from "uniqid";
-import fireDB, { auth, storage } from '../../../firebaseConfig';
+import fireDB, { auth, storage } from '../firebaseConfig';
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { findUTCOffset } from '../../Time';
+import { findUTCOffset } from '../Components/Time';
 import "../../../Styles/Manage.css";
 import { IconButton, Avatar } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";

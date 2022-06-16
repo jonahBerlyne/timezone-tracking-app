@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from "react-icons/fa"
-import fireDB, { auth } from '../../../firebaseConfig';
+import fireDB, { auth } from '../firebaseConfig';
 import { doc, setDoc, getDocs, query, collection, deleteDoc, onSnapshot } from "firebase/firestore";
 import { useNavigate, useParams } from 'react-router-dom';
 import "../../../Styles/Manage.css";

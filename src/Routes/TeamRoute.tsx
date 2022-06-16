@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import fireDB, { auth } from '../firebaseConfig';
-import TeamNavbar from '../User/Team/TeamNavbar';
+import TeamNavbar from '../Components/Navbars/TeamNavbar';
 import { collection, getDocs, query } from 'firebase/firestore';
-import Footer from '../Main/Footer';
+import Footer from '../Components/Footer';
 import "../Styles/App.css";
 
 export default function TeamRoute ({ children }: {children: any}) {

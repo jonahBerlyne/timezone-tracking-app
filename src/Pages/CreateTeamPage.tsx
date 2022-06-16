@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { doc, setDoc } from 'firebase/firestore';
-import fireDB, { auth } from '../../firebaseConfig';
+import fireDB, { auth } from '../firebaseConfig';
 import uniqid from "uniqid";
 import { useNavigate } from 'react-router-dom';
 import "../../Styles/Teams.css";

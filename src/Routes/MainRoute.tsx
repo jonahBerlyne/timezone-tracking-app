@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import fireDB, { auth } from "../firebaseConfig";
-import UserNavbar from '../User/UserNavbar';
-import AuthNavbar from '../Auth/AuthNavbar';
+import UserNavbar from '../Components/Navbars/UserNavbar';
+import AuthNavbar from '../Components/Navbars/AuthNavbar';
 import { useAppDispatch, useAppSelector } from '../Redux/hooks';
 import { login, selectUser } from '../Redux/userSlice';
 import { doc, getDoc } from 'firebase/firestore';
 import { store } from '../Redux/Store';
-import Footer from '../Main/Footer';
+import Footer from '../Components/Footer';
 import "../Styles/App.css";
 
 export default function MainRoute ({ children }: {children: any}) {

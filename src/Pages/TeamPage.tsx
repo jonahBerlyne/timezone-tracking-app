@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import fireDB, { auth } from "../../firebaseConfig";
+import fireDB, { auth } from "../firebaseConfig";
 import { getDocs, query, collection } from "firebase/firestore";
 import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../Redux/hooks';
-import { selectUser } from '../../Redux/userSlice';
-import TimeZone from "./TimeZone";
+import { useAppSelector } from '../Redux/hooks';
+import { selectUser } from '../Redux/userSlice';
+import TimeZone from "../Components/Team/TimeZone";
 import "../../Styles/Team.css";
 
 export default function TeamPage() {

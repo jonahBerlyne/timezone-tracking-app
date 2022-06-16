@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import fireDB, { auth, storage } from '../../../firebaseConfig';
+import fireDB, { auth, storage } from '../../firebaseConfig';
 import { query, collection, doc, deleteDoc, onSnapshot, getDoc } from 'firebase/firestore';
 import { FaTimes } from "react-icons/fa";
 import "../../../Styles/Manage.css";

@@ -1,4 +1,4 @@
-import TimeZone from "../User/Team/TimeZone";
+import TimeZone from "../Components/Team/TimeZone";
 import "../Styles/Home.css";
 
 export default function Home() {
