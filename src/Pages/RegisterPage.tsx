@@ -18,11 +18,17 @@ interface Values {
 }
 
 export default function RegisterPage() {
-
+ 
  const apiKey: string | undefined = process.env.REACT_APP_TIMEZONE_API_KEY;
+ 
+ const [showZones, setShowZones] = useState<boolean>(false);
 
  useEffect(() => {
   fetchAPI();
+
+  return () => {
+   setShowZones(false);
+  }
  }, []);
 
  const [countries, setCountries] = useState<any[]>([]);
@@ -99,7 +105,6 @@ export default function RegisterPage() {
   });
   setFormat("");
  }
- const [showZones, setShowZones] = useState<boolean>(false);
 
  const handleChange = (e: any): void => {
   if (e.target.name === "country") {
@@ -146,7 +151,8 @@ export default function RegisterPage() {
    {registerForm && 
     <div className='auth'>
      <RegisterForm {...formProps}/>
-     <button 
+     <button
+      data-testid="profileBtn" 
       className="btn btn-primary get-started-btn" 
       onClick={goToProfileInputs}
       disabled={

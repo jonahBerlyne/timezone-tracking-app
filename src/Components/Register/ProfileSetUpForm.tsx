@@ -22,7 +22,8 @@ export default function ProfileSetUpForm({ values, handleChange, countries, zone
     <h5 className="auth-subheader">First, enter your name</h5>
     <input 
      type="text"
-     name="name" 
+     name="name"
+     data-testid="Name" 
      className='form-control auth-input' 
      placeholder='Name' 
      value={values.name} 
@@ -30,11 +31,11 @@ export default function ProfileSetUpForm({ values, handleChange, countries, zone
      required
     />
     <h5 className='auth-subheader'>Now, select your country</h5>
-    <select className='form-control auth-input' name="country" onChange={handleChange} required>
+    <select data-testid="Select" className='form-control auth-input' name="country" onChange={handleChange} required>
      <option defaultValue="" key=""></option>
      {countries.map(country => {
       return (
-       <option key={countries.indexOf(country)}>{country}</option>
+       <option data-testid="Option" key={countries.indexOf(country)}>{country}</option>
       );
      })}
     </select>

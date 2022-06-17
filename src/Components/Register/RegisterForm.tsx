@@ -17,7 +17,8 @@ export default function RegisterForm({ values, handleChange }: Register) {
    <div className="auth-inputs">
     <input
      name="email"
-     type="email" 
+     type="email"
+     data-testid="Email" 
      className='form-control auth-input' 
      placeholder='Email' 
      value={values.email} 
@@ -26,7 +27,8 @@ export default function RegisterForm({ values, handleChange }: Register) {
     />
     <input
      name="password" 
-     type="password" 
+     type="password"
+     data-testid="Password"  
      className='form-control auth-input' placeholder='Password' 
      value={values.password} 
      onChange={handleChange}
@@ -35,6 +37,7 @@ export default function RegisterForm({ values, handleChange }: Register) {
     <input 
      name="confirmPassword" 
      type="password" 
+     data-testid="confirmPassword"
      className='form-control auth-input' 
      placeholder='Confirm Password' 
      value={values.confirmPassword} 
