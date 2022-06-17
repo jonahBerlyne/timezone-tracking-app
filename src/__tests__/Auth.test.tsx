@@ -53,11 +53,8 @@ beforeEach(() => {
  ) as jest.Mock;
 });
 
-afterEach(() => {
- global.fetch = originalFetch;
-});
-
 afterEach(done => {
+  global.fetch = originalFetch;
   cleanup();
   jest.resetAllMocks();
   done();
