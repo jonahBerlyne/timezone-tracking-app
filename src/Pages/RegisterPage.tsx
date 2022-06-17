@@ -139,8 +139,7 @@ export default function RegisterPage() {
    });
    setZones(timezonesArr);
   }
-  console.log(values);
- }, [values]);
+ }, [values, zonesConst]);
 
  return (
   <div>
@@ -157,7 +156,7 @@ export default function RegisterPage() {
       }
      >Get Started
      </button>
-     <p className='login-link-element'>Already have an account? <Link to="/login" className='auth-link'>Log in here!</Link></p>
+     <p data-testid="login-link" className='login-link-element'>Already have an account? <Link to="/login" className='auth-link'>Log in here!</Link></p>
     </div>
    }
    {profileSetUpForm && 

@@ -20,14 +20,16 @@ export default function Login() {
   <div className='auth'>
    <h2 className='auth-header'>Log in</h2>
    <div className="auth-inputs">
-    <input 
+    <input
      type="email" 
+     data-testid="Email" 
      className='form-control auth-input' placeholder='Email' 
      value={email} 
      onChange={(e) => {setEmail(e.target.value)}}
     />
     <input 
      type="password" 
+     data-testid="Password"
      className='form-control auth-input' placeholder='Password' 
      value={password} 
      onChange={(e) => {setPassword(e.target.value)}}
@@ -40,7 +42,7 @@ export default function Login() {
      password === ""
     }>Log in
    </button>
-   <p className='register-link-element'>Don't have an account? <Link to="/register" className='auth-link'>Sign up now!</Link></p>
+   <p data-testid="register-link" className='register-link-element'>Don't have an account? <Link to="/register" className='auth-link'>Sign up now!</Link></p>
   </div>
  );
 }
