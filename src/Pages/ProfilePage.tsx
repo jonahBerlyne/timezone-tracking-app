@@ -8,7 +8,7 @@ import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage
 import { findUTCOffset } from '../Components/Time';
 import { useAppDispatch, useAppSelector } from '../Redux/hooks';
 import { logout, selectUser } from '../Redux/userSlice';
-import { deleteUser, EmailAuthCredential, EmailAuthProvider, reauthenticateWithCredential, updateEmail, updateProfile, User } from 'firebase/auth';
+import { deleteUser, EmailAuthCredential, EmailAuthProvider, reauthenticateWithCredential, updateEmail, updateProfile, User, getAuth } from 'firebase/auth';
 import "../../Styles/Profile.css";
 import { Avatar } from '@mui/material';
 
@@ -43,7 +43,7 @@ export default function ProfilePage() {
   setFormat(user?.format);
  }
 
- const initialValues = { name: auth.currentUser?.displayName, country: "", timezone: "", email: auth.currentUser?.email, password: '', delete: '', reason: '' };
+ const initialValues = { name: getAuth().currentUser?.displayName, country: "", timezone: "", email: getAuth().currentUser?.email, password: '', delete: '', reason: '' };
 
  const [values, setValues] = useState<Values>(initialValues);
 
@@ -125,7 +125,7 @@ export default function ProfilePage() {
  const [imgFile, setImgFile] = useState<any>(null);
  const [imgFileErr, setImgFileErr] = useState<string | null>(null);
  const types: string[] = ['image/png', 'image/jpeg'];
- const [imgPreview, setImgPreview] = useState<any>(auth.currentUser?.photoURL);
+ const [imgPreview, setImgPreview] = useState<any>(getAuth().currentUser?.photoURL);
 
  const choosePic = (e: any): void => {
   const image = e.target.files[0];
@@ -141,18 +141,22 @@ export default function ProfilePage() {
   useEffect(() => {
    if (imgFile) setImgPreview(URL.createObjectURL(imgFile));
    return () => {
-     setImgPreview(auth.currentUser?.photoURL);
+     setImgPreview(getAuth().currentUser?.photoURL);
    }
   }, [imgFile]);
 
  const handleUpload = async (): Promise<any> => {
   if (imgFile === null) return;
   try {
-   const uploadTask = ref(storage, `${auth.currentUser?.uid}/profilePic`);
+   const uploadTask = ref(storage, `${getAuth().currentUser?.uid}/profilePic`);
    await uploadBytes(uploadTask, imgFile);
    const url = await getDownloadURL(uploadTask);
-   if (auth.currentUser) {
-    await updateProfile(auth.currentUser, {
+   let currentUser: any = null;
+   if (getAuth().currentUser !== null) {
+     currentUser = getAuth().currentUser;
+   }
+   if (currentUser !== null) {
+    await updateProfile(currentUser, {
      photoURL: url
     });
    }
@@ -170,8 +174,8 @@ export default function ProfilePage() {
    alert("You have to enter your password in the password field to save your changes");
    return;
   }
-  if (!imgFile && (values.name === auth.currentUser?.displayName || values.name === '') && (values.email === auth.currentUser?.email || values.email === '') && values.country === "" && format === user?.format) {
-   alert(`You haven't made any changes, ${auth.currentUser?.displayName}.`);
+  if (!imgFile && (values.name === getAuth().currentUser?.displayName || values.name === '') && (values.email === getAuth().currentUser?.email || values.email === '') && values.country === "" && format === user?.format) {
+   alert(`You haven't made any changes, ${getAuth().currentUser?.displayName}.`);
    return;
   }
   if (showZones && values.timezone === "") {
@@ -180,7 +184,7 @@ export default function ProfilePage() {
   }
   try {
    await handleUpload();
-   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`);
+   const docRef = doc(fireDB, "users", `${getAuth().currentUser?.uid}`);
    const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
    let utcOffset: number = NaN;
    if (userZoneData.length > 0 || format !== userInfo?.format) {
@@ -190,9 +194,10 @@ export default function ProfilePage() {
      timezoneData: values.country !== "" && values.timezone !== "" ? {...userZoneData[0], utcOffset} : userInfo?.timezoneData,
      format
     };
+    console.log(userDoc);
     await setDoc(docRef, userDoc);
    }
-   const currentUser: User | null = auth.currentUser;
+   const currentUser: User | null = getAuth().currentUser;
    if (currentUser) {
     if (values.email !== currentUser?.email) {
      const credential: EmailAuthCredential = EmailAuthProvider.credential(
@@ -227,21 +232,21 @@ export default function ProfilePage() {
    return;
   }
   try {
-   const deletedUserRef = doc(fireDB, "deleted", `${auth.currentUser?.uid}`);
+   const deletedUserRef = doc(fireDB, "deleted", `${getAuth().currentUser?.uid}`);
    if (values.reason === '') values.reason = "No reason given";
    const deletedUser = {
-    name: auth.currentUser?.displayName,
-    email: auth.currentUser?.email,
+    name: getAuth().currentUser?.displayName,
+    email: getAuth().currentUser?.email,
     reason: values.reason
    }
    await setDoc(deletedUserRef, deletedUser);
-   if (auth.currentUser?.photoURL !== "/Images/default_pic.png") {
-    const deletedPicRef = ref(storage, `${auth.currentUser?.uid}/profilePic`);
+   if (getAuth().currentUser?.photoURL !== "/Images/default_pic.png") {
+    const deletedPicRef = ref(storage, `${getAuth().currentUser?.uid}/profilePic`);
     await deleteObject(deletedPicRef);
    }
-   const userDocRef = doc(fireDB, "users", `${auth.currentUser?.uid}`);
+   const userDocRef = doc(fireDB, "users", `${getAuth().currentUser?.uid}`);
    await deleteDoc(userDocRef);
-   const currentUser: User | null = auth.currentUser;
+   const currentUser: User | null = getAuth().currentUser;
    if (currentUser) {
     const credential = EmailAuthProvider.credential(
      currentUser.email!,
@@ -263,8 +268,8 @@ export default function ProfilePage() {
   <div className='profile-page-container'>
    {showProfile &&
     <div className='profile-container'>
-     <Profile name={auth.currentUser?.displayName} imgUrl={auth.currentUser?.photoURL} zoneName={profileZone} format={userInfo?.format} utcOffset={userInfo?.timezoneData.utcOffset} />
-     <button className='btn btn-primary edit-profile-btn' onClick={goToEditProfile}>Edit your profile</button>
+     <Profile name={getAuth().currentUser?.displayName} imgUrl={getAuth().currentUser?.photoURL} zoneName={profileZone} format={userInfo?.format} utcOffset={userInfo?.timezoneData.utcOffset} />
+     <button data-testid="editProfileBtn" className='btn btn-primary edit-profile-btn' onClick={goToEditProfile}>Edit your profile</button>
     </div> 
    }
    {editProfile &&
@@ -272,7 +277,7 @@ export default function ProfilePage() {
      <EditProfile {...editProps} />
      <div className="edit-profile-btns">
       <button className="btn btn-primary profile-btn" onClick={goToProfile}>Go back</button>
-      <button className="btn btn-success save-changes-btn" onClick={saveChanges}>Save</button>
+      <button data-testid="saveBtn" className="btn btn-success save-changes-btn" onClick={saveChanges}>Save</button>
       <button className="btn btn-danger delete-acct-btn" onClick={deleteAccount}>Delete my account</button>
      </div>
     </div>

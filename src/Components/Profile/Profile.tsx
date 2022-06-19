@@ -16,12 +16,12 @@ export default function Profile({ name, imgUrl, zoneName, format, utcOffset }: P
  return (
   <div className="profile">
     {imgUrl && <Avatar src={imgUrl} alt={`${name} profile pic`} />}
-    <h2>{name}</h2>
+    <h2 data-testid="name">{name}</h2>
     <div className="profile-info-container">
      <LocationOn />
      <div className="profile-info">
-      <p className="profile-location">{zoneName}</p> 
-      <p className="profile-time">{format === "ampm" && formatAMPM(utcOffset)} {format === "MT" && formatMT(utcOffset)}</p>
+      <p data-testid="zoneName" className="profile-location">{zoneName}</p> 
+      <p data-testid="time" className="profile-time">{format === "ampm" && formatAMPM(utcOffset)}{format === "MT" && formatMT(utcOffset)}</p>
      </div>
     </div>
   </div>

@@ -21,16 +21,16 @@ export default function EditProfile({ values, handleChange, choosePic, imgPrevie
   <div className="edit-profile">
    <div className="edit-profile-pic-container">
     <Avatar src={imgPreview} alt={imgPreview} />
-    <input name="img_upload" onChange={choosePic} type="file" />
-    {imgFileErr && <p className="edit-profile-pic-err">{imgFileErr}</p>}
+    <input data-testid="imgInput" name="img_upload" onChange={choosePic} type="file" />
+    {imgFileErr && <p data-testid="imgFileErr" className="edit-profile-pic-err">{imgFileErr}</p>}
    </div>
    <div className="edit-profile-name-container">
     <p>Name</p>
-    <input type="text" name="name" value={values.name} onChange={handleChange} placeholder={values.name}/>
+    <input data-testid="nameInput" type="text" name="name" value={values.name} onChange={handleChange} placeholder={values.name}/>
    </div>
    <div className="edit-profile-email-container">
     <p>Email</p>
-    <input type="email" name="email" value={values.email} onChange={handleChange} />
+    <input data-testid="emailInput" type="email" name="email" value={values.email} onChange={handleChange} />
    </div>
    <div className="edit-profile-time-container">
     <p>Time format</p>
@@ -38,7 +38,8 @@ export default function EditProfile({ values, handleChange, choosePic, imgPrevie
      <div className="edit-profile-radio-btn">
       <input 
        type="radio" 
-       name="format" 
+       name="format"
+       data-testid="ampmBtn" 
        value="ampm"
        checked={isRadioSelected("ampm")} 
        onChange={onRadioChange}
@@ -48,7 +49,8 @@ export default function EditProfile({ values, handleChange, choosePic, imgPrevie
      <div className="edit-profile-radio-btn">
       <input 
        type="radio" 
-       name="format" 
+       name="format"
+       data-testid="MTBtn" 
        value="MT"
        checked={isRadioSelected("MT")} 
        onChange={onRadioChange}
@@ -59,7 +61,7 @@ export default function EditProfile({ values, handleChange, choosePic, imgPrevie
    </div>
    <div className="edit-profile-country-container">
     <p>Select a new country</p>
-    <select id="countryBox" name="country" onChange={handleChange}>
+    <select data-testid="countrySelect" id="countryBox" name="country" onChange={handleChange}>
      <option defaultValue="" key=""></option>
      {countries.map(country => {
       return (
@@ -70,7 +72,7 @@ export default function EditProfile({ values, handleChange, choosePic, imgPrevie
     {showZones &&
      <div className="edit-profile-timezone-container">
       <p>Select a new timezone</p>
-      <select id="timezoneBox" name="timezone" onChange={handleChange} required>
+      <select data-testid="zoneSelect" id="timezoneBox" name="timezone" onChange={handleChange} required>
        <option defaultValue="" key=""></option>
        {zones.map(zone => {
         return (
@@ -85,13 +87,13 @@ export default function EditProfile({ values, handleChange, choosePic, imgPrevie
    <div className="edit-profile-delete-acct-container">
     <h4>Delete account</h4>
     <label>Type DELETE to confirm</label>
-    <input type="text" name="delete" value={values.delete} onChange={handleChange}/>
+    <input data-testid="deleteInput" type="text" name="delete" value={values.delete} onChange={handleChange}/>
     <label>Why are you deleting your account? (Optional)</label>
-    <textarea rows={3} cols={10} name="reason" value={values.reason} onChange={handleChange}/>
+    <textarea data-testid="reasonInput" rows={3} cols={10} name="reason" value={values.reason} onChange={handleChange}/>
    </div>
    <div className="edit-profile-password-container">
     <label>Please enter your password to save any changes or to delete your account</label>
-    <input type="password" name="password" value={values.password} onChange={handleChange} required />
+    <input data-testid="passwordInput" type="password" name="password" value={values.password} onChange={handleChange} required />
    </div>
   </div>
  );
