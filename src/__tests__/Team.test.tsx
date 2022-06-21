@@ -16,6 +16,9 @@ import TeamsPage from "../Pages/TeamsPage";
 import TeamPage from "../Pages/TeamPage";
 import configureMockStore from "redux-mock-store";
 import thunk from 'redux-thunk';
+import ManageTeamPage from "../Pages/ManageTeamPage";
+import TeamMembers from "../Components/Team/TeamMembers";
+import AddTeamMemberPage from "../Pages/AddTeamMemberPage";
 
 jest.mock("../firebaseConfig", () => {
   return {
@@ -88,7 +91,7 @@ describe("Create Team Page", () => {
    }
   } as unknown) as Auth;
   (getAuth as jest.Mock).mockReturnValue(mockAuth);
-  (doc as jest.Mock).mockReturnValue({});
+  (doc as jest.Mock).mockReturnThis();
   (setDoc as jest.Mock).mockResolvedValue({
    id: "abc",
    name: "example"
@@ -262,5 +265,171 @@ describe("Team Page", () => {
   expect(screen.getByTestId("name_0_4")).toHaveTextContent("Carl");
   expect(screen.getByTestId("name_1_4")).toHaveTextContent("Darren");
   expect(screen.getByTestId("location_0_4")).toHaveTextContent("Dubai");
+ });
+});
+
+describe("Manage Team Page", () => {
+ it("renders the manage team page", () => {
+  const mockAuth = ({
+   currentUser: {
+       displayName: "example",
+       email: "example@example.com",
+       photoURL: "example.png",
+       uid: "abc"
+   }
+  } as unknown) as Auth;
+  (getAuth as jest.Mock).mockReturnValue(mockAuth);
+
+  const { container } = render(
+   <Router>
+    <ManageTeamPage />
+   </Router>
+  );
+
+  expect(container).toMatchSnapshot();
+ });
+
+ it("renders the team members component", () => {
+  const mockAuth = ({
+   currentUser: {
+       displayName: "example",
+       email: "example@example.com",
+       photoURL: "example.png",
+       uid: "abc"
+   }
+  } as unknown) as Auth;
+  (getAuth as jest.Mock).mockReturnValue(mockAuth);
+
+  const { container } = render(
+   <Router>
+    <TeamMembers teamId="abc" />
+   </Router>
+  );
+
+  expect(container).toMatchSnapshot();
+ });
+});
+
+describe("Add Team Member Page", () => {
+
+ const setup = async () => {
+  const mockAuth = ({
+   currentUser: {
+       displayName: "example",
+       email: "example@example.com",
+       photoURL: "example.png",
+       uid: "abc"
+   }
+  } as unknown) as Auth;
+  (getAuth as jest.Mock).mockReturnValue(mockAuth);
+
+  (doc as jest.Mock).mockReturnThis();
+  (setDoc as jest.Mock).mockResolvedValue({
+   id: "abc",
+   email: "example@example.com",
+   name: "example",
+   timezoneData: {
+    "countryCode": "AE",
+    "countryName": "United Arab Emirates",
+    "zoneName": "Asia/Dubai",
+    "gmtOffset": 14400,
+    "timestamp": 1464460937,
+    "utcOffset": 4
+   },
+   profilePic: "/Images/default_pic.png"
+  });
+
+  const { container } = render(
+   <Router>
+    <AddTeamMemberPage />
+   </Router>
+  );
+
+  const promise = Promise.resolve();
+  await act(async () => {
+   await promise;
+  });
+
+  return {
+   container
+  };
+ }
+
+ it("renders the add team member page", async () => {
+  const { container } = await setup();
+  expect(container).toMatchSnapshot();
+ });
+
+ it("selects the team member's profile pic", async () => {
+  await setup();
+
+  global.URL.createObjectURL = jest.fn();
+  const fakeFile = new File(['example'], 'example2.png', { type: 'image/png' });
+  const inputFile = screen.getByTestId(/imgInput/i);
+  
+  fireEvent.change(inputFile, {
+   target: { files: [fakeFile] }
+  });
+
+  expect(global.URL.createObjectURL).toHaveBeenCalledTimes(1);
+  expect(screen.queryByTestId("imgFileErr")).not.toBeInTheDocument();
+ });
+
+ it("shows the img file error message", async () => {
+  await setup();
+
+  const fakeFile = new File(['example'], 'example2.xml', { type: 'image/xml' });
+  const inputFile = screen.getByTestId(/imgInput/i);
+  
+  fireEvent.change(inputFile, {
+   target: { files: [fakeFile] }
+  });
+
+  expect(screen.getByTestId("imgFileErr")).toBeInTheDocument();
+  expect(screen.getByTestId("imgFileErr")).toHaveTextContent("Please choose an image file (png or jpeg)");
+ });
+
+ it("adds the team member's info", async () => {
+  await setup();
+  jest.useFakeTimers();
+
+  fireEvent.change(screen.getByTestId("nameInput"), {target: {value: "example"}});
+  fireEvent.change(screen.getByTestId("emailInput"), {target: {value: "example@example.com"}});
+
+  userEvent.selectOptions(screen.getByTestId("countrySelect"), "United Arab Emirates");
+  act(() => {
+   jest.runAllTimers();
+  });
+  userEvent.selectOptions(screen.getByTestId("zoneSelect"), "Asia/Dubai");
+
+  expect(screen.getByTestId("nameInput")).toHaveValue("example");
+  expect(screen.getByTestId("emailInput")).toHaveValue("example@example.com");
+  expect((screen.getByText("United Arab Emirates") as HTMLOptionElement).selected).toBeTruthy();
+  expect((screen.getByText("Asia/Dubai") as HTMLOptionElement).selected).toBeTruthy();
+ });
+
+ it("saves the team member's info", async () => {
+  await setup();
+  jest.useFakeTimers();
+
+  fireEvent.change(screen.getByTestId("nameInput"), {target: {value: "example"}});
+  fireEvent.change(screen.getByTestId("emailInput"), {target: {value: "example@example.com"}});
+
+  userEvent.selectOptions(screen.getByTestId("countrySelect"), "United Arab Emirates");
+  act(() => {
+   jest.runAllTimers();
+  });
+  userEvent.selectOptions(screen.getByTestId("zoneSelect"), "Asia/Dubai");
+  
+  const jsdomAlert = window.alert;
+  window.alert = () => {};
+  
+  fireEvent.click(screen.getByTestId("saveBtn"));
+
+  await waitFor(() => {
+   expect(setDoc).toBeCalled();
+  });
+
+  window.alert = jsdomAlert;
  });
 });

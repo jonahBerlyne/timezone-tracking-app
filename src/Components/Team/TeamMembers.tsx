@@ -6,13 +6,14 @@ import "../../../Styles/Manage.css";
 import { deleteObject, ref } from 'firebase/storage';
 import { IconButton, Avatar } from "@mui/material";
 import { Clear } from "@mui/icons-material";
+import { getAuth } from 'firebase/auth';
 
 export default function TeamMembers({ teamId }: { teamId: string | undefined }) {
 
  const [members, setMembers] = useState<any[]>([]);
 
  useEffect(() => {
-  const q = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamId}`, "team_members"));
+  const q = query(collection(fireDB, "users", `${getAuth().currentUser?.uid}`, "teams", `${teamId}`, "team_members"));
   const unsub = onSnapshot(q, snapshot => {
    let membersArr: any[] = [];
    snapshot.docs.forEach(member => {

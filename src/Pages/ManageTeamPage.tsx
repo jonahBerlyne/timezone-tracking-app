@@ -4,15 +4,16 @@ import TeamMembers from '../Components/Team/TeamMembers';
 import "../../../Styles/Manage.css";
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import fireDB, { auth } from '../firebaseConfig';
+import { getAuth } from 'firebase/auth';
 
-export default function ManageTeam() {
+export default function ManageTeamPage() {
 
  const teamParam = useParams();
 
  const [teamName, setTeamName] = useState<string>("");
  
  useEffect(() => {
-  const q = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams"));
+  const q = query(collection(fireDB, "users", `${getAuth().currentUser?.uid}`, "teams"));
   const unsub = onSnapshot(q, snapshot => {
    snapshot.docs.forEach(doc => {
     if (doc.data()?.id === teamParam.id) {
@@ -41,7 +42,7 @@ export default function ManageTeam() {
       </div>
 
       <div className="manage-team-members-container">
-       <TeamMembers teamId={teamParam.id}/>
+       <TeamMembers teamId={teamParam.id} />
       </div>
       
      </div>

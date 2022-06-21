@@ -8,6 +8,7 @@ import "../../../Styles/Manage.css";
 import { IconButton, Avatar } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate, useParams } from 'react-router-dom';
+import { getAuth } from 'firebase/auth';
 
 interface Values {
  id: string | undefined;
@@ -17,7 +18,7 @@ interface Values {
  timezone: string;
 };
 
-export default function AddTeamMember() {
+export default function AddTeamMemberPage() {
 
  const teamParam = useParams();
 
@@ -122,11 +123,12 @@ export default function AddTeamMember() {
 
  const saveChanges = async (): Promise<any> => {
   try {
-   const docRef = doc(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${teamParam.id}`, "team_members", `${values.id}`);
+   const docRef = doc(fireDB, "users", `${getAuth().currentUser?.uid}`, "teams", `${teamParam.id}`, "team_members", `${values.id}`);
    const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
    const utcOffset = findUTCOffset(userZoneData[0].gmtOffset);
    const memberInfo = {
     id: values.id,
+    email: values.email,
     name: values.name,
     timezoneData: {...userZoneData[0], utcOffset},
     profilePic: imgUrl
@@ -161,21 +163,21 @@ export default function AddTeamMember() {
     
    <div className="add-member-profile-pic-container">
     <Avatar src={imgPreview} alt={`${values.email} profile pic`} />
-    <input onChange={choosePic} type="file"/>
-    {imgFileErr && <p>{imgFileErr}</p>}
+    <input data-testid="imgInput" onChange={choosePic} type="file"/>
+    {imgFileErr && <p data-testid="imgFileErr">{imgFileErr}</p>}
    </div>
    <div className="add-member-name-container">
     <p>Name</p>
-    <input type="text" name="name" value={values.name} onChange={handleChange} placeholder='Name' required />
+    <input data-testid="nameInput" type="text" name="name" value={values.name} onChange={handleChange} placeholder='Name' required />
    </div>
    <div className='add-member-email-container'>
      <p>Email address</p>
-     <input type="email" name="email" value={values.email} onChange={handleChange} placeholder="E-mail" required />
+     <input data-testid="emailInput" type="email" name="email" value={values.email} onChange={handleChange} placeholder="E-mail" required />
    </div>
    <div className="add-member-time-container">
     <div className="add-member-country-container">
      <p>Country</p>
-     <select name="country" onChange={handleChange} required>
+     <select data-testid="countrySelect" name="country" onChange={handleChange} required>
       <option defaultValue="" key=""></option>
       {countries.map(country => {
        return (
@@ -187,7 +189,7 @@ export default function AddTeamMember() {
     {showZones && 
      <div className="add-member-timezone-container">
       <p>Timezone</p>
-      <select name="timezone" onChange={handleChange} required>
+      <select data-testid="zoneSelect" name="timezone" onChange={handleChange} required>
        <option defaultValue="" key=""></option>
        {zones.map(zone => {
         return (
@@ -198,7 +200,7 @@ export default function AddTeamMember() {
      </div>
     }
    </div>
-   <button className='btn btn-primary save-member-btn' onClick={handleUpload}>Save</button>
+   <button data-testid="saveBtn" className='btn btn-primary save-member-btn' onClick={handleUpload}>Save</button>
   </div>
  );
 }
