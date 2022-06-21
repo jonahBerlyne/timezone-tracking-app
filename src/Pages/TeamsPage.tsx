@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import fireDB, { auth } from '../firebaseConfig';
 import "../../Styles/Teams.css";
+import { getAuth } from 'firebase/auth';
 
 export default function TeamsPage() {
 
@@ -10,7 +11,7 @@ export default function TeamsPage() {
  const [teams, setTeams] = useState<any[]>([]);
 
  useEffect(() => {
-  const q = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams"));
+  const q = query(collection(fireDB, "users", `${getAuth().currentUser?.uid}`, "teams"));
   const unsub = onSnapshot(q, snapshot => {
    let teamsArr: any[] = [];
    snapshot.docs.forEach(doc => {

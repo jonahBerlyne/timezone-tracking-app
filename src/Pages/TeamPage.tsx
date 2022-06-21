@@ -6,17 +6,17 @@ import { useAppSelector } from '../Redux/hooks';
 import { selectUser } from '../Redux/userSlice';
 import TimeZone from "../Components/Team/TimeZone";
 import "../../Styles/Team.css";
+import { getAuth } from 'firebase/auth';
 
 export default function TeamPage() {
 
- const user = useAppSelector(selectUser);
  const team = useParams();
  const [timezones, setTimezones] = useState<any[]>([]);
  const [noMembers, setNoMembers] = useState<boolean>(false);
 
  const getTeamMembers = async (): Promise<any> => {
   try {
-   const membersCollection = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams", `${team.id}`, "team_members"));
+   const membersCollection = query(collection(fireDB, "users", `${getAuth().currentUser?.uid}`, "teams", `${team.id}`, "team_members"));
    const membersSnapshot = await getDocs(membersCollection);
    let tempArr: any[] = [];
    membersSnapshot.forEach(member => {
