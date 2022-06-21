@@ -3,12 +3,13 @@ import { render, screen, cleanup, fireEvent, waitFor, act } from "@testing-libra
 import "@testing-library/jest-dom/extend-expect";
 import LoginPage from "../Pages/LoginPage";
 import { BrowserRouter as Router } from "react-router-dom";
-import { Auth, createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { Auth, createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, updateProfile, UserCredential } from "firebase/auth";
 import { Provider } from "react-redux";
 import { store } from "../Redux/Store";
 import userEvent from "@testing-library/user-event";
 import RegisterPage from "../Pages/RegisterPage";
 import { enableFetchMocks } from "jest-fetch-mock";
+import { doc, setDoc } from "firebase/firestore";
 
 jest.mock("../firebaseConfig", () => {
   return {
@@ -17,6 +18,8 @@ jest.mock("../firebaseConfig", () => {
 });
 
 jest.mock("firebase/auth");
+
+jest.mock("firebase/firestore");
 
 let originalFetch: any;
 
@@ -62,8 +65,6 @@ afterEach(done => {
 
 describe("Login Page", () => {
 
-
-
  it("renders the login page", () => {
   const { container } = render(
    <Provider store={store}>
@@ -92,33 +93,27 @@ describe("Login Page", () => {
   expect(passwordInput).toHaveValue("example");
  });
 
- it("should login user", () => {
+ it("should login user", async () => {
 
-   const mockAuth = ({
-    signInWithEmailAndPassword: jest.fn(),
-   } as unknown) as Auth;
-   (getAuth as jest.MockedFunction<typeof getAuth>).mockReturnValue(mockAuth);
+  (signInWithEmailAndPassword as jest.Mock).mockResolvedValue(this);
 
-   const email = "example@example.com";
-   const password = "example";
-   
-   const Login = () => {
+  render(
+   <Router>
+    <LoginPage />
+   </Router>
+  );
 
-    const loginUser = async () => await signInWithEmailAndPassword(getAuth(), email, password);
+  const emailInput = screen.getByTestId("Email");
+  const passwordInput = screen.getByTestId("Password");
 
-    return (
-      <div>
-        <button data-testid="loginBtn" onClick={() => loginUser()}></button>
-      </div>
-    );
-  }
+  userEvent.type(emailInput, "example@example.com");
+  userEvent.type(passwordInput, "example");
 
-  render(<Login />);
+  fireEvent.click(screen.getByTestId("signInBtn"));
 
-  const loginBtn = screen.getByTestId("loginBtn");
-  fireEvent.click(loginBtn);
-
-  expect(getAuth).toBeCalledTimes(1);
+  await waitFor(() => {
+    expect(signInWithEmailAndPassword).toBeCalled();
+  });
  });
 
  it('navigates to register page', async () => {
@@ -147,6 +142,7 @@ describe("Login Page", () => {
 describe("Register Page", () => {
 
  const setup = async () => {
+
   const { container, rerender } = render(
    <Router>
     <RegisterPage />
@@ -171,6 +167,7 @@ describe("Register Page", () => {
 
  it("changes register input values", async () => {
   await setup();
+  jest.useFakeTimers();
 
   fireEvent.change(screen.getByTestId("Email"), {target: {value: "example@example.com"}});
   fireEvent.change(screen.getByTestId("Password"), {target: {value: "example"}});
@@ -183,37 +180,64 @@ describe("Register Page", () => {
   fireEvent.click(screen.getByTestId("profileBtn"));
 
   fireEvent.change(screen.getByTestId("Name"), {target: {value: "example"}});
-  userEvent.selectOptions(screen.getByTestId("Select"), "United Arab Emirates");
+  userEvent.selectOptions(screen.getByTestId("countrySelect"), "United Arab Emirates");
+  act(() => {
+    jest.runAllTimers();
+  });
+  userEvent.selectOptions(screen.getByTestId("zoneSelect"), "Asia/Dubai");
+  fireEvent.click(screen.getByTestId("MTBtn"));
 
   expect(screen.getByTestId("Name")).toHaveValue("example");
   expect((screen.getByText("United Arab Emirates") as HTMLOptionElement).selected).toBeTruthy();
+  expect((screen.getByText("Asia/Dubai") as HTMLOptionElement).selected).toBeTruthy();
+  expect(screen.getByTestId("ampmBtn")).not.toBeChecked();
+  expect(screen.getByTestId("MTBtn")).toBeChecked();
  });
 
  it("should register user", async () => {
-  const mockAuth = ({
-   createUserWithEmailAndPassword: jest.fn(),
-  } as unknown) as Auth;
-  (getAuth as jest.MockedFunction<typeof getAuth>).mockReturnValue(mockAuth);
+  const mockCredential = ({
+   user: {
+    uid: "abc"
+   }
+  } as unknown) as UserCredential;
+  (createUserWithEmailAndPassword as jest.Mock).mockResolvedValue(mockCredential);
+  (doc as jest.Mock).mockReturnThis();
+  (setDoc as jest.Mock).mockResolvedValue(this);
+  (updateProfile as jest.Mock).mockResolvedValue(this);
 
-  const email = "example@example.com";
-  const password = "example";
+  await setup();
+  jest.useFakeTimers();
 
-  const Register = () => {
-    const registerUser = async () => await createUserWithEmailAndPassword(getAuth(), email, password);
-    return (
-      <div>
-        <button data-testid="registerBtn" onClick={() => registerUser()}></button>
-      </div>
-    );
-  }
+  fireEvent.change(screen.getByTestId("Email"), {target: {value: "example@example.com"}});
+  fireEvent.change(screen.getByTestId("Password"), {target: {value: "example"}});
+  fireEvent.change(screen.getByTestId("confirmPassword"), {target: {value: "example"}});
 
+  fireEvent.click(screen.getByTestId("profileBtn"));
 
-  render(<Register />);
+  fireEvent.change(screen.getByTestId("Name"), {target: {value: "example"}});
+  userEvent.selectOptions(screen.getByTestId("countrySelect"), "United Arab Emirates");
+  act(() => {
+    jest.runAllTimers();
+  });
+  userEvent.selectOptions(screen.getByTestId("zoneSelect"), "Asia/Dubai");
+  fireEvent.click(screen.getByTestId("MTBtn"));
 
-  const registerBtn = screen.getByTestId("registerBtn");
-  fireEvent.click(registerBtn);
+  const jsdomAlert = window.alert;
+  window.alert = () => {};
 
-  expect(getAuth).toBeCalledTimes(1);
+  fireEvent.click(screen.getByTestId("registerBtn"));
+
+  await waitFor(() => {
+    expect(createUserWithEmailAndPassword).toBeCalled();
+  });
+  await waitFor(() => {
+    expect(setDoc).toBeCalled();
+  });
+  await waitFor(() => {
+    expect(updateProfile).toBeCalled();
+  });
+
+  window.alert = jsdomAlert;
  });
 
  it('navigates to login page', async () => {

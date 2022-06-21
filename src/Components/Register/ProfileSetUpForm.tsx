@@ -31,7 +31,7 @@ export default function ProfileSetUpForm({ values, handleChange, countries, zone
      required
     />
     <h5 className='auth-subheader'>Now, select your country</h5>
-    <select data-testid="Select" className='form-control auth-input' name="country" onChange={handleChange} required>
+    <select data-testid="countrySelect" className='form-control auth-input' name="country" onChange={handleChange} required>
      <option defaultValue="" key=""></option>
      {countries.map(country => {
       return (
@@ -44,7 +44,7 @@ export default function ProfileSetUpForm({ values, handleChange, countries, zone
     {showZones &&
      <div className='auth-time-container'>
       <h5 className='auth-subheader'>Please select your timezone</h5>
-      <select className='form-control auth-input' id="timezoneBox" name="timezone" onChange={handleChange} required>
+      <select data-testid="zoneSelect" className='form-control auth-input' id="timezoneBox" name="timezone" onChange={handleChange} required>
        <option defaultValue="" key=""></option>
        {zones.map(zone => {
         return (
@@ -55,7 +55,8 @@ export default function ProfileSetUpForm({ values, handleChange, countries, zone
       <h5 className='auth-subheader'>Please select a time format</h5>
       <div className='auth-time-radio-btns'>
        <input 
-        type="radio" 
+        type="radio"
+        data-testid="ampmBtn" 
         name="format" 
         value="ampm" 
         onChange={onRadioChange} 
@@ -63,7 +64,8 @@ export default function ProfileSetUpForm({ values, handleChange, countries, zone
        />
        <label className="auth-time-radio-btn-label">AM/PM Format</label>
        <input 
-        type="radio" 
+        type="radio"
+        data-testid="MTBtn" 
         name="format" 
         value="MT" 
         onChange={onRadioChange} 

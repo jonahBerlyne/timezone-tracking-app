@@ -19,6 +19,7 @@ import thunk from 'redux-thunk';
 import ManageTeamPage from "../Pages/ManageTeamPage";
 import TeamMembers from "../Components/Team/TeamMembers";
 import AddTeamMemberPage from "../Pages/AddTeamMemberPage";
+import EditTeamInfoPage from "../Pages/EditTeamInfoPage";
 
 jest.mock("../firebaseConfig", () => {
   return {
@@ -431,5 +432,27 @@ describe("Add Team Member Page", () => {
   });
 
   window.alert = jsdomAlert;
+ });
+});
+
+describe("Edit Team Info Page", () => {
+ it("renders the edit team info page", () => {
+  const mockAuth = ({
+   currentUser: {
+       displayName: "example",
+       email: "example@example.com",
+       photoURL: "example.png",
+       uid: "abc"
+   }
+  } as unknown) as Auth;
+  (getAuth as jest.Mock).mockReturnValue(mockAuth);
+
+  const { container } = render(
+   <Router>
+    <EditTeamInfoPage />
+   </Router>
+  );
+
+  expect(container).toMatchSnapshot();
  });
 });

@@ -6,8 +6,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import "../../../Styles/Manage.css";
 import { IconButton } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
+import { getAuth } from 'firebase/auth';
 
-export default function EditTeamInfo() {
+export default function EditTeamInfoPage() {
 
  const teamParam = useParams();
 
@@ -15,7 +16,7 @@ export default function EditTeamInfo() {
  const [teamName, setTeamName] = useState<string>("");
  
  useEffect(() => {
-  const q = query(collection(fireDB, "users", `${auth.currentUser?.uid}`, "teams"));
+  const q = query(collection(fireDB, "users", `${getAuth().currentUser?.uid}`, "teams"));
   const unsub = onSnapshot(q, snapshot => {
    snapshot.docs.forEach(doc => {
     if (doc.data()?.id === teamParam.id) {

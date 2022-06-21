@@ -174,7 +174,8 @@ export default function RegisterPage() {
        onClick={goToRegisterInputs}
       >Go Back
       </button>
-      <button 
+      <button
+       data-testid="registerBtn" 
        className="btn btn-primary register-btn" 
        onClick={register}
        disabled={
