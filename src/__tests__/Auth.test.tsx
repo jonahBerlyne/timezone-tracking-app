@@ -192,6 +192,8 @@ describe("Register Page", () => {
   expect((screen.getByText("Asia/Dubai") as HTMLOptionElement).selected).toBeTruthy();
   expect(screen.getByTestId("ampmBtn")).not.toBeChecked();
   expect(screen.getByTestId("MTBtn")).toBeChecked();
+
+  jest.clearAllTimers();
  });
 
  it("should register user", async () => {
@@ -238,6 +240,7 @@ describe("Register Page", () => {
   });
 
   window.alert = jsdomAlert;
+  jest.clearAllTimers();
  });
 
  it('navigates to login page', async () => {

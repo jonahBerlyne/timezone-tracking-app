@@ -4,11 +4,11 @@ import "@testing-library/jest-dom/extend-expect";
 import ProfilePage from '../Pages/ProfilePage';
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
-import { Auth, getAuth } from 'firebase/auth';
+import { Auth, getAuth, reauthenticateWithCredential, updateEmail, updateProfile } from 'firebase/auth';
 import configureMockStore from "redux-mock-store";
 import thunk from 'redux-thunk';
 import userEvent from '@testing-library/user-event';
-import { doc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 
 jest.mock("../firebaseConfig", () => {
   return {
@@ -191,5 +191,57 @@ describe("Profile Page", () => {
   expect((screen.getByText("United Arab Emirates") as HTMLOptionElement).selected).toBeTruthy();
   expect((screen.getByText("Asia/Dubai") as HTMLOptionElement).selected).toBeTruthy();
   expect(screen.getByTestId("passwordInput")).toHaveValue("example123");
+
+  jest.clearAllTimers();
+ });
+
+ it("saves the user's changes", async () => {
+  (doc as jest.Mock).mockReturnThis();
+  (setDoc as jest.Mock).mockResolvedValue(this);
+  (reauthenticateWithCredential as jest.Mock).mockResolvedValue(this);
+  (updateEmail as jest.Mock).mockResolvedValue(this);
+  (updateProfile as jest.Mock).mockResolvedValue(this);
+
+  await setup();
+  jest.useFakeTimers();
+
+  fireEvent.click(screen.getByTestId("editProfileBtn"));
+
+  fireEvent.change(screen.getByTestId("nameInput"), {target: {value: "example2"}});
+  fireEvent.change(screen.getByTestId("emailInput"), {target: {value: "example2@example2.com"}});
+
+  fireEvent.click(screen.getByTestId("MTBtn"));
+
+  userEvent.selectOptions(screen.getByTestId("countrySelect"), "United Arab Emirates");
+  act(() => {
+   jest.runAllTimers();
+  });
+  userEvent.selectOptions(screen.getByTestId("zoneSelect"), "Asia/Dubai");
+
+  fireEvent.change(screen.getByTestId("passwordInput"), {target: {value: "example123"}});
+
+  const jsdomAlert = window.alert;
+  window.alert = () => {};
+
+  delete (window as Partial<Window>).location;
+  window.location = { ...window.location, reload: jest.fn() };
+  
+  fireEvent.click(screen.getByTestId("saveBtn"));
+  
+  await waitFor(() => {
+    expect(setDoc).toBeCalled();
+  });
+  await waitFor(() => {
+    expect(reauthenticateWithCredential).toBeCalled();
+  });
+  await waitFor(() => {
+    expect(updateEmail).toBeCalled();
+  });
+  await waitFor(() => {
+    expect(updateProfile).toBeCalled();
+  });
+  
+  window.alert = jsdomAlert;
+  jest.clearAllTimers();
  });
 });

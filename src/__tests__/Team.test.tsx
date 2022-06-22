@@ -407,11 +407,14 @@ describe("Add Team Member Page", () => {
   expect(screen.getByTestId("emailInput")).toHaveValue("example@example.com");
   expect((screen.getByText("United Arab Emirates") as HTMLOptionElement).selected).toBeTruthy();
   expect((screen.getByText("Asia/Dubai") as HTMLOptionElement).selected).toBeTruthy();
+
+  jest.clearAllTimers();
  });
 
  it("saves the team member's info", async () => {
   await setup();
   jest.useFakeTimers();
+  jest.setTimeout(10000);
 
   fireEvent.change(screen.getByTestId("nameInput"), {target: {value: "example"}});
   fireEvent.change(screen.getByTestId("emailInput"), {target: {value: "example@example.com"}});
@@ -432,6 +435,7 @@ describe("Add Team Member Page", () => {
   });
 
   window.alert = jsdomAlert;
+  jest.clearAllTimers();
  });
 });
 

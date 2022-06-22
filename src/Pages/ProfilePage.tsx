@@ -187,17 +187,19 @@ export default function ProfilePage() {
    const docRef = doc(fireDB, "users", `${getAuth().currentUser?.uid}`);
    const userZoneData = zoneData.filter(zone => zone.zoneName === values.timezone);
    let utcOffset: number = NaN;
+   const currentUser: User | null = getAuth().currentUser;
    if (userZoneData.length > 0 || format !== userInfo?.format) {
     if (userZoneData.length > 0) utcOffset = findUTCOffset(userZoneData[0].gmtOffset);
     const userDoc = {
      ...userInfo,
+     email: values.email,
+     displayName: values.name,
+     photoUrl: imgFile ? URL.createObjectURL(imgFile) : userInfo?.photoUrl,
      timezoneData: values.country !== "" && values.timezone !== "" ? {...userZoneData[0], utcOffset} : userInfo?.timezoneData,
      format
     };
-    console.log(userDoc);
     await setDoc(docRef, userDoc);
    }
-   const currentUser: User | null = getAuth().currentUser;
    if (currentUser) {
     if (values.email !== currentUser?.email) {
      const credential: EmailAuthCredential = EmailAuthProvider.credential(
