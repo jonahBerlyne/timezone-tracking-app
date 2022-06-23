@@ -3,7 +3,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import fireDB, { auth } from '../firebaseConfig';
 import uniqid from "uniqid";
 import { useNavigate } from 'react-router-dom';
-import "../../Styles/Teams.css";
+import "../Styles/Teams.css";
 import { getAuth } from 'firebase/auth';
 
 export default function CreateTeamPage() {

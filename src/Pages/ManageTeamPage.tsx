@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import TeamMembers from '../Components/Team/TeamMembers';
-import "../../../Styles/Manage.css";
+import "../Styles/Manage.css";
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import fireDB, { auth } from '../firebaseConfig';
 import { getAuth } from 'firebase/auth';

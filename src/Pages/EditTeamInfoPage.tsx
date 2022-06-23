@@ -3,7 +3,7 @@ import { FaArrowLeft } from "react-icons/fa"
 import fireDB, { auth } from '../firebaseConfig';
 import { doc, setDoc, getDocs, query, collection, deleteDoc, onSnapshot } from "firebase/firestore";
 import { useNavigate, useParams } from 'react-router-dom';
-import "../../../Styles/Manage.css";
+import "../Styles/Manage.css";
 import { IconButton } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { getAuth } from 'firebase/auth';

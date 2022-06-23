@@ -2,7 +2,7 @@ import { collection, onSnapshot, query } from 'firebase/firestore';
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import fireDB, { auth } from '../firebaseConfig';
-import "../../Styles/Teams.css";
+import "../Styles/Teams.css";
 import { getAuth } from 'firebase/auth';
 
 export default function TeamsPage() {

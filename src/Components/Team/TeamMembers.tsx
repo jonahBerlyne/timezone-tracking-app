@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import fireDB, { auth, storage } from '../../firebaseConfig';
 import { query, collection, doc, deleteDoc, onSnapshot, getDoc } from 'firebase/firestore';
 import { FaTimes } from "react-icons/fa";
-import "../../../Styles/Manage.css";
+import "../../Styles/Manage.css";
 import { deleteObject, ref } from 'firebase/storage';
 import { IconButton, Avatar } from "@mui/material";
 import { Clear } from "@mui/icons-material";

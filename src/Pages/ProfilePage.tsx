@@ -9,7 +9,7 @@ import { findUTCOffset } from '../Components/Time';
 import { useAppDispatch, useAppSelector } from '../Redux/hooks';
 import { logout, selectUser } from '../Redux/userSlice';
 import { deleteUser, EmailAuthCredential, EmailAuthProvider, reauthenticateWithCredential, updateEmail, updateProfile, User, getAuth } from 'firebase/auth';
-import "../../Styles/Profile.css";
+import "../Styles/Profile.css";
 import { Avatar } from '@mui/material';
 
 interface Values {

@@ -6,7 +6,7 @@ import fireDB, { auth } from "../firebaseConfig";
 import ProfileSetUpForm from '../Components/Register/ProfileSetUpForm';
 import { doc, setDoc } from 'firebase/firestore';
 import { findUTCOffset } from '../Components/Time';
-import "../../Styles/Auth.css";
+import "../Styles/Auth.css";
 
 interface Values {
  email: string;

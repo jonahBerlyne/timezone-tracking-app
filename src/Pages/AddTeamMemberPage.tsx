@@ -4,7 +4,7 @@ import fireDB, { auth, storage } from '../firebaseConfig';
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { findUTCOffset } from '../Components/Time';
-import "../../../Styles/Manage.css";
+import "../Styles/Manage.css";
 import { IconButton, Avatar } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate, useParams } from 'react-router-dom';
