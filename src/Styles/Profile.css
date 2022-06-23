@@ -180,3 +180,30 @@
  padding-right: 20px;
  font-weight: bold;
 }
+
+@media screen and (max-width: 425px) {
+
+ .edit-profile-country-container > select,
+ .edit-profile-timezone-container > select {
+   width: 300px;
+ }
+
+ .edit-profile-delete-acct-container > input {
+   margin-left: 10px;
+ }
+
+ .edit-profile-delete-acct-container > input,
+ .edit-profile-password-container > input {
+   width: 300px;
+ }
+ 
+ .edit-profile-delete-acct-container > textarea {
+   width: 300px;
+   margin-left: 10px;
+ }
+
+ .edit-profile-btns {
+  flex-direction: column;
+ }
+
+}
