@@ -101,3 +101,33 @@ input:focus {
  width: 100px;
  padding: 8px;
 }
+
+@media screen and (max-width: 425px) {
+
+ .auth {
+  margin-top: 40px;
+ }
+
+ .auth-inputs {
+  margin-top: 40px;
+ }
+
+ .auth-input {
+  width: 300px;
+  margin-bottom: 20px;
+ }
+
+ .login-btn,
+ .get-started-btn {
+  width: 300px;
+ }
+
+ .get-started-container {
+  margin-top: 30px;
+ }
+
+ .profile-set-up-btns {
+  margin-bottom: 20px;
+ }
+
+}

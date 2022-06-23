@@ -13,7 +13,7 @@ interface Register {
 export default function RegisterForm({ values, handleChange }: Register) {
  return (
   <div>
-   <h2 className='auth-header'>Register:</h2>
+   <h2 className='auth-header'>Register</h2>
    <div className="auth-inputs">
     <input
      name="email"

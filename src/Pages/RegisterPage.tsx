@@ -85,10 +85,6 @@ export default function RegisterPage() {
  }
 
  const goToProfileInputs = (): void => {
-  if (values.password !== values.confirmPassword) {
-   alert("Password fields must be the same");
-   return;
-  } 
   setRegisterForm(false);
   setProfileSetUpForm(true);
  }
@@ -158,7 +154,8 @@ export default function RegisterPage() {
       disabled={
        values.email === '' ||
        values.password === '' ||
-       values.confirmPassword === ''
+       values.confirmPassword === '' ||
+       values.password !== values.confirmPassword
       }
      >Get Started
      </button>
