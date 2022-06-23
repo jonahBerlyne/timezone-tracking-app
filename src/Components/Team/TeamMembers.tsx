@@ -40,7 +40,7 @@ export default function TeamMembers({ teamId }: { teamId: string | undefined }) 
  }
 
  return (
-  <div className='member-rows-container'>
+  <div className={members.length > 0 ? 'member-rows-container' : 'no-members'}>
    <h1>Members:</h1>
    {members.map(member => {
     let zoneStr = member.timezoneData.zoneName;

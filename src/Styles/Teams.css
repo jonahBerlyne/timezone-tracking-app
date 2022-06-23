@@ -54,3 +54,11 @@
  border-radius: 20px;
  font-weight: bold;
 }
+
+@media screen and (max-width: 425px) {
+ 
+ .create-team-container {
+  margin-top: 130px;
+ }
+
+}

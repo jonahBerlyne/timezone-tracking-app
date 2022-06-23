@@ -46,6 +46,10 @@
  background-color: rgb(240, 240, 240);
 }
 
+.no-members {
+ display: none;
+}
+
 .member-rows-container {
  display: flex;
  flex-direction: column;
@@ -77,51 +81,6 @@
 
 .member-row-info-location {
  opacity: 0.7;
-}
-
-@media screen and (max-width: 1016px) {
-
- .manage-page-container {
-  align-items: center;
-  margin-top: 20px;
- }
- 
- .manage-team-info-container {
-  flex-direction: column;
-  margin-bottom: 30px;
- }
- 
- .manage-team-text-container {
-  margin-bottom: 50px;
-  text-align: center;
- }
-
- .member-row {
-  width: 100%;
- }
-
- .manage-team-btns-container {
-  align-items: center;
-  margin-bottom: 20px;
- }
-
-}
-
-@media screen and (min-width: 1017px) {
-
- .manage-team-container {
-  margin-top: 20px;
-  margin-left: 50px;
- }
-
- .manage-team-text-container {
-  margin: 30px 150px 20px 0px;
- }
-
- .member-rows-container {
-  margin-top: 30px;
- }
-
 }
 
 .add-member-profile-pic-container > .MuiAvatar-root {
@@ -255,4 +214,84 @@
 
 .delete-team-btn {
  font-weight: bold;
+}
+
+@media screen and (max-width: 425px) {
+
+ .manage-team-text-container > p {
+  padding: 0px 15px 0px 15px;
+ }
+
+ .manage-team-members-container {
+  margin-top: -20px;
+ }
+
+ .add-member-country-container > select,
+ .add-member-timezone-container > select {
+  width: 300px;
+ }
+
+ .member-row-info {
+  margin-left: 10px;
+  margin-top: 5px;
+ }
+
+ .member-row-info-text {
+  margin-top: 10px;
+ }
+
+ .delete-team-container {
+  margin: 0px 50px 0px 50px;
+  padding: 25px 30px 25px 30px;
+ }
+
+ .delete-team-container > p {
+  text-align: center;
+ }
+
+}
+
+@media screen and (max-width: 1016px) {
+
+ .manage-page-container {
+  align-items: center;
+  margin-top: 20px;
+ }
+ 
+ .manage-team-info-container {
+  flex-direction: column;
+  margin-bottom: 30px;
+ }
+ 
+ .manage-team-text-container {
+  margin-bottom: 50px;
+  text-align: center;
+ }
+
+ .member-row {
+  width: 100%;
+ }
+
+ .manage-team-btns-container {
+  align-items: center;
+  margin-bottom: 20px;
+ }
+
+}
+
+@media screen and (min-width: 1017px) {
+
+ .manage-team-container {
+  margin-top: 20px;
+  margin-left: 50px;
+ }
+
+ .manage-team-text-container {
+  margin: 30px 150px 20px 0px;
+ }
+
+ .member-rows-container {
+  margin-top: 30px;
+ }
+
 }

@@ -9,3 +9,25 @@
  gap: 30px;
  margin-top: 20px;
 }
+
+.team-navbar-header {
+ font-family: "Lato", sans-serif;
+}
+
+.team-navbar-name {
+ margin-top: 7px;
+}
+
+.team-navbar-menu {
+ text-align: center;
+ margin-right: 25px;
+}
+
+@media screen and (max-width: 425px) {
+ 
+ .team-navbar-name {
+  font-size: 18px;
+  padding-left: 4.2px;
+ }
+
+}

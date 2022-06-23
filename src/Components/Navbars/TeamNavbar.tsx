@@ -8,6 +8,7 @@ import { Settings } from "@mui/icons-material";
 import { useAppDispatch } from '../../Redux/hooks';
 import { logout } from '../../Redux/userSlice';
 import { signOut } from 'firebase/auth';
+import "../../Styles/Team.css";
 
 export default function TeamNavbar() {
 
@@ -41,19 +42,19 @@ export default function TeamNavbar() {
  const navigate = useNavigate();
 
  return (
-    <div className='header' style={{ fontFamily: "Lato, sans-serif" }}>
+    <div className='header team-navbar-header'>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
             <IconButton onClick={() => navigate(`/team/${teamParam.id}/manage`)}>
              <Settings color="primary" />
             </IconButton>
-            {teamName !== "" && <h1 className="navbar-brand navbar-team-name" style={{ marginTop: "7px" }}>{teamName}</h1>}
+            {teamName !== "" && <h1 className="navbar-brand team-navbar-name">{teamName}</h1>}
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span>
                 <FaBars size={25} color="gray"/>
               </span>
             </button>
-            <div className="collapse navbar-collapse" style={{ textAlign: "center", marginRight: "25px" }} id="navbarNav">
+            <div className="collapse navbar-collapse team-navbar-menu" id="navbarNav">
               <ul className="navbar-nav ms-auto">
                 <li className="nav-item">
                   <Link className="nav-link" to="/">Home</Link>
