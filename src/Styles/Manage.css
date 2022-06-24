@@ -46,7 +46,7 @@
  background-color: rgb(240, 240, 240);
 }
 
-.no-members {
+.no-members-to-display {
  display: none;
 }
 
@@ -94,13 +94,6 @@
  flex-direction: column;
  align-items: center;
  margin-top: 10px;
-}
-
-.add-member-container > .MuiIconButton-root,
-.edit-team-info-container > .MuiIconButton-root {
- position: absolute;
- left: 3px;
- top: 70px;
 }
 
 .add-member-profile-pic-container {
@@ -178,8 +171,14 @@
  text-align: center;
 }
 
-.save-member-btn {
+.add-team-member-btns {
+ display: flex;
+ gap: 30px;
  margin-top: 20px;
+ margin-bottom: 40px;
+}
+
+.add-team-member-btns > button {
  padding-left: 20px;
  padding-right: 20px;
  font-weight: bold;
@@ -208,7 +207,7 @@
 
 .delete-team-container {
  border: 1px solid red;
- margin: 0px 100px 0px 100px;
+ margin: 0px 100px 50px 100px;
  padding: 15px 30px 15px 30px;
 }
 
@@ -241,7 +240,7 @@
  }
 
  .delete-team-container {
-  margin: 0px 50px 0px 50px;
+  margin: 0px 50px 25px 50px;
   padding: 25px 30px 25px 30px;
  }
 
@@ -294,4 +293,5 @@
   margin-top: 30px;
  }
 
+ 
 }

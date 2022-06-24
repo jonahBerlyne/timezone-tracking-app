@@ -156,10 +156,6 @@ export default function AddTeamMemberPage() {
 
  return (
   <div className='add-member-container'>
-
-   <IconButton onClick={() => navigate(`/team/${teamParam.id}/manage`)}>
-    <ArrowBack />
-   </IconButton>
     
    <div className="add-member-profile-pic-container">
     <Avatar src={imgPreview} alt={`${values.email} profile pic`} />
@@ -200,7 +196,10 @@ export default function AddTeamMemberPage() {
      </div>
     }
    </div>
-   <button data-testid="saveBtn" className='btn btn-primary save-member-btn' onClick={handleUpload}>Save</button>
+   <div className="add-team-member-btns">
+    <button className='btn btn-primary' onClick={() => navigate(`/team/${teamParam.id}/manage`)}>Go Back</button>
+    <button data-testid="saveBtn" className='btn btn-success' onClick={handleUpload}>Save</button>
+   </div>
   </div>
  );
 }

@@ -68,11 +68,7 @@ export default function EditTeamInfoPage() {
   <div className='edit-team-info-container'>
 
    {teamName !== '' &&
-    <>    
-     <IconButton onClick={() => navigate(`/team/${teamParam.id}/manage`)}>
-      <ArrowBack />
-     </IconButton>
-
+    <>
      <div className="edit-team-name-container">
       <p>Change team name</p>
       <input value={teamNameInput} onChange={handleChange} />
@@ -83,6 +79,8 @@ export default function EditTeamInfoPage() {
       <p>Delete your team, this cannot be undone</p>
       <button className='btn btn-danger delete-team-btn' onClick={deleteTeam}>Delete {teamName}</button>
      </div>
+
+     <button className='btn btn-primary' onClick={() => navigate(`/team/${teamParam.id}/manage`)}>Go Back</button>
     </> 
    }
 
