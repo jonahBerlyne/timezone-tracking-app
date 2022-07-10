@@ -1,8 +1,5 @@
 export const findUTCOffset = (gmt: number): number => {
-  // console.clear();
   const diff = gmt / 3600;
-  // console.log(Math.floor(diff) < diff < Math.ceil(diff)); // True for float zones, false for int zones
-  // console.log((diff - Math.floor(diff))*60); // 30/45 for float zones, 0 for int zones
   return diff;
 }
 

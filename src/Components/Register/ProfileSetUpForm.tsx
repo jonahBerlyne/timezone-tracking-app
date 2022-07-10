@@ -28,6 +28,7 @@ export default function ProfileSetUpForm({ values, handleChange, countries, zone
      placeholder='Name' 
      value={values.name} 
      onChange={handleChange}
+     maxLength={23}
      required
     />
     <h5 className='auth-subheader'>Now, select your country</h5>

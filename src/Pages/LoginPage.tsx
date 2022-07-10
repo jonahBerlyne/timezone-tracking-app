@@ -26,6 +26,7 @@ export default function Login() {
      className='form-control auth-input' placeholder='Email' 
      value={email} 
      onChange={(e) => {setEmail(e.target.value)}}
+     maxLength={30}
     />
     <input 
      type="password" 
@@ -33,6 +34,7 @@ export default function Login() {
      className='form-control auth-input' placeholder='Password' 
      value={password} 
      onChange={(e) => {setPassword(e.target.value)}}
+     maxLength={25}
     />
    </div>
    <button

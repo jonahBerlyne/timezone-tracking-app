@@ -23,6 +23,7 @@ export default function RegisterForm({ values, handleChange }: Register) {
      placeholder='Email' 
      value={values.email} 
      onChange={handleChange}
+     maxLength={30}
      required
     />
     <input
@@ -32,6 +33,7 @@ export default function RegisterForm({ values, handleChange }: Register) {
      className='form-control auth-input' placeholder='Password' 
      value={values.password} 
      onChange={handleChange}
+     maxLength={25}
      required
     />
     <input 
@@ -42,6 +44,7 @@ export default function RegisterForm({ values, handleChange }: Register) {
      placeholder='Confirm Password' 
      value={values.confirmPassword} 
      onChange={handleChange}
+     maxLength={25}
      required
     />
    </div>

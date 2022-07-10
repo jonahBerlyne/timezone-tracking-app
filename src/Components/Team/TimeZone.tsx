@@ -2,7 +2,7 @@ import React from 'react';
 import { useAppSelector } from '../../Redux/hooks';
 import { selectUser } from '../../Redux/userSlice';
 import "../../Styles/TimeZone.css";
-import { formatAMPM, formatMT } from "../Time";
+import { formatAMPM, formatMT } from "../../time";
 import { Avatar } from "@mui/material";
 
 interface Team {
@@ -10,12 +10,12 @@ interface Team {
  members: any[];
 };
 
-export default function TeamZone({ offset, members }: Team) {
+export default function TimeZone({ offset, members }: Team) {
 
   const user = useAppSelector(selectUser);
 
   return (
-    <div className='team-zone-container' key={offset}>
+    <div className='time-zone-container' key={offset}>
 
      <div className="time-container">
       {!user && <p className='time-element'>{formatAMPM(offset)}</p>}

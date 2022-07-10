@@ -71,7 +71,7 @@ export default function EditTeamInfoPage() {
     <>
      <div className="edit-team-name-container">
       <p>Change team name</p>
-      <input value={teamNameInput} onChange={handleChange} />
+      <input value={teamNameInput} onChange={handleChange} maxLength={25} />
       <button className="btn change-team-name-btn" onClick={saveNameChange}>Save</button>
      </div>
 

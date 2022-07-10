@@ -5,7 +5,7 @@ import fireDB, { auth } from '../firebaseConfig';
 import { deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { storage } from '../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import { findUTCOffset } from '../Components/Time';
+import { findUTCOffset } from '../time';
 import { useAppDispatch, useAppSelector } from '../Redux/hooks';
 import { logout, selectUser } from '../Redux/userSlice';
 import { deleteUser, EmailAuthCredential, EmailAuthProvider, reauthenticateWithCredential, updateEmail, updateProfile, User, getAuth } from 'firebase/auth';

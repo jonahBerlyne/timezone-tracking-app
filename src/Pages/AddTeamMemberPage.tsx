@@ -3,7 +3,7 @@ import uniqid from "uniqid";
 import fireDB, { auth, storage } from '../firebaseConfig';
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { findUTCOffset } from '../Components/Time';
+import { findUTCOffset } from '../time';
 import "../Styles/Manage.css";
 import { IconButton, Avatar } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
@@ -26,14 +26,21 @@ export default function AddTeamMemberPage() {
 
  const [values, setValues] = useState<Values>(initialValues);
 
+ const [showAddMember, setShowAddMember] = useState<boolean>(false);
+
  useEffect(() => {
   fetchAPI();
+
+  return () => {
+    setShowAddMember(false);
+  }
  }, []);
 
  const [countries, setCountries] = useState<any[]>([]);
  const [zones, setZones] = useState<any[]>([]);
  const [zonesConst, setZonesConst] = useState<any[]>([]);
  const [zoneData, setZoneData] = useState<any[]>([]);
+
 
  const fetchAPI = async (): Promise<any> => {
   try {
@@ -49,6 +56,7 @@ export default function AddTeamMemberPage() {
    });
    setZonesConst(zonesArr);
    setCountries([...new Set(countriesArr)].sort());
+   setShowAddMember(true);
   } catch (err) {
    alert(`Fetching error: ${err}`);
   }
@@ -164,11 +172,11 @@ export default function AddTeamMemberPage() {
    </div>
    <div className="add-member-name-container">
     <p>Name</p>
-    <input data-testid="nameInput" type="text" name="name" value={values.name} onChange={handleChange} placeholder='Name' required />
+    <input data-testid="nameInput" type="text" name="name" value={values.name} onChange={handleChange} placeholder='Name' maxLength={23} required />
    </div>
    <div className='add-member-email-container'>
      <p>Email address</p>
-     <input data-testid="emailInput" type="email" name="email" value={values.email} onChange={handleChange} placeholder="E-mail" required />
+     <input data-testid="emailInput" type="email" name="email" value={values.email} onChange={handleChange} placeholder="E-mail" maxLength={30} required />
    </div>
    <div className="add-member-time-container">
     <div className="add-member-country-container">

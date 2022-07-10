@@ -1,4 +1,4 @@
-import { formatAMPM, formatMT } from "../Time";
+import { formatAMPM, formatMT } from "../../time";
 import "../../Styles/Profile.css";
 import { LocationOn } from "@mui/icons-material";
 import { Avatar } from "@mui/material";

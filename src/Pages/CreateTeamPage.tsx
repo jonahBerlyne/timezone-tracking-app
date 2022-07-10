@@ -32,7 +32,7 @@ export default function CreateTeamPage() {
  return (
   <div className='create-team-container'>
    <h4>Add a team!</h4>
-   <input data-testid="teamName" type="text" placeholder="Team name" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
+   <input data-testid="teamName" type="text" placeholder="Team name" value={teamName} onChange={(e) => setTeamName(e.target.value)} maxLength={25} />
    <button data-testid="createTeamBtn" className='btn btn-primary' onClick={createTeam}>Create team</button>
   </div>
  );
