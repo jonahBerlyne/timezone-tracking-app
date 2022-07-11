@@ -233,10 +233,12 @@
  .member-row-info {
   margin-left: 10px;
   margin-top: 5px;
+  align-items: center;
  }
 
  .member-row-info-text {
-  margin-top: 10px;
+  flex-direction: column;
+  gap: 0px;
  }
 
  .delete-team-container {

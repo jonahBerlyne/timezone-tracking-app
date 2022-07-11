@@ -6,6 +6,8 @@
 
 .no-teams {
  margin-top: 250px;
+ text-align: center;
+ font-size: 25px;
 }
 
 .teams-container {
@@ -56,9 +58,13 @@
 }
 
 @media screen and (max-width: 425px) {
- 
  .create-team-container {
   margin-top: 130px;
+ }
+
+ .no-teams {
+  margin-top: 150px;
+  font-size: 22.5px;
  }
 
 }

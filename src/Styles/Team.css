@@ -8,6 +8,7 @@
  flex-wrap: wrap;
  gap: 30px;
  margin-top: 20px;
+ overflow-y: scroll;
 }
 
 .team-navbar-header {

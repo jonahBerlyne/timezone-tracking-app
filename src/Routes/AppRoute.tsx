@@ -19,12 +19,10 @@ export default function AppRoute ({ children }: {children: any}) {
 
   const getUserInfo = async (user: User): Promise<any> => {
     let storeLength = 0;
-    console.log(storeLength);
     try {
       while (storeLength < 2) {
         const docRef = doc(fireDB, "users", `${user.uid}`);
         const docSnapshot = await getDoc(docRef);
-        console.log(docSnapshot.data());
         dispatch(
           login({
             ...docSnapshot.data(),

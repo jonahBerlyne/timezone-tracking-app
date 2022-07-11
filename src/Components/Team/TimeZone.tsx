@@ -2,7 +2,7 @@ import React from 'react';
 import { useAppSelector } from '../../Redux/hooks';
 import { selectUser } from '../../Redux/userSlice';
 import "../../Styles/TimeZone.css";
-import { formatAMPM, formatMT } from "../../time";
+import { formatAMPM, formatMT } from '../../time';
 import { Avatar } from "@mui/material";
 
 interface Team {
@@ -37,7 +37,7 @@ export default function TimeZone({ offset, members }: Team) {
      <div className="members-container">
       {members.map((member: any, index: number) => {
         const locationData = member.timezoneData.zoneName;
-        const location = locationData.substring(locationData.indexOf("/") + 1, locationData.length).replace(/_+/g, ' ');
+        const location = locationData.substring(locationData.lastIndexOf("/") + 1, locationData.length).replace(/_+/g, ' ');
         return (
          <div className='member-container' key={member.id}>
           <Avatar src={member.profilePic} alt={member.name} className="member-avatar" />

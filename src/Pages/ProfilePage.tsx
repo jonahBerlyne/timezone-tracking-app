@@ -10,7 +10,6 @@ import { useAppDispatch, useAppSelector } from '../Redux/hooks';
 import { logout, selectUser } from '../Redux/userSlice';
 import { deleteUser, EmailAuthCredential, EmailAuthProvider, reauthenticateWithCredential, updateEmail, updateProfile, User, getAuth } from 'firebase/auth';
 import "../Styles/Profile.css";
-import { Avatar } from '@mui/material';
 
 interface Values {
  name: any;
@@ -55,7 +54,7 @@ export default function ProfilePage() {
  useEffect(() => {
   if (user) {
    let zoneStr = user?.timezoneData.zoneName;
-   zoneStr = zoneStr.substring(zoneStr.indexOf("/") + 1, zoneStr.length).replace(/_+/g, ' ');
+   zoneStr = zoneStr.substring(zoneStr.lastIndexOf("/") + 1, zoneStr.length).replace(/_+/g, ' ');
    setProfileZone(zoneStr);
    fetchAPI();
    setFormat(user?.format);
@@ -194,7 +193,7 @@ export default function ProfilePage() {
      ...userInfo,
      email: values.email,
      displayName: values.name,
-     photoUrl: imgFile ? URL.createObjectURL(imgFile) : userInfo?.photoUrl,
+     photoUrl: imgFile ? URL.createObjectURL(imgFile) : getAuth().currentUser?.photoURL,
      timezoneData: values.country !== "" && values.timezone !== "" ? {...userZoneData[0], utcOffset} : userInfo?.timezoneData,
      format
     };
@@ -271,7 +270,9 @@ export default function ProfilePage() {
    {showProfile &&
     <div className='profile-container'>
      <Profile name={getAuth().currentUser?.displayName} imgUrl={getAuth().currentUser?.photoURL} zoneName={profileZone} format={userInfo?.format} utcOffset={userInfo?.timezoneData.utcOffset} />
-     <button data-testid="editProfileBtn" className='btn btn-primary edit-profile-btn' onClick={goToEditProfile}>Edit your profile</button>
+     <div className="edit-profile-btn-container">
+      <button data-testid="editProfileBtn" className='btn btn-primary edit-profile-btn' onClick={goToEditProfile}>Edit your profile</button>
+     </div>
     </div> 
    }
    {editProfile &&

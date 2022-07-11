@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import fireDB, { auth, storage } from '../../firebaseConfig';
 import { query, collection, doc, deleteDoc, onSnapshot, getDoc } from 'firebase/firestore';
-import { FaTimes } from "react-icons/fa";
 import "../../Styles/Manage.css";
 import { deleteObject, ref } from 'firebase/storage';
 import { IconButton, Avatar } from "@mui/material";
@@ -44,7 +43,7 @@ export default function TeamMembers({ teamId }: { teamId: string | undefined }) 
    <h1>Members:</h1>
    {members.map(member => {
     let zoneStr = member.timezoneData.zoneName;
-    zoneStr = zoneStr.substring(zoneStr.indexOf("/") + 1, zoneStr.length).replace(/_+/g, ' ');
+    zoneStr = zoneStr.substring(zoneStr.lastIndexOf("/") + 1, zoneStr.length).replace(/_+/g, ' ');
     return (
      <div key={member.id} className="member-row">
       <div className="member-row-info">
