@@ -3,9 +3,12 @@ import { Navigate, useParams } from 'react-router-dom';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import fireDB, { auth } from '../firebaseConfig';
 import TeamNavbar from '../Components/Navbars/TeamNavbar';
-import { collection, getDocs, query } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query } from 'firebase/firestore';
 import Footer from '../Components/Footer';
 import "../Styles/App.css";
+import { useAppDispatch, useAppSelector } from '../Redux/hooks';
+import { login, selectUser } from '../Redux/userSlice';
+import { store } from '../Redux/Store';
 
 export default function TeamRoute ({ children }: {children: any}) {
  const [pending, setPending] = useState<boolean>(true);
@@ -29,13 +32,36 @@ export default function TeamRoute ({ children }: {children: any}) {
   }
  }
 
+ const user = useAppSelector(selectUser);
+ const dispatch = useAppDispatch();
+
+ const getUserInfo = async (user: User): Promise<any> => {
+  let storeLength = 0;
+  try {
+    while (storeLength < 2) {
+      const docRef = doc(fireDB, "users", `${user.uid}`);
+      const docSnapshot = await getDoc(docRef);
+      dispatch(
+        login({
+          ...docSnapshot.data(),
+          id: docSnapshot.id
+        })
+      );
+      storeLength = Object.keys(store.getState().user.user).length;
+    }
+  } catch (err) {
+    alert(`User info retrieval error: ${err}`);
+  }
+ }
+
  useEffect(() => {
   const unsub = onAuthStateChanged(
    auth,
-   user => {
-    if (user) {
-     getTeamInfo(user);
-     setCurrentUser(user);
+   _user => {
+    if (_user) {
+     getTeamInfo(_user);
+     getUserInfo(_user);
+     setCurrentUser(_user);
     } else {
      setCurrentUser(null);
     }
@@ -65,7 +91,7 @@ export default function TeamRoute ({ children }: {children: any}) {
  if (currentUser) {
   return (
    <div className='app-container'>
-    {teams.length > 0 && teams.includes(team) &&
+    {teams.length > 0 && teams.includes(team) && user &&
       <div className="app-body">
        <TeamNavbar />
        {children}

@@ -1,5 +1,6 @@
 .no-members {
  text-align: center;
+ margin-top: 250px;
 }
 
 .team-members-container {
@@ -8,7 +9,6 @@
  flex-wrap: wrap;
  gap: 30px;
  margin-top: 20px;
- overflow-y: scroll;
 }
 
 .team-navbar-header {
@@ -25,15 +25,13 @@
 }
 
 @media screen and (max-width: 425px) {
- 
  .team-navbar-name {
   font-size: 18px;
   padding-left: 4.2px;
  }
 
  .no-members {
-  margin-top: 140px;
+  margin-top: 80px;
   padding: 0px 10px 0px 10px;
  }
-
 }

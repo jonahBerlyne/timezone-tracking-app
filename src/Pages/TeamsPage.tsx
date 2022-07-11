@@ -13,7 +13,6 @@ export default function TeamsPage() {
  useEffect(() => {
   const q = query(collection(fireDB, "users", `${getAuth().currentUser?.uid}`, "teams"));
   const unsub = onSnapshot(q, snapshot => {
-   console.log(1);
    let teamsArr: any[] = [];
    snapshot.docs.forEach(doc => {
     const teamDoc = {
