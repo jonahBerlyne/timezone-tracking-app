@@ -5,8 +5,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { findUTCOffset } from '../time';
 import "../Styles/Manage.css";
-import { IconButton, Avatar } from "@mui/material";
-import { ArrowBack } from "@mui/icons-material";
+import { Avatar } from "@mui/material";
 import { useNavigate, useParams } from 'react-router-dom';
 import { getAuth } from 'firebase/auth';
 
@@ -26,21 +25,14 @@ export default function AddTeamMemberPage() {
 
  const [values, setValues] = useState<Values>(initialValues);
 
- const [showAddMember, setShowAddMember] = useState<boolean>(false);
-
  useEffect(() => {
   fetchAPI();
-
-  return () => {
-    setShowAddMember(false);
-  }
  }, []);
 
  const [countries, setCountries] = useState<any[]>([]);
  const [zones, setZones] = useState<any[]>([]);
  const [zonesConst, setZonesConst] = useState<any[]>([]);
  const [zoneData, setZoneData] = useState<any[]>([]);
-
 
  const fetchAPI = async (): Promise<any> => {
   try {
@@ -56,9 +48,10 @@ export default function AddTeamMemberPage() {
    });
    setZonesConst(zonesArr);
    setCountries([...new Set(countriesArr)].sort());
-   setShowAddMember(true);
   } catch (err) {
-   alert(`Fetching error: ${err}`);
+   console.error(`Fetching error: ${err}`);
+   window.location.reload();
+   console.clear();
   }
  }
 
@@ -164,50 +157,54 @@ export default function AddTeamMemberPage() {
 
  return (
   <div className='add-member-container'>
-    
-   <div className="add-member-profile-pic-container">
-    <Avatar src={imgPreview} alt={`${values.email} profile pic`} />
-    <input data-testid="imgInput" onChange={choosePic} type="file"/>
-    {imgFileErr && <p data-testid="imgFileErr">{imgFileErr}</p>}
-   </div>
-   <div className="add-member-name-container">
-    <p>Name</p>
-    <input data-testid="nameInput" type="text" name="name" value={values.name} onChange={handleChange} placeholder='Name' maxLength={23} required />
-   </div>
-   <div className='add-member-email-container'>
-     <p>Email address</p>
-     <input data-testid="emailInput" type="email" name="email" value={values.email} onChange={handleChange} placeholder="E-mail" maxLength={30} required />
-   </div>
-   <div className="add-member-time-container">
-    <div className="add-member-country-container">
-     <p>Country</p>
-     <select data-testid="countrySelect" name="country" onChange={handleChange} required>
-      <option defaultValue="" key=""></option>
-      {countries.map(country => {
-       return (
-        <option key={countries.indexOf(country)}>{country}</option>
-         );
-        })}
-     </select>
-    </div>
-    {showZones && 
-     <div className="add-member-timezone-container">
-      <p>Timezone</p>
-      <select data-testid="zoneSelect" name="timezone" onChange={handleChange} required>
-       <option defaultValue="" key=""></option>
-       {zones.map(zone => {
-        return (
-         <option key={zones.indexOf(zone)}>{zone}</option>
-        );
-       })}
-      </select>
-     </div>
-    }
-   </div>
-   <div className="add-team-member-btns">
-    <button className='btn btn-primary' onClick={() => navigate(`/team/${teamParam.id}/manage`)}>Go Back</button>
-    <button data-testid="saveBtn" className='btn btn-success' onClick={handleUpload}>Save</button>
-   </div>
+  
+   {countries.length > 0 && 
+    <>    
+      <div className="add-member-profile-pic-container">
+        <Avatar src={imgPreview} alt={`${values.email} profile pic`} />
+        <input data-testid="imgInput" onChange={choosePic} type="file"/>
+        {imgFileErr && <p data-testid="imgFileErr">{imgFileErr}</p>}
+      </div>
+      <div className="add-member-name-container">
+        <p>Name</p>
+        <input data-testid="nameInput" type="text" name="name" value={values.name} onChange={handleChange} placeholder='Name' maxLength={23} required />
+      </div>
+      <div className='add-member-email-container'>
+        <p>Email address</p>
+        <input data-testid="emailInput" type="email" name="email" value={values.email} onChange={handleChange} placeholder="E-mail" maxLength={30} required />
+      </div>
+      <div className="add-member-time-container">
+        <div className="add-member-country-container">
+        <p>Country</p>
+        <select data-testid="countrySelect" name="country" onChange={handleChange} required>
+          <option defaultValue="" key=""></option>
+          {countries.map(country => {
+          return (
+            <option key={countries.indexOf(country)}>{country}</option>
+            );
+            })}
+        </select>
+        </div>
+        {showZones && 
+        <div className="add-member-timezone-container">
+          <p>Timezone</p>
+          <select data-testid="zoneSelect" name="timezone" onChange={handleChange} required>
+          <option defaultValue="" key=""></option>
+          {zones.map(zone => {
+            return (
+            <option key={zones.indexOf(zone)}>{zone}</option>
+            );
+          })}
+          </select>
+        </div>
+        }
+      </div>
+      <div className="add-team-member-btns">
+        <button className='btn btn-primary' onClick={() => navigate(`/team/${teamParam.id}/manage`)}>Go Back</button>
+        <button data-testid="saveBtn" className='btn btn-success' onClick={handleUpload}>Save</button>
+      </div>
+    </>
+   }
   </div>
  );
 }

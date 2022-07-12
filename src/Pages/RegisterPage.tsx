@@ -50,7 +50,9 @@ export default function RegisterPage() {
    setZonesConst(zonesArr);
    setCountries([...new Set(countriesArr)].sort());
   } catch (err) {
-   alert(`Fetching error: ${err}`);
+   console.error(`Fetching error: ${err}`);
+   window.location.reload();
+   console.clear();
   }
  }
 
@@ -144,7 +146,7 @@ export default function RegisterPage() {
 
  return (
   <div>
-   {registerForm && 
+   {registerForm && countries.length > 0 && 
     <div className='auth'>
      <RegisterForm {...formProps}/>
      <button
@@ -162,7 +164,7 @@ export default function RegisterPage() {
      <p data-testid="login-link" className='login-link-element'>Already have an account? <Link to="/login" className='auth-link'>Log in here!</Link></p>
     </div>
    }
-   {profileSetUpForm && 
+   {profileSetUpForm && countries.length > 0 && 
     <div className='auth get-started-container'>
      <ProfileSetUpForm {...formProps} countries={countries} zones={zones} showZones={showZones} />
      <div className="profile-set-up-btns">

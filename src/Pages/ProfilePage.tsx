@@ -82,7 +82,9 @@ export default function ProfilePage() {
    setCountries([...new Set(countriesArr)].sort());
    setZonesConst(zonesArr);
   } catch (err) {
-   alert(`Fetching error: ${err}`);
+   console.error(`Fetching error: ${err}`);
+   window.location.reload();
+   console.clear();
   }
  }
 
@@ -267,7 +269,7 @@ export default function ProfilePage() {
 
  return (
   <div className='profile-page-container'>
-   {showProfile &&
+   {showProfile && countries.length > 0 &&
     <div className='profile-container'>
      <Profile name={getAuth().currentUser?.displayName} imgUrl={getAuth().currentUser?.photoURL} zoneName={profileZone} format={userInfo?.format} utcOffset={userInfo?.timezoneData.utcOffset} />
      <div className="edit-profile-btn-container">
@@ -275,7 +277,7 @@ export default function ProfilePage() {
      </div>
     </div> 
    }
-   {editProfile &&
+   {editProfile && countries.length > 0 &&
     <div className='edit-profile-container'>
      <EditProfile {...editProps} />
      <div className="edit-profile-btns">
